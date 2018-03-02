@@ -23,7 +23,7 @@ public class AuroraBot {
         String token1 = "AvnWUUKfH3i_ppeEn51k";
         String token2 = "NDE4NzE0NDAxNjE3NjA";
         String token3 = "4NzA0.DXllxQ.5_RKIjd";
-        
+
         String[] token = {token3, token2, token1};
 
         JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT).setToken(token[1] + token[0] + token[2]);
