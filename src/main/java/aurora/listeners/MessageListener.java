@@ -110,6 +110,8 @@ public class MessageListener extends ListenerAdapter {
                 punchOut(channel, message);
             } else if (messageContent.contains("!report")) {
                 report(channel, message);
+            } else if (messageContent.contains("!reset")) {
+                reset(channel, message);
             } else if (messageContent.contains("!check")) {
                 check(channel, message);
             } else if (messageContent.startsWith("@AuroraBot")) {

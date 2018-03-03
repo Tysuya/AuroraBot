@@ -19,7 +19,7 @@ public class Boss {
 
     public static void initialize() {
         bossRespawnTimes.put("GHOSTSNAKE", 30);
-        bossRespawnTimes.put("SPIDEY", 30);
+        bossRespawnTimes.put("SPIDEY", 20);
         bossRespawnTimes.put("WILDBOAR", 20);
         bossRespawnTimes.put("BERSERK GOSUMI", 20);
         bossRespawnTimes.put("BLOODY GOSUMI", 20);
@@ -56,7 +56,7 @@ public class Boss {
 
                         if(bossTimes.get(bossNames[i]) != null) {
                             if(dateString2.equals(dateFormat.format(bossTimes.get(bossNames[i])))) {
-                                messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " will respawn in 3 minutes! Don't forget to log in!").queue();
+                                messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " will respawn in " + codeBlock("3 minutes") + "! Don't forget to log in!").queue();
                             }
 
                             if(dateString.equals(dateFormat.format(bossTimes.get(bossNames[i])))) {
@@ -138,7 +138,6 @@ public class Boss {
         messageChannel = channel;
 
         String[] report = message.getContent().split("!report ")[1].split(" ");
-        System.out.println(Arrays.toString(report));
         String bossName = changeAbbreviations(report[0].toUpperCase());
         String timeOfDeath = "";
 
@@ -190,6 +189,13 @@ public class Boss {
         channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
     }
 
+    public static void reset(MessageChannel channel, Message message) {
+        String[] report = message.getContent().split("!reset ")[1].split(" ");
+        String bossName = changeAbbreviations(report[0].toUpperCase());
+        bossTimes.put(bossName, null);
+        channel.sendMessage("The respawn timer for " + bold(bossName) + " has been reset.").queue();
+    }
+
     public static void check(MessageChannel channel, Message message) {
         String bossName = changeAbbreviations(message.getContent().split("!check ")[1].toUpperCase());
         channel.sendMessage(currentHunters(bossHunters.get(bossName)) + respawnTime(bossName)).queue();
@@ -225,6 +231,10 @@ public class Boss {
                 bossName = bossName.replace("GS", "GHOSTSNAKE");
             case "WB":
                 bossName = bossName.replace("WB", "WILDBOAR");
+            case "BERSERK":
+                bossName = bossName.replace("BERSERK", "BERSERK GOSUMI");
+            case "BLOODY":
+                bossName = bossName.replace("BLOODY", "BLOODY GOSUMI");
         }
         return bossName;
     }
