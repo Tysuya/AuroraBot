@@ -3,6 +3,7 @@ package aurora.commands;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.requests.RestAction;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,11 +15,12 @@ import java.util.*;
 public class Boss {
     static HashMap<String, Integer> bossRespawnTimes = new HashMap<>();
     static HashMap<String, ArrayList<User>> bossHunters = new HashMap<>();
-    static HashMap<String, Date> bossTimes = new HashMap<>();
+    static HashMap<String, Date> nextBossSpawnTime = new HashMap<>();
     static MessageChannel messageChannel;
+    static Message theMessage;
 
     public static void initialize() {
-        bossRespawnTimes.put("GHOSTSNAKE", 4);
+        bossRespawnTimes.put("GHOSTSNAKE", 30);
         bossRespawnTimes.put("SPIDEY", 20);
         bossRespawnTimes.put("WILDBOAR", 20);
         bossRespawnTimes.put("BERSERK GOSUMI", 20);
@@ -28,7 +30,7 @@ public class Boss {
         String[] bossNames = {"GHOSTSNAKE", "SPIDEY", "WILDBOAR", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
         for(int i = 0; i < bossNames.length; i++) {
             bossHunters.put(bossNames[i], new ArrayList<>());
-            //bossTimes.put(bossNames[i], new Date());
+            //nextBossSpawnTime.put(bossNames[i], new Date());
         }
 
         try {
@@ -54,13 +56,12 @@ public class Boss {
 
                         String dateString2 = dateFormat.format(calendar.getTime());
 
-                        if(bossTimes.get(bossNames[i]) != null) {
-                            if(dateString2.equals(dateFormat.format(bossTimes.get(bossNames[i])))) {
-                                messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " will respawn in " + codeBlock("3 minutes") + "! Don't forget to log in!").queue();
+                        if(nextBossSpawnTime.get(bossNames[i]) != null) {
+                            if(dateString2.equals(dateFormat.format(nextBossSpawnTime.get(bossNames[i])))) {
+                                messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
                             }
 
-                            if(dateString.equals(dateFormat.format(bossTimes.get(bossNames[i])))) {
-
+                            if(dateString.equals(dateFormat.format(nextBossSpawnTime.get(bossNames[i])))) {
                                 messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " has respawned! Find it and kill it!").queue();
                             }
                         }
@@ -162,12 +163,16 @@ public class Boss {
             calendar.set(Calendar.SECOND, Integer.parseInt(timeOfDeathArray[1]));
         }
 
+        if(calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
+            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
+        }
+
         calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
 
         String dateString = dateFormat.format(calendar.getTime());
         System.out.println(dateString);
 
-        bossTimes.put(bossName, calendar.getTime());
+        nextBossSpawnTime.put(bossName, calendar.getTime());
         String huntersString = "";
         String[] bossNames = {"GHOSTSNAKE", "SPIDEY", "WILDBOAR", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
 
@@ -186,13 +191,35 @@ public class Boss {
         String messageString = "Great job, " + message.getAuthor().getName() + "!";
         String messageString2 = "\nWhen it respawns, I will be notifying: " + huntersString;
         String messageString3 = currentHunters(bossHunters.get(bossName));
-        channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
+
+        RestAction<Message> restAction = channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3);
+        theMessage = restAction.complete();
+
+        try {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                               @Override
+                               public void run() {
+                                   if(theMessage != null) {
+                                       long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
+
+                                       long seconds = time % 60;
+                                       long minutes = time / 60 % 60;
+                                       theMessage.editMessage(messageString + respawnTime(bossName) + messageString2 + messageString3 + "\n" + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
+                                   }
+                               }
+                           }, 0, 5000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
     }
 
     public static void reset(MessageChannel channel, Message message) {
         String[] report = message.getContent().split("!reset ")[1].split(" ");
         String bossName = changeAbbreviations(report[0].toUpperCase());
-        bossTimes.put(bossName, null);
+        nextBossSpawnTime.put(bossName, null);
         channel.sendMessage("The respawn timer for " + bold(bossName) + " has been reset.").queue();
     }
 
@@ -204,10 +231,10 @@ public class Boss {
     public static String respawnTime(String bossName) {
         String nextSpawn = "Unknown";
 
-        if(bossTimes.get(bossName) != null) {
+        if(nextBossSpawnTime.get(bossName) != null) {
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-            nextSpawn = dateFormat.format(bossTimes.get(bossName));
+            nextSpawn = dateFormat.format(nextBossSpawnTime.get(bossName));
         }
 
         return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn);
