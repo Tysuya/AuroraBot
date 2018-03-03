@@ -99,7 +99,7 @@ public class Boss {
             punchedStatus += " has already been punched in for " + bossName + ".\n";
         }
         bossHunters.put(bossName, huntersList);
-        
+
         System.out.println("Current hunters: " + bossHunters.get(bossName));
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
