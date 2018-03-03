@@ -42,7 +42,6 @@ public class Boss {
 
                     for(int i = 0; i < bossNames.length; i++) {
                         String huntersString = "";
-                        String[] bossNames = {"GHOSTSNAKE", "SPIDEY", "WILDBOAR", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
                         for(int j = 0; j < bossHunters.get(bossNames[i]).size(); j++) {
                             huntersString += bossHunters.get(bossNames[i]).get(j).getAsMention();
                             if(j != bossHunters.get(bossNames[i]).size() - 1) {
@@ -50,23 +49,22 @@ public class Boss {
                             }
                         }
 
-                        Calendar now = Calendar.getInstance();
-                        now.add(Calendar.MINUTE, 3);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.MINUTE, 3);
 
-                        String dateString2 = dateFormat.format(now.getTime());
+                        String dateString2 = dateFormat.format(calendar.getTime());
 
                         if(bossTimes.get(bossNames[i]) != null) {
                             if(dateString2.equals(dateFormat.format(bossTimes.get(bossNames[i])))) {
-                                messageChannel.sendMessage(huntersString + " " + bossNames[i] + " will respawn in 3 minutes! Find it and kill it!").queue();
+                                messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " will respawn in 3 minutes! Don't forget to log in!").queue();
                             }
 
                             if(dateString.equals(dateFormat.format(bossTimes.get(bossNames[i])))) {
-                                messageChannel.sendMessage(huntersString + " " + bossNames[i] + " has respawned! Find it and kill it!").queue();
+
+                                messageChannel.sendMessage(huntersString + " " + bold(bossNames[i]) + " has respawned! Find it and kill it!").queue();
                             }
                         }
-
                     }
-                    //channel.sendMessage(dateString).queue();
                 }
             }, 0, 1000);
         } catch (Exception e) {
@@ -76,7 +74,7 @@ public class Boss {
 
     public static void punchIn(MessageChannel channel, Message message) {
         messageChannel = channel;
-        String bossName = changeAbbreviations(message.getContent().split("ab!pin ")[1].toUpperCase());
+        String bossName = changeAbbreviations(message.getContent().split("!pin ")[1].toUpperCase());
         if(bossName.contains(", ")) {
             String[] bossNames = bossName.split(", ");
             for(int i = 0; i < bossNames.length; i++) {
@@ -93,28 +91,19 @@ public class Boss {
         String punchedStatus = hunter.getAsMention();
         if(!huntersList.contains(hunter)) {
             huntersList.add(hunter);
-            punchedStatus += " just punched in for " + bossName + ".\n";
+            punchedStatus += " just punched in for " + bossName;
         }
         else {
-            punchedStatus += " has already been punched in for " + bossName + ".\n";
+            punchedStatus += " has already been punched in for " + bossName;
         }
         bossHunters.put(bossName, huntersList);
 
-        System.out.println("Current hunters: " + bossHunters.get(bossName));
-        String huntersString = "";
-        for(int i = 0; i < huntersList.size(); i++) {
-            huntersString += huntersList.get(i).getName();
-            if(i != huntersList.size() - 1) {
-                huntersString += ", ";
-            }
-        }
-
-        String messageString = punchedStatus + "Current " + bossName + " Hunters: `" + huntersString + "`";
-        channel.sendMessage(respawnTime(bossName, messageString)).queue();
+        String messageString = punchedStatus + currentHunters(huntersList);
+        channel.sendMessage(messageString + respawnTime(bossName)).queue();
     }
 
     public static void punchOut(MessageChannel channel, Message message) {
-        String bossName = changeAbbreviations(message.getContent().split("ab!pout ")[1].toUpperCase());
+        String bossName = changeAbbreviations(message.getContent().split("!pout ")[1].toUpperCase());
         if(bossName.contains(", ")) {
             String[] bossNames = bossName.split(", ");
             for(int i = 0; i < bossNames.length; i++) {
@@ -138,41 +127,48 @@ public class Boss {
 
         huntersList = newHuntersList;
         bossHunters.put(bossName, huntersList);
-        System.out.println("Current hunters: " + bossHunters.get(bossName));
-        String huntersString = " ";
-        for(int i = 0; i < huntersList.size(); i++) {
-            huntersString += huntersList.get(i).getName();
-            if(i != huntersList.size() - 1) {
-                huntersString += ", ";
-            }
-        }
-        channel.sendMessage(hunter.getAsMention() + " just punched out for " + bossName + ". Thanks for your service!\n" + "Current " + bossName + " Hunters: `" + huntersString+ "`").queue();
+
+        String messageString = hunter.getAsMention() + " just punched out for " + bold(bossName) + ". Thanks for your service!";
+        String messageString2 = currentHunters(huntersList);
+
+        channel.sendMessage(messageString + messageString2).queue();
     }
 
     public static void report(MessageChannel channel, Message message) {
-        String[] report = message.getContent().split("ab!report ")[1].split(", ");
+        messageChannel = channel;
+
+        String[] report = message.getContent().split("!report ")[1].split(" ");
         System.out.println(Arrays.toString(report));
         String bossName = changeAbbreviations(report[0].toUpperCase());
         String timeOfDeath = "";
-        String loot = "";
-        if(report.length > 2) {
-            timeOfDeath = report[1];
-        }
-
-        if(report.length > 2) {
-            loot = report[2];
-        }
 
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
+        Calendar calendar = Calendar.getInstance();
 
-        String dateString = dateFormat.format(now.getTime());
+        if(report.length > 1) {
+            timeOfDeath = report[1];
+            String[] timeOfDeathArray = new String[2];
+            if(timeOfDeath.contains(":")) {
+                timeOfDeathArray = timeOfDeath.split(":");
+            }
+            else {
+                timeOfDeathArray[0] = timeOfDeath.charAt(0) + "" + timeOfDeath.charAt(1);
+                timeOfDeathArray[1] = timeOfDeath.charAt(2) + "" + timeOfDeath.charAt(3);
+            }
+
+            //now.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDeathArray[0]));
+            calendar.set(Calendar.SECOND, Integer.parseInt(timeOfDeathArray[1]));
+        }
+
+        calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
+
+        String dateString = dateFormat.format(calendar.getTime());
         System.out.println(dateString);
 
-        bossTimes.put(bossName, now.getTime());
+        bossTimes.put(bossName, calendar.getTime());
         String huntersString = "";
         String[] bossNames = {"GHOSTSNAKE", "SPIDEY", "WILDBOAR", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
 
@@ -184,18 +180,22 @@ public class Boss {
                 }
             }
         }
+        if(huntersString.isEmpty()) {
+            huntersString = codeBlock("None");
+        }
 
         String messageString = "Great job, " + message.getAuthor().getName() + "!";
-        String messageString2 = "\nWhen it respawns, I will be notifying " + huntersString;
-        channel.sendMessage(respawnTime(bossName, messageString) + messageString2).queue();
+        String messageString2 = "\nWhen it respawns, I will be notifying: " + huntersString;
+        String messageString3 = currentHunters(bossHunters.get(bossName));
+        channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
     }
 
     public static void check(MessageChannel channel, Message message) {
-        String bossName = changeAbbreviations(message.getContent().split("ab!check ")[1]);
-        channel.sendMessage(respawnTime(bossName, "")).queue();
+        String bossName = changeAbbreviations(message.getContent().split("!check ")[1].toUpperCase());
+        channel.sendMessage(currentHunters(bossHunters.get(bossName)) + respawnTime(bossName)).queue();
     }
 
-    public static String respawnTime(String bossName, String messageString) {
+    public static String respawnTime(String bossName) {
         String nextSpawn = "Unknown";
 
         if(bossTimes.get(bossName) != null) {
@@ -204,7 +204,19 @@ public class Boss {
             nextSpawn = dateFormat.format(bossTimes.get(bossName));
         }
 
-        return messageString + "\n" + bossName + " will respawn next at `" + nextSpawn + "`";
+        return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn);
+    }
+
+    public static String currentHunters(ArrayList<User> huntersList) {
+        String huntersString = "";
+        for(int i = 0; i < huntersList.size(); i++) {
+            huntersString += huntersList.get(i).getName();
+            if(i != huntersList.size() - 1) {
+                huntersString += ", ";
+            }
+        }
+
+        return  "\nCurrent Hunters: " + codeBlock(huntersString);
     }
 
     public static String changeAbbreviations(String bossName) {
@@ -215,5 +227,18 @@ public class Boss {
                 bossName = bossName.replace("WB", "WILDBOAR");
         }
         return bossName;
+    }
+
+    public static String codeBlock(String messageString) {
+        if(!messageString.isEmpty()) {
+            return "`" + messageString + "`";
+        }
+        else {
+            return codeBlock("None");
+        }
+    }
+
+    public static String bold(String messageString) {
+        return "**" + messageString + "**";
     }
 }

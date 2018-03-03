@@ -98,19 +98,19 @@ public class MessageListener extends ListenerAdapter {
                     e.printStackTrace();
                 }
 
-            } else if (messageContent.equals("ab!uptime")) {
+            } else if (messageContent.equals("!uptime")) {
                 uptime(channel);
             } else if (messageContent.contains("fact") && !message.getAuthor().isBot()) {
                 fact(channel, message);
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
-            } else if (messageContent.contains("ab!punchin") || messageContent.contains("ab!pin")) {
+            } else if (messageContent.contains("!punchin") || messageContent.contains("!pin")) {
                 punchIn(channel, message);
-            } else if (messageContent.contains("ab!punchout") || messageContent.contains("ab!pout")) {
+            } else if (messageContent.contains("!punchout") || messageContent.contains("!pout")) {
                 punchOut(channel, message);
-            } else if (messageContent.contains("ab!report")) {
+            } else if (messageContent.contains("!report")) {
                 report(channel, message);
-            } else if (messageContent.contains("ab!check")) {
+            } else if (messageContent.contains("!check")) {
                 check(channel, message);
             } else if (messageContent.startsWith("@AuroraBot")) {
                 try {
