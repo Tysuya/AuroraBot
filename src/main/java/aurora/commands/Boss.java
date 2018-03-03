@@ -18,7 +18,7 @@ public class Boss {
     static MessageChannel messageChannel;
 
     public static void initialize() {
-        bossRespawnTimes.put("GHOSTSNAKE", 30);
+        bossRespawnTimes.put("GHOSTSNAKE", 4);
         bossRespawnTimes.put("SPIDEY", 20);
         bossRespawnTimes.put("WILDBOAR", 20);
         bossRespawnTimes.put("BERSERK GOSUMI", 20);
