@@ -27,7 +27,7 @@ public class AuroraBot {
         String token = System.getenv("token");
 
         try {
-            token = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("token")));
+            token = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("token"))).split("\n")[0];
         } catch(Exception e) {
             e.printStackTrace();
         }
