@@ -20,15 +20,10 @@ public class AuroraBot {
     public static JDA jda;
     public static long startTime = System.currentTimeMillis();
     public static void main(String[] args) {
-        String token1 = "vAqZOfj4R99bBmrd5V8";
-        String token2 = "NDE4NzE0NDAxNjE3NjA4";
-        String token3 = "NzA0.DX0QsQ.DQsNwtwK";
+        String token = System.getenv("token");
+        JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT).setToken(token);
 
-        String[] token = {token3, token2, token1};
 
-        //token[1] + token[0] + token[2]
-        String token4 = System.getenv("token");
-        JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT).setToken(token4);
 
         //.buildBlocking();  //There are 2 ways to login, blocking vs async. Blocking guarantees that JDA will be completely loaded.
         try {
