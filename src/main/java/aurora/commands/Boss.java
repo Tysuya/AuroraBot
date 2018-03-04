@@ -339,7 +339,7 @@ public class Boss {
             huntersString = codeBlock("None");
         }
 
-        return "\nWhen it respawns, I will be notifying: " + huntersString;
+        return huntersString;
     }
 
     public static String changeAbbreviations(String bossName) {
