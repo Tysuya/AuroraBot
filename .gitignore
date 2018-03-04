@@ -8,3 +8,4 @@ out
 *.iws
 .env
 .DS_Store
+token

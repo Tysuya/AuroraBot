@@ -3,12 +3,10 @@ package aurora.commands;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.requests.RestAction;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by Tyler on 1/17/2017.
@@ -98,27 +96,27 @@ public class Boss {
 
     public static void punchIn(MessageChannel channel, Message message) {
         messageChannel = channel;
-        String[] bossNames = message.getContent().split("!pin ")[1].toUpperCase().split(" ");
+        String[] bossNames = changeAbbreviations(message.getContent().split("!pin ")[1]);
+        System.out.println(Arrays.toString(bossNames));
 
-        for(String bossNameInList : bossNames) {
-            if (bossNameInList.contains("@"))
+        for(String bossName : bossNames) {
+            if (bossName.contains("@"))
                 break;
             if(message.getMentionedUsers().isEmpty())
-                addHunter(channel, bossNameInList, message.getAuthor());
+                addHunter(channel, bossName, message.getAuthor());
             else
                 for(User hunter : message.getMentionedUsers()) {
-                    addHunter(channel, bossNameInList, hunter);
+                    addHunter(channel, bossName, hunter);
                 }
         }
     }
 
     public static void addHunter(MessageChannel channel, String bossName, User hunter) {
-        bossName = changeAbbreviations(bossName);
         ArrayList<User> huntersList = bossHunters.get(bossName);
         if(huntersList == null)
             huntersList = new ArrayList<>();
 
-        String punchedStatus = hunter.getName();
+        String punchedStatus = codeBlock(hunter.getName());
         if(!huntersList.contains(hunter)) {
             huntersList.add(hunter);
             punchedStatus += " just punched in for " + bold(bossName);
@@ -132,21 +130,20 @@ public class Boss {
     }
 
     public static void punchOut(MessageChannel channel, Message message) {
-        String[] bossNames = message.getContent().split("!pout ")[1].toUpperCase().split(" ");
+        String[] bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
-        for(String bossNameInList : bossNames) {
-            if (bossNameInList.contains("@"))
+        for(String bossName : bossNames) {
+            if (bossName.contains("@"))
                 break;
             if(message.getMentionedUsers().isEmpty())
-                removeHunter(channel, bossNameInList, message.getAuthor());
+                removeHunter(channel, bossName, message.getAuthor());
             else
                 for(User hunter : message.getMentionedUsers())
-                    removeHunter(channel, bossNameInList, hunter);
+                    removeHunter(channel, bossName, hunter);
         }
     }
 
     public static void removeHunter(MessageChannel channel, String bossName, User hunter) {
-        bossName = changeAbbreviations(bossName);
         ArrayList<User> huntersList = bossHunters.get(bossName);
         ArrayList<User> newHuntersList = new ArrayList<>();
         if(huntersList == null)
@@ -169,13 +166,14 @@ public class Boss {
     public static void report(MessageChannel channel, Message message) {
         messageChannel = channel;
 
-        String[] report = message.getContent().split("!report ")[1].split(" ");
-        String bossName = changeAbbreviations(report[0].toUpperCase());
+        String[] report = changeAbbreviations(message.getContent().split("!report ")[1]);
+
+        String bossName = report[0];
         String timeOfDeath = "";
 
         Calendar calendar = Calendar.getInstance();
 
-        if(report.length > 1 && !report[1].equals("lost") && !report[1].contains("@")) {
+        if(report.length > 1 && !report[1].contains("LOST") && !report[1].contains("@")) {
             timeOfDeath = report[1];
             String[] timeOfDeathArray = new String[2];
             if(timeOfDeath.contains(":")) {
@@ -229,10 +227,9 @@ public class Boss {
     }
 
     public static void reset(MessageChannel channel, Message message) {
-        String[] bossNames = message.getContent().split("!reset ")[1].toUpperCase().split(" ");
+        String[] bossNames = changeAbbreviations(message.getContent().split("!reset ")[1]);
 
         for(String bossName : bossNames) {
-            bossName = changeAbbreviations(bossName);
             nextBossSpawnTime.put(bossName, null);
             bossReport.put(bossName, null);
             channel.sendMessage(bold(bossName) + "'s respawn timer has been reset").queue();
@@ -240,11 +237,9 @@ public class Boss {
     }
 
     public static void history(MessageChannel channel, Message message) {
-        String[] bossNames = message.getContent().split("!history ")[1].toUpperCase().split(" ");
+        String[] bossNames = changeAbbreviations(message.getContent().split("!history ")[1]);
 
         for(String bossName : bossNames) {
-            bossName = changeAbbreviations(bossName);
-
             String bossHistoryString = "";
             for (String historyString : bossHistory.get(bossName)) {
                 bossHistoryString += "\n" + historyString;
@@ -257,10 +252,9 @@ public class Boss {
     }
 
     public static void kills(MessageChannel channel, Message message) {
-        String[] bossNames = message.getContent().split("!kills ")[1].toUpperCase().split(" ");
+        String[] bossNames = changeAbbreviations(message.getContent().split("!kills ")[1]);
 
         for(String bossName : bossNames) {
-            bossName = changeAbbreviations(bossName);
             String bossKillsString = "";
 
             HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
@@ -294,13 +288,12 @@ public class Boss {
     }
 
     public static void check(MessageChannel channel, Message message) {
-        String[] bossNames = message.getContent().split("!check ")[1].toUpperCase().split(" ");
+        String[] bossNames = changeAbbreviations(message.getContent().split("!check ")[1]);
 
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         for(String bossName : bossNames) {
-            bossName = changeAbbreviations(bossName);
             channel.sendMessage(respawnTime(bossName) +
                     "\nCurrent Time: " + codeBlock(dateFormat.format(new Date())) +
                     currentHunters(bossName)).queue();
@@ -308,7 +301,6 @@ public class Boss {
     }
 
     public static String respawnTime(String bossName) {
-        bossName = changeAbbreviations(bossName);
         String nextSpawn = "Unknown";
         String note = "";
 
@@ -326,8 +318,6 @@ public class Boss {
     }
 
     public static String currentHunters(String bossName) {
-        bossName = changeAbbreviations(bossName);
-
         ArrayList<User> huntersList = bossHunters.get(bossName);
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
@@ -345,8 +335,6 @@ public class Boss {
     }
 
     public static String notifyingHunters(String bossName) {
-        bossName = changeAbbreviations(bossName);
-
         ArrayList<User> huntersList = bossHunters.get(bossName);
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
@@ -355,26 +343,35 @@ public class Boss {
                 huntersString += ", ";
             }
         }
-
-        /*if(huntersString.isEmpty()) {
-            huntersString = codeBlock("None");
-        }*/
-
+        /*if(huntersString.isEmpty())
+            huntersString = codeBlock("None");*/
         return huntersString;
     }
 
-    public static String changeAbbreviations(String bossName) {
-        switch(bossName) {
-            case "GS":
-                bossName = bossName.replace("GS", "GHOSTSNAKE");
-            case "WB":
-                bossName = bossName.replace("WB", "WILDBOAR");
-            case "BERSERK":
-                bossName = bossName.replace("BERSERK", "BERSERK GOSUMI");
-            case "BLOODY":
-                bossName = bossName.replace("BLOODY", "BLOODY GOSUMI");
+    public static String[] changeAbbreviations(String bossLine) {
+        bossLine = bossLine.toUpperCase();
+
+        bossLine = bossLine.replace("GS", "GHOSTSNAKE");
+        bossLine = bossLine.replace("WB", "WILDBOAR");
+        bossLine = bossLine.replace("BERSERK GOSUMI", "BERSERK");
+        bossLine = bossLine.replace("BLOODY GOSUMI", "BLOOY");
+        bossLine = bossLine.replace("RED BEE", "RED");
+
+        String[] bossNames = bossLine.split(" ");
+
+        for(int i = 0; i < bossNames.length; i++) {
+            String bossName = bossNames[i];
+            switch (bossName) {
+                case "BERSERK":
+                    bossName = bossName.replace("BERSERK", "BERSERK GOSUMI");
+                case "BLOODY":
+                    bossName = bossName.replace("BLOODY", "BLOODY GOSUMI");
+                case "RED":
+                    bossName = bossName.replace("RED", "RED BEE");
+            }
+            bossNames[i] = bossName;
         }
-        return bossName;
+        return bossNames;
     }
 
     public static String codeBlock(String messageString) {
