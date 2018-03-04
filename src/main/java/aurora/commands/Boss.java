@@ -57,11 +57,11 @@ public class Boss {
 
                         if(nextBossSpawnTime.get(bossName) != null) {
                             if(dateString2.equals(dateFormat.format(nextBossSpawnTime.get(bossName)))) {
-                                messageChannel.sendMessage(notifyingHunters(bossName) + " " + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
+                                messageChannel.sendMessage(notifyingHunters(bossName) + "\n" + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
                             }
 
                             if(dateString.equals(dateFormat.format(nextBossSpawnTime.get(bossName)))) {
-                                messageChannel.sendMessage(notifyingHunters(bossName) + " " + bold(bossName) + " has respawned! Find it and kill it!").queue();
+                                messageChannel.sendMessage(notifyingHunters(bossName) + "\n" + bold(bossName) + " has respawned! Find it and kill it!").queue();
                             }
                         }
                     }
@@ -100,14 +100,24 @@ public class Boss {
         messageChannel = channel;
         String[] bossNames = message.getContent().split("!pin ")[1].toUpperCase().split(" ");
 
-        for(String bossNameInList : bossNames)
-            addHunter(channel, bossNameInList, message.getAuthor());
+        for(String bossNameInList : bossNames) {
+            if (bossNameInList.contains("@"))
+                break;
+            if(message.getMentionedUsers().isEmpty())
+                addHunter(channel, bossNameInList, message.getAuthor());
+            else
+                for(User hunter : message.getMentionedUsers()) {
+                    addHunter(channel, bossNameInList, hunter);
+                }
+        }
     }
 
     public static void addHunter(MessageChannel channel, String bossName, User hunter) {
         bossName = changeAbbreviations(bossName);
-
         ArrayList<User> huntersList = bossHunters.get(bossName);
+        if(huntersList == null)
+            huntersList = new ArrayList<>();
+
         String punchedStatus = hunter.getName();
         if(!huntersList.contains(hunter)) {
             huntersList.add(hunter);
@@ -124,14 +134,23 @@ public class Boss {
     public static void punchOut(MessageChannel channel, Message message) {
         String[] bossNames = message.getContent().split("!pout ")[1].toUpperCase().split(" ");
 
-        for(String bossNameInList : bossNames)
-            removeHunter(channel, bossNameInList, message.getAuthor());
+        for(String bossNameInList : bossNames) {
+            if (bossNameInList.contains("@"))
+                break;
+            if(message.getMentionedUsers().isEmpty())
+                removeHunter(channel, bossNameInList, message.getAuthor());
+            else
+                for(User hunter : message.getMentionedUsers())
+                    removeHunter(channel, bossNameInList, hunter);
+        }
     }
 
     public static void removeHunter(MessageChannel channel, String bossName, User hunter) {
         bossName = changeAbbreviations(bossName);
         ArrayList<User> huntersList = bossHunters.get(bossName);
         ArrayList<User> newHuntersList = new ArrayList<>();
+        if(huntersList == null)
+            huntersList = new ArrayList<>();
 
         for(User hunterInList : huntersList) {
             if(!hunterInList.equals(hunter)) {
@@ -156,7 +175,7 @@ public class Boss {
 
         Calendar calendar = Calendar.getInstance();
 
-        if(report.length > 1 && !report[1].equals("lost")) {
+        if(report.length > 1 && !report[1].equals("lost") && !report[1].contains("@")) {
             timeOfDeath = report[1];
             String[] timeOfDeathArray = new String[2];
             if(timeOfDeath.contains(":")) {
@@ -176,22 +195,21 @@ public class Boss {
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
         }
 
-        calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
-
-        nextBossSpawnTime.put(bossName, calendar.getTime());
-
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String author = message.getAuthor().getName();
 
-        String messageString = "Great job, " + codeBlock(message.getAuthor().getName()) + "!";
+        if(message.getContent().contains("@"))
+            author = message.getMentionedUsers().get(0).getName();
+
+        String messageString = "Great job, " + codeBlock(author) + "!";
 
         if(message.getContent().contains("lost")) {
-            messageString = "That's okay, " + codeBlock(message.getAuthor().getName()) + "! We all fail sometimes!";
-            bossHistory.get(bossName).add(message.getAuthor().getName() + " lost " + bossName + " at " + dateFormat.format(calendar.getTime()));
+            messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
+            bossHistory.get(bossName).add(author + " lost " + bossName + " at " + dateFormat.format(calendar.getTime()));
         }
         else {
-            bossHistory.get(bossName).add(message.getAuthor().getName() + " killed " + bossName + " at " + dateFormat.format(calendar.getTime()));
-            String author = message.getAuthor().getName();
+            bossHistory.get(bossName).add(author + " killed " + bossName + " at " + dateFormat.format(calendar.getTime()));
             HashMap<String, Integer> authorList = bossKills.get(bossName);
             authorList.putIfAbsent(author, 0);
 
@@ -199,6 +217,9 @@ public class Boss {
 
             bossKills.put(bossName, authorList);
         }
+
+        calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
+        nextBossSpawnTime.put(bossName, calendar.getTime());
 
         bossReport.put(bossName, channel.sendMessage(messageString +
                 respawnTime(bossName) +
@@ -335,9 +356,9 @@ public class Boss {
             }
         }
 
-        if(huntersString.isEmpty()) {
+        /*if(huntersString.isEmpty()) {
             huntersString = codeBlock("None");
-        }
+        }*/
 
         return huntersString;
     }
