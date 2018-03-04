@@ -27,7 +27,7 @@ public class Uptime {
         if(days == 1)
             daysString = " day ";
 
-        channel.sendMessage("AuroraBot has been online for ```"+ days + daysString + hours + hoursString + minutes + minutesString + seconds + secondsString + "```").queue();
+        channel.sendMessage("AuroraBot has been online for: ```"+ days + daysString + hours + hoursString + minutes + minutesString + seconds + secondsString + "```").queue();
     }
 
 }

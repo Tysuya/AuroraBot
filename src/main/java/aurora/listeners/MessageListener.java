@@ -85,9 +85,31 @@ public class MessageListener extends ListenerAdapter {
         if(!message.getAuthor().isBot()) {
             if (messageContent.equals("ab!help")) {
                 channel.sendMessage("Hello, I am AuroraBot. My current commands are as follows:" +
-                        "```ab!ping\nab!uptime```" +
-                        "I am also a chatbot, so start a message with <@418714401617608704> and I will respond.\n" +
-                        "I am in active development, so some things may break. Send any bugs to my creator, <@159201526114549760>.").queue();
+                        "\n__General Commands:__" +
+                        "\n```ab!ping - to ping AuroraBot to get a response time" +
+                        "\nab!uptime - to check the uptime of AuroraBot```" +
+                        "\n__Boss Hunting Commands:__" +
+                        "\n```!pin [bossName] - to punch in to be notified when a boss spawns" +
+                        "\n!pout [bossName] - to punch out of notifications" +
+                        "\n!report [bossName] [time] [lost] - to report when you killed a boss - add \"lost\" if you didn't actually kill the boss" +
+                        "\n!reset [bossName] - to reset a boss time to \"Unknown\"" +
+                        "\n!check [bossName] - to check the next time a boss is going to spawn" +
+                        "\n!history [bossName] - to check the history of a boss" +
+                        "\n!kills [bossName] - to check the number of kills on a boss```" +
+                        "\n__Boss names and abbreviations recognized by AuroraBot:__" +
+                        "\n```GHOSTSNAKE - GS" +
+                        "\nSPIDEY" +
+                        "\nWILDBOAR - WB" +
+                        "\nBERSERK GOSUMI - BERSERK" +
+                        "\nBLOODY GOSUMI - BLOODY" +
+                        "\nRAVEN" +
+                        "\nBLASTER```" +
+                        "\n__Notes:__" +
+                        "\n```Boss names are not case-sensitive" +
+                        "\nUsing colons in times is optional" +
+                        "\nAll of the commands can take multiple boss names except for !report```" +
+                        "I am also a chatbot, so start a message with <@418714401617608704> and I will respond." +
+                        "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.").queue();
 
             } else if (messageContent.equals("ab!ping")) {
                 long start = System.currentTimeMillis();
@@ -98,15 +120,15 @@ public class MessageListener extends ListenerAdapter {
                     e.printStackTrace();
                 }
 
-            } else if (messageContent.equals("!uptime")) {
+            } else if (messageContent.equals("ab!uptime")) {
                 uptime(channel);
             } else if (messageContent.contains("fact") && !message.getAuthor().isBot()) {
                 fact(channel, message);
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
-            } else if (messageContent.contains("!punchin") || messageContent.contains("!pin")) {
+            } else if (messageContent.contains("!pin")) {
                 punchIn(channel, message);
-            } else if (messageContent.contains("!punchout") || messageContent.contains("!pout")) {
+            } else if (messageContent.contains("!pout")) {
                 punchOut(channel, message);
             } else if (messageContent.contains("!report")) {
                 report(channel, message);
@@ -114,6 +136,10 @@ public class MessageListener extends ListenerAdapter {
                 reset(channel, message);
             } else if (messageContent.contains("!check")) {
                 check(channel, message);
+            } else if (messageContent.contains("!history")) {
+                history(channel, message);
+            } else if (messageContent.contains("!kills")) {
+                kills(channel, message);
             } else if (messageContent.startsWith("@AuroraBot")) {
                 try {
                     String chat = messageContent.split("@AuroraBot ")[1];
