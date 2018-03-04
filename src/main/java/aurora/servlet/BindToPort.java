@@ -36,7 +36,7 @@ public class BindToPort extends HttpServlet {
                 @Override
                 public void run() {
                     try {
-                        URL url = new URL("https://aurorabot.herokuapp.com/");
+                        URL url = new URL("https://aurorabot-heroku.herokuapp.com/");
                         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                         httpURLConnection.connect();
                         int responseCode = httpURLConnection.getResponseCode();
