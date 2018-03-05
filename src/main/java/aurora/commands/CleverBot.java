@@ -12,7 +12,7 @@ public class CleverBot {
     static HashMap<String, String> conversationID = new HashMap<>();
     public static void cleverBot(MessageChannel channel, Message message) {
         try {
-            String chat = message.getContent().split("@AuroraBotTest ")[1];
+            String chat = message.getContent().split("@AuroraBot ")[1];
             String author = message.getAuthor().getName();
             System.out.println(chat);
 
