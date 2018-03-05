@@ -102,7 +102,7 @@ public class Boss {
     static HashMap<String, Message> bossKillsMessages = new HashMap<>();
 
     public static void initializeKills(String[] bossNames) {
-        HashMap<String, Integer> a = new HashMap<>();
+        /*HashMap<String, Integer> a = new HashMap<>();
         a.put("dandera", 10);
         a.put("Jenny", 10);
         a.put("Vampy", 3);
@@ -119,7 +119,7 @@ public class Boss {
         bossKills.put("SPIDEY", c);
         HashMap<String, Integer> d = new HashMap<>();
         d.put("dandera", 1);
-        bossKills.put("WILDBOAR", d);
+        bossKills.put("WILDBOAR", d);*/
 
         HashMap<String, String> bossKillsIDS = new HashMap<>();
         /*bossKillsHistory.put(bossNames[0], "420050448951672843");
@@ -129,17 +129,16 @@ public class Boss {
         bossKillsHistory.put(bossNames[4], "420055808727056385");
         bossKillsHistory.put(bossNames[5], "420055809402208256");
         bossKillsHistory.put(bossNames[6], "420055837759897602");*/
-        bossKillsIDS.put(bossNames[0], "420059805865082880");
-        bossKillsIDS.put(bossNames[1], "420059806380982272"); //wb
-        bossKillsIDS.put(bossNames[2], "420059807593267202");
-        bossKillsIDS.put(bossNames[3], "420059808385990657");
-        bossKillsIDS.put(bossNames[4], "420059809434566667");
-        bossKillsIDS.put(bossNames[5], "420059831353737216");
-        bossKillsIDS.put(bossNames[6], "420059831571972110");
+        bossKillsIDS.put(bossNames[0], "420069733711216661");
+        bossKillsIDS.put(bossNames[1], "420069734080577536");
+        bossKillsIDS.put(bossNames[2], "420069734021857283");
+        bossKillsIDS.put(bossNames[3], "420069734651002880");
+        bossKillsIDS.put(bossNames[4], "420069734982090752");
+        bossKillsIDS.put(bossNames[5], "420069760739311627");
+        bossKillsIDS.put(bossNames[6], "420069761125318676");
 
         for(String bossName : bossNames)
-            bossKillsMessages.put(bossName, AuroraBot.jda.getTextChannelById("420058966257827841").getMessageById(bossKillsIDS.get(bossName)).complete());
-            //bKillz.add(AuroraBot.jda.getTextChannelById("420030970364952586").getMessageById(bossKillsHistory.get(bossName)).complete().getContent());
+            bossKillsMessages.put(bossName, AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete());
 
         for(int i = 0; i < bossNames.length; i++) {
             String[] lines = bossKillsMessages.get(bossNames[i]).getContent().split("\\n");
