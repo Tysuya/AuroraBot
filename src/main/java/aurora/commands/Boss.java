@@ -1,8 +1,11 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.requests.RestAction;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,15 +24,15 @@ public class Boss {
     static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
 
     public static void initialize() {
-        bossRespawnTimes.put("GHOSTSNAKE", 30);
-        bossRespawnTimes.put("WILDBOAR", 20);
-        bossRespawnTimes.put("SPIDEY", 20);
-        bossRespawnTimes.put("BERSERK GOSUMI", 20);
-        bossRespawnTimes.put("BLOODY GOSUMI", 20);
-        bossRespawnTimes.put("RAVEN", 20);
-        bossRespawnTimes.put("BLASTER", 20);
         String[] bossNames = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
 
+        bossRespawnTimes.put(bossNames[0], 30);
+        bossRespawnTimes.put(bossNames[1], 20);
+        bossRespawnTimes.put(bossNames[2], 20);
+        bossRespawnTimes.put(bossNames[3], 20);
+        bossRespawnTimes.put(bossNames[4], 20);
+        bossRespawnTimes.put(bossNames[5], 20);
+        bossRespawnTimes.put(bossNames[6], 20);
 
         for(String bossName : bossNames) {
             bossHunters.put(bossName, new ArrayList<>());
@@ -38,21 +41,7 @@ public class Boss {
             //nextBossSpawnTime.put(bossNames[i], new Date());
         }
 
-        HashMap<String, Integer> a = new HashMap<>();
-        a.put("Jenny", 10);
-        a.put("dandera", 7);
-        a.put("Vampy", 2);
-        a.put("Aversionist", 2);
-        a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
-        bossKills.put("GHOSTSNAKE", a);
-        HashMap<String, Integer> b = new HashMap<>();
-        b.put("Vampy", 2);
-        b.put("2mutchKek", 1);
-        bossKills.put("BERSERK GOSUMI", b);
-        HashMap<String, Integer> c = new HashMap<>();
-
-        c.put("dandera", 3);
-        bossKills.put("SPIDEY", c);
+        initializeKills(bossNames);
 
         // Check every second if boss respawned
         try {
@@ -108,6 +97,65 @@ public class Boss {
             }, 0, 5000);
         } catch(Exception e) {
             e.printStackTrace();
+        }
+    }
+    static HashMap<String, Message> bossKillsMessages = new HashMap<>();
+
+    public static void initializeKills(String[] bossNames) {
+        HashMap<String, Integer> a = new HashMap<>();
+        a.put("dandera", 10);
+        a.put("Jenny", 10);
+        a.put("Vampy", 3);
+        a.put("Aversionist", 2);
+        a.put("my name is jeeff", 2);
+        a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
+        bossKills.put("GHOSTSNAKE", a);
+        HashMap<String, Integer> b = new HashMap<>();
+        b.put("Vampy", 2);
+        b.put("2mutchKek", 1);
+        bossKills.put("BERSERK GOSUMI", b);
+        HashMap<String, Integer> c = new HashMap<>();
+        c.put("dandera", 9);
+        bossKills.put("SPIDEY", c);
+        HashMap<String, Integer> d = new HashMap<>();
+        d.put("dandera", 1);
+        bossKills.put("WILDBOAR", d);
+
+        HashMap<String, String> bossKillsIDS = new HashMap<>();
+        /*bossKillsHistory.put(bossNames[0], "420050448951672843");
+        bossKillsHistory.put(bossNames[1], "420050448951672843"); //wb
+        bossKillsHistory.put(bossNames[2], "420050449228627981");
+        bossKillsHistory.put(bossNames[3], "420051103154176000");
+        bossKillsHistory.put(bossNames[4], "420055808727056385");
+        bossKillsHistory.put(bossNames[5], "420055809402208256");
+        bossKillsHistory.put(bossNames[6], "420055837759897602");*/
+        bossKillsIDS.put(bossNames[0], "420059805865082880");
+        bossKillsIDS.put(bossNames[1], "420059806380982272"); //wb
+        bossKillsIDS.put(bossNames[2], "420059807593267202");
+        bossKillsIDS.put(bossNames[3], "420059808385990657");
+        bossKillsIDS.put(bossNames[4], "420059809434566667");
+        bossKillsIDS.put(bossNames[5], "420059831353737216");
+        bossKillsIDS.put(bossNames[6], "420059831571972110");
+
+        for(String bossName : bossNames)
+            bossKillsMessages.put(bossName, AuroraBot.jda.getTextChannelById("420058966257827841").getMessageById(bossKillsIDS.get(bossName)).complete());
+            //bKillz.add(AuroraBot.jda.getTextChannelById("420030970364952586").getMessageById(bossKillsHistory.get(bossName)).complete().getContent());
+
+        for(int i = 0; i < bossNames.length; i++) {
+            String[] lines = bossKillsMessages.get(bossNames[i]).getContent().split("\\n");
+            HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
+
+            for (int j = 1; j < lines.length - 1; j++) {
+                int parenthesis = lines[j].indexOf(")");
+                int colon = lines[j].indexOf(":");
+
+                String name = lines[j].substring(parenthesis + 2, colon);
+                Integer kills = Integer.parseInt(lines[j].substring(colon + 2));
+                bossKillsHashMap.put(name, kills);
+            }
+            System.out.println(bossKillsMessages.get(bossNames[i]).getContent());
+            System.out.println(bossKillsHashMap);
+            bossKills.put(bossNames[i], bossKillsHashMap);
         }
     }
 
@@ -240,6 +288,7 @@ public class Boss {
                 respawnTime(bossName) +
                 currentHunters(bossName)).complete());
 
+        bossKillsMessages.get(bossName).editMessage("Kills for " + bold(bossName) + ":```" + killsString(bossName) + "\n```").queue();
         //channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
     }
 
@@ -270,11 +319,14 @@ public class Boss {
 
     public static void kills(MessageChannel channel, Message message) {
         String[] bossNames = changeAbbreviations(message.getContent().split("!kills ")[1]);
+        for(String bossName : bossNames)
+            channel.sendMessage("Kills for " + bold(bossName) + ":```" + killsString(bossName) + "\n```").queue();
+    }
 
-        for(String bossName : bossNames) {
-            String bossKillsString = "";
+    public static String killsString(String bossName) {
+        String bossKillsString = "";
 
-            HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
+        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
             /*System.out.println(killsHashMap.toString());
             Map<Integer, String> swapped = killsHashMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
             Object[] killCounts = swapped.keySet().toArray();
@@ -282,26 +334,24 @@ public class Boss {
             Collections.reverse(Arrays.asList(killCounts));
             System.out.println(Arrays.toString(killCounts));*/
 
-            Object[] entrySet = killsHashMap.entrySet().toArray();
-            Arrays.sort(entrySet, new Comparator() {
-                public int compare(Object o1, Object o2) {
-                    return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
-                }
-            });
-
-            int place = 1;
-            for (Object entry : entrySet) {
-                killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
-                String name = ((Map.Entry<String, Integer>) entry).getKey();
-                int killCount = ((Map.Entry<String, Integer>) entry).getValue();
-                bossKillsString += "\n" + place++ + ") " + name + ": " + killCount;
+        Object[] entrySet = killsHashMap.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
             }
+        });
 
-            if (bossKillsString.isEmpty())
-                bossKillsString = " ";
-
-            channel.sendMessage("Kills for " + bold(bossName) + ":```" + bossKillsString + "```").queue();
+        int place = 1;
+        for (Object entry : entrySet) {
+            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            bossKillsString += "\n" + place++ + ") " + name + ": " + killCount;
         }
+
+        if (bossKillsString.isEmpty())
+            bossKillsString = " ";
+        return bossKillsString;
     }
 
     public static void check(MessageChannel channel, Message message) {
