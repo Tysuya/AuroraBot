@@ -30,12 +30,29 @@ public class Boss {
         bossRespawnTimes.put("BLASTER", 20);
         String[] bossNames = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
 
+
         for(String bossName : bossNames) {
             bossHunters.put(bossName, new ArrayList<>());
             bossHistory.put(bossName, new ArrayList<>());
             bossKills.put(bossName, new HashMap<>());
             //nextBossSpawnTime.put(bossNames[i], new Date());
         }
+
+        HashMap<String, Integer> a = new HashMap<>();
+        a.put("Jenny", 10);
+        a.put("dandera", 7);
+        a.put("Vampy", 2);
+        a.put("Aversionist", 2);
+        a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
+        bossKills.put("GHOSTSNAKE", a);
+        HashMap<String, Integer> b = new HashMap<>();
+        b.put("Vampy", 2);
+        b.put("2mutchKek", 1);
+        bossKills.put("BERSERK GOSUMI", b);
+        HashMap<String, Integer> c = new HashMap<>();
+
+        c.put("dandera", 3);
+        bossKills.put("SPIDEY", c);
 
         // Check every second if boss respawned
         try {
@@ -204,10 +221,10 @@ public class Boss {
 
         if(message.getContent().contains("lost")) {
             messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
-            bossHistory.get(bossName).add(author + " lost " + bossName + " at " + dateFormat.format(calendar.getTime()));
+            bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author);
         }
         else {
-            bossHistory.get(bossName).add(author + " killed " + bossName + " at " + dateFormat.format(calendar.getTime()));
+            bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author);
             HashMap<String, Integer> authorList = bossKills.get(bossName);
             authorList.putIfAbsent(author, 0);
 

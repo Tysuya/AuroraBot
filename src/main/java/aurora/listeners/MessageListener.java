@@ -14,6 +14,7 @@ import static aurora.commands.Boss.*;
 import static aurora.commands.Fact.fact;
 import static aurora.commands.Should.should;
 import static aurora.commands.Uptime.uptime;
+import static aurora.commands.CleverBot.cleverBot;
 
 import static aurora.utils.SendMentionMessage.sendMentionMessage;
 
@@ -141,17 +142,7 @@ public class MessageListener extends ListenerAdapter {
             } else if (messageContent.contains("!kills")) {
                 kills(channel, message);
             } else if (messageContent.startsWith("@AuroraBot")) {
-                try {
-                    String chat = messageContent.split("@AuroraBot ")[1];
-                    System.out.println(chat);
-
-                    CleverBotQuery cleverBotQuery = new CleverBotQuery("c4c6ef1eeefdfa203806506b4a2d63c0", chat);
-                    cleverBotQuery.sendRequest();
-                    chat = cleverBotQuery.getResponse();
-                    sendMentionMessage(channel, message, chat);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                cleverBot(channel, message);
             }
         }
     }

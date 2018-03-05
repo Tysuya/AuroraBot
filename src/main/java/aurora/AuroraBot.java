@@ -19,7 +19,6 @@ import static aurora.servlet.BindToPort.bindToPort;
 import static aurora.servlet.BindToPort.keepAwake;
 import static aurora.utils.CycleGames.cycleGames;
 
-
 public class AuroraBot {
     public static JDA jda;
     public static long startTime = System.currentTimeMillis();
