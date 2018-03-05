@@ -14,15 +14,14 @@ public class Report extends Boss {
     public static void report(MessageChannel channel, Message message) {
         messageChannel = channel;
 
-        ArrayList<String> report = changeAbbreviations(message.getContent().split("!report ")[1]);
-
-        String bossName = report.get(0);
         String timeOfDeath = "";
+        String[] initialReport = message.getContent().split("!report ")[1].split(" ");
+
 
         Calendar calendar = Calendar.getInstance();
 
-        if(report.size() > 1 && !report.get(1).contains("LOST") && !report.get(1).contains("@")) {
-            timeOfDeath = report.get(1);
+        if(initialReport.length > 1 && !initialReport[1].contains("LOST") && !initialReport[1].contains("@")) {
+            timeOfDeath = initialReport[1];
             String[] timeOfDeathArray = new String[2];
             if(timeOfDeath.contains(":")) {
                 timeOfDeathArray = timeOfDeath.split(":");
@@ -36,6 +35,10 @@ public class Report extends Boss {
             calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDeathArray[0]));
             calendar.set(Calendar.SECOND, Integer.parseInt(timeOfDeathArray[1]));
         }
+
+        ArrayList<String> report = changeAbbreviations(message.getContent().split("!report ")[1]);
+
+        String bossName = report.get(0);
 
         if(calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
