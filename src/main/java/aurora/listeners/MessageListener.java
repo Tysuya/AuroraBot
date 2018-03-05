@@ -8,15 +8,19 @@ import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import aurora.utils.CleverBotQuery;
 
 import static aurora.commands.Boss.*;
+import static aurora.commands.Check.check;
 import static aurora.commands.Fact.fact;
+import static aurora.commands.History.history;
+import static aurora.commands.Kills.kills;
+import static aurora.commands.PunchOut.punchOut;
+import static aurora.commands.Report.report;
+import static aurora.commands.Reset.reset;
 import static aurora.commands.Should.should;
 import static aurora.commands.Uptime.uptime;
 import static aurora.commands.CleverBot.cleverBot;
-
-import static aurora.utils.SendMentionMessage.sendMentionMessage;
+import static aurora.commands.PunchIn.punchIn;
 
 public class MessageListener extends ListenerAdapter {
     public MessageListener() {
