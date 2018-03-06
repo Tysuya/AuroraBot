@@ -20,7 +20,7 @@ public abstract class Boss {
     static HashMap<String, Message> bossReport = new HashMap<>();
     static HashMap<String, ArrayList<String>> bossHistory = new HashMap<>();
     static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
-    static HashMap<String, Message> bossKillsMessages = new HashMap<>();
+    static HashMap<String, Message> bossKillsLog = new HashMap<>();
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER"};
 
@@ -44,7 +44,6 @@ public abstract class Boss {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // Check every second if boss respawned
         try {
             Timer timer = new Timer();
@@ -76,16 +75,17 @@ public abstract class Boss {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        // Update boss timer in chat
+    static Timer spawnTimer = new Timer();
+    public static void spawnTimer() {
+        spawnTimer.cancel();
         try {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
+            spawnTimer = new Timer();
+            spawnTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
                     for(String bossName : bossNamesFinal) {
-
                         if(bossReport.get(bossName) != null && nextBossSpawnTime.get(bossName) != null) {
                             long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
                             long seconds = time % 60;
@@ -132,12 +132,11 @@ public abstract class Boss {
         bossKillsIDS.put(bossNamesFinal[6], "420069761125318676");
 
         for(String bossName : bossNamesFinal)
-            bossKillsMessages.put(bossName, AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete());
+            bossKillsLog.put(bossName, AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete());
 
         for(int i = 0; i < bossNamesFinal.length; i++) {
-            String[] lines = bossKillsMessages.get(bossNamesFinal[i]).getContent().split("\\n");
+            String[] lines = bossKillsLog.get(bossNamesFinal[i]).getContent().split("\\n");
             HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
-
             for (int j = 1; j < lines.length - 1; j++) {
                 int parenthesis = lines[j].indexOf(")");
                 int colon = lines[j].indexOf(":");
@@ -146,22 +145,15 @@ public abstract class Boss {
                 Integer kills = Integer.parseInt(lines[j].substring(colon + 2));
                 bossKillsHashMap.put(name, kills);
             }
-            System.out.println(bossKillsMessages.get(bossNamesFinal[i]).getContent());
+            System.out.println(bossKillsLog.get(bossNamesFinal[i]).getContent());
             System.out.println(bossKillsHashMap);
             bossKills.put(bossNamesFinal[i], bossKillsHashMap);
         }
     }
 
-    public static String killsString(String bossName) {
+    public static String getKills(String bossName) {
         String bossKillsString = "";
-
         HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
-            /*System.out.println(killsHashMap.toString());
-            Map<Integer, String> swapped = killsHashMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-            Object[] killCounts = swapped.keySet().toArray();
-            Arrays.sort(killCounts);
-            Collections.reverse(Arrays.asList(killCounts));
-            System.out.println(Arrays.toString(killCounts));*/
 
         Object[] entrySet = killsHashMap.entrySet().toArray();
         Arrays.sort(entrySet, new Comparator() {
@@ -170,17 +162,20 @@ public abstract class Boss {
             }
         });
 
+        int totalKillCount = 0;
         int place = 1;
         for (Object entry : entrySet) {
             killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
             String name = ((Map.Entry<String, Integer>) entry).getKey();
             int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
             bossKillsString += "\n" + place++ + ") " + name + ": " + killCount;
         }
 
         if (bossKillsString.isEmpty())
             bossKillsString = " ";
-        return bossKillsString;
+
+        return "Total kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
 
     public static String respawnTime(String bossName) {
@@ -262,12 +257,10 @@ public abstract class Boss {
     }
 
     public static String codeBlock(String messageString) {
-        if(!messageString.isEmpty()) {
+        if(!messageString.isEmpty())
             return "`" + messageString + "`";
-        }
-        else {
+        else
             return codeBlock("None");
-        }
     }
 
     public static String bold(String messageString) {

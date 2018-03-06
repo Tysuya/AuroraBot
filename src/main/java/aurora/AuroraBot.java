@@ -31,7 +31,6 @@ public class AuroraBot {
 
         JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT).setToken(token);
 
-
         //.buildBlocking();  //There are 2 ways to login, blocking vs async. Blocking guarantees that JDA will be completely loaded.
         try {
             jda = jdaBuilder.buildBlocking();

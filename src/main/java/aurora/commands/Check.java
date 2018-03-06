@@ -21,5 +21,6 @@ public class Check extends Boss {
                     "\nCurrent Time: " + codeBlock(dateFormat.format(new Date())) +
                     currentHunters(bossName)).complete());
         }
+        spawnTimer();
     }
 }

@@ -74,7 +74,9 @@ public class Report extends Boss {
                 respawnTime(bossName) +
                 currentHunters(bossName)).complete());
 
-        bossKillsMessages.get(bossName).editMessage("Kills for " + bold(bossName) + ":```" + killsString(bossName) + "\n```").queue();
+        spawnTimer();
+
+        bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
         //channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
     }
 }
