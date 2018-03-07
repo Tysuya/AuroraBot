@@ -11,12 +11,10 @@ public class History extends Boss {
 
         for(String bossName : bossNames) {
             String bossHistoryString = "";
-            for (String historyString : bossHistory.get(bossName)) {
+            for (String historyString : bossHistory.get(bossName))
                 bossHistoryString += "\n" + historyString;
-            }
-            if (bossHistoryString.isEmpty()) {
+            if (bossHistoryString.isEmpty())
                 bossHistoryString = " ";
-            }
             channel.sendMessage("History for " + bold(bossName) + ":```" + bossHistoryString + "```").queue();
         }
     }

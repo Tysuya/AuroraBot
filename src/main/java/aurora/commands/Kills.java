@@ -9,6 +9,6 @@ public class Kills extends Boss {
     public static void kills(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!kills ")[1]);
         for(String bossName : bossNames)
-            channel.sendMessage(getKills(bossName)).queue();
+            channel.sendMessage(bossKillsLog.get(bossName).getContent()).queue();
     }
 }

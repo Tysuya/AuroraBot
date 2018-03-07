@@ -5,10 +5,7 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.*;
 
 public class Report extends Boss {
     public static void report(MessageChannel channel, Message message) {
@@ -16,7 +13,6 @@ public class Report extends Boss {
 
         String timeOfDeath = "";
         String[] initialReport = message.getContent().split("!report ")[1].split(" ");
-
 
         Calendar calendar = Calendar.getInstance();
 
@@ -31,7 +27,6 @@ public class Report extends Boss {
                 timeOfDeathArray[1] = timeOfDeath.charAt(2) + "" + timeOfDeath.charAt(3);
             }
 
-            //now.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
             calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDeathArray[0]));
             calendar.set(Calendar.SECOND, Integer.parseInt(timeOfDeathArray[1]));
         }
@@ -46,25 +41,31 @@ public class Report extends Boss {
 
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-        String author = message.getAuthor().getName();
 
+        String author = message.getAuthor().getName();
         if(message.getContent().contains("@"))
             author = message.getMentionedUsers().get(0).getName();
 
-        String messageString = "Great job, " + codeBlock(author) + "!";
+        String messageString = "";
 
         if(message.getContent().contains("lost")) {
             messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author);
         }
         else {
+            messageString = "Great job, " + codeBlock(author) + "!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author);
             HashMap<String, Integer> authorList = bossKills.get(bossName);
-            authorList.putIfAbsent(author, 0);
 
+            authorList.putIfAbsent(author, 0);
             authorList.put(author, authorList.get(author) + 1);
 
             bossKills.put(bossName, authorList);
+            try {
+                bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
@@ -75,8 +76,47 @@ public class Report extends Boss {
                 currentHunters(bossName)).complete());
 
         spawnTimer();
+    }
 
-        bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
-        //channel.sendMessage(messageString + respawnTime(bossName) + messageString2 + messageString3).queue();
+    public static String getKills(String bossName) {
+        String bossKillsString = "";
+        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
+
+        Object[] entrySet = killsHashMap.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
+            }
+        });
+
+        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
+        String emojiString = "";
+        for(int i = 1; i < 101; i++) {
+            emojiString += emojis[new Random().nextInt(5)];
+            if(i % 20 == 0)
+                emojiString += "\n";
+            else
+                emojiString += " ";
+        }
+
+        int totalKillCount = 0;
+        int rank = 1;
+        for (Object entry : entrySet) {
+            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
+            bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
+
+            if(killCount % 100 == 0)
+                messageChannel.sendMessage("Congratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+        }
+
+        if (bossKillsString.isEmpty())
+            bossKillsString = " ";
+        if (totalKillCount % 100 == 0)
+            messageChannel.sendMessage("Congratulations, " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
+
+        return "Total kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
 }

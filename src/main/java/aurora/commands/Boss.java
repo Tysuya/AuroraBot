@@ -52,20 +52,19 @@ public abstract class Boss {
                 public void run() {
                     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
                     dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-                    String dateString = dateFormat.format(new Date());
+                    String currentDate = dateFormat.format(new Date());
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.MINUTE, 3);
+                    String fastDate = dateFormat.format(calendar.getTime());
 
                     for(String bossName : bossNamesFinal) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.add(Calendar.MINUTE, 3);
-
-                        String dateString2 = dateFormat.format(calendar.getTime());
-
                         if(nextBossSpawnTime.get(bossName) != null) {
-                            if(dateString2.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
+                            if(fastDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
                                 messageChannel.sendMessage(notifyingHunters(bossName) +
                                         "\n" + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
 
-                            if(dateString.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
+                            if(currentDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
                                 messageChannel.sendMessage(notifyingHunters(bossName) +
                                         "\n" + bold(bossName) + " has respawned! Find it and kill it!").queue();
                         }
@@ -131,51 +130,23 @@ public abstract class Boss {
         bossKillsIDS.put(bossNamesFinal[5], "420069760739311627");
         bossKillsIDS.put(bossNamesFinal[6], "420069761125318676");
 
-        for(String bossName : bossNamesFinal)
-            bossKillsLog.put(bossName, AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete());
-
-        for(int i = 0; i < bossNamesFinal.length; i++) {
-            String[] lines = bossKillsLog.get(bossNamesFinal[i]).getContent().split("\\n");
+        for(String bossName : bossNamesFinal) {
+            Message bossKillsMessage = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete();
+            String[] lines = bossKillsMessage.getContent().split("\\n");
             HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
-            for (int j = 1; j < lines.length - 1; j++) {
-                int parenthesis = lines[j].indexOf(")");
-                int colon = lines[j].indexOf(":");
+            for (int i = 1; i < lines.length - 1; i++) {
+                int parenthesis = lines[i].indexOf(")");
+                int colon = lines[i].indexOf(":");
 
-                String name = lines[j].substring(parenthesis + 2, colon);
-                Integer kills = Integer.parseInt(lines[j].substring(colon + 2));
+                String name = lines[i].substring(parenthesis + 2, colon);
+                Integer kills = Integer.parseInt(lines[i].substring(colon + 2));
                 bossKillsHashMap.put(name, kills);
             }
-            System.out.println(bossKillsLog.get(bossNamesFinal[i]).getContent());
-            System.out.println(bossKillsHashMap);
-            bossKills.put(bossNamesFinal[i], bossKillsHashMap);
+            System.out.println(bossKillsHashMap.toString());
+            System.out.println(bossKillsMessage.getContent());
+            bossKills.put(bossName, bossKillsHashMap);
+            bossKillsLog.put(bossName, bossKillsMessage);
         }
-    }
-
-    public static String getKills(String bossName) {
-        String bossKillsString = "";
-        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
-
-        Object[] entrySet = killsHashMap.entrySet().toArray();
-        Arrays.sort(entrySet, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            }
-        });
-
-        int totalKillCount = 0;
-        int place = 1;
-        for (Object entry : entrySet) {
-            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
-            String name = ((Map.Entry<String, Integer>) entry).getKey();
-            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
-            totalKillCount += killCount;
-            bossKillsString += "\n" + place++ + ") " + name + ": " + killCount;
-        }
-
-        if (bossKillsString.isEmpty())
-            bossKillsString = " ";
-
-        return "Total kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
 
     public static String respawnTime(String bossName) {
@@ -187,9 +158,8 @@ public abstract class Boss {
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             nextSpawn = dateFormat.format(nextBossSpawnTime.get(bossName));
 
-            if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime()) {
+            if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
                 note = " (Note: This time has already passed)";
-            }
         }
 
         return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn) + note;
@@ -200,14 +170,12 @@ public abstract class Boss {
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
             huntersString += huntersList.get(i).getName();
-            if(i != huntersList.size() - 1) {
+            if(i != huntersList.size() - 1)
                 huntersString += ", ";
-            }
         }
 
-        if(huntersString.isEmpty()) {
+        if(huntersString.isEmpty())
             huntersString = codeBlock("None");
-        }
 
         return "\nCurrent Hunters: " + codeBlock(huntersString);
     }
@@ -217,9 +185,8 @@ public abstract class Boss {
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
             huntersString += huntersList.get(i).getAsMention();
-            if(i != huntersList.size() - 1) {
+            if(i != huntersList.size() - 1)
                 huntersString += ", ";
-            }
         }
         /*if(huntersString.isEmpty())
             huntersString = codeBlock("None");*/
@@ -232,7 +199,7 @@ public abstract class Boss {
         bossLine = bossLine.replace("GS", "GHOSTSNAKE");
         bossLine = bossLine.replace("WB", "WILDBOAR");
         bossLine = bossLine.replace("BERSERK GOSUMI", "BERSERK");
-        bossLine = bossLine.replace("BLOODY GOSUMI", "BLOOY");
+        bossLine = bossLine.replace("BLOODY GOSUMI", "BLOODY");
         bossLine = bossLine.replace("RED BEE", "RED");
 
         ArrayList<String> bossNames = new ArrayList<>(Arrays.asList(bossLine.split(" ")));
@@ -247,11 +214,12 @@ public abstract class Boss {
                     bossNames.set(i, bossNames.get(i).replace("RED", "RED BEE"));
             }
         }
-        ArrayList<String> toRemove = new ArrayList<>();
+
+        ArrayList<String> removedBossNames = new ArrayList<>();
         for(String bossName : bossNames)
             if(!new ArrayList<>(Arrays.asList(bossNamesFinal)).contains(bossName))
-                toRemove.add(bossName);
-        bossNames.removeAll(toRemove);
+                removedBossNames.add(bossName);
+        bossNames.removeAll(removedBossNames);
 
         return bossNames;
     }

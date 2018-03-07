@@ -13,8 +13,6 @@ public class PunchIn extends Boss {
         System.out.println(bossNames.toString());
 
         for(String bossName : bossNames) {
-            if (bossName.contains("@"))
-                break;
             if(message.getMentionedUsers().isEmpty())
                 addHunter(channel, bossName, message.getAuthor());
             else
@@ -26,8 +24,6 @@ public class PunchIn extends Boss {
 
     public static void addHunter(MessageChannel channel, String bossName, User hunter) {
         ArrayList<User> huntersList = bossHunters.get(bossName);
-        if(huntersList == null)
-            huntersList = new ArrayList<>();
 
         String punchedStatus = codeBlock(hunter.getName());
         if(!huntersList.contains(hunter)) {

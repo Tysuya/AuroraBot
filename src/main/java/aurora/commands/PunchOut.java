@@ -11,8 +11,6 @@ public class PunchOut extends Boss {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
         for(String bossName : bossNames) {
-            if (bossName.contains("@"))
-                break;
             if(message.getMentionedUsers().isEmpty())
                 removeHunter(channel, bossName, message.getAuthor());
             else
@@ -24,14 +22,10 @@ public class PunchOut extends Boss {
     public static void removeHunter(MessageChannel channel, String bossName, User hunter) {
         ArrayList<User> huntersList = bossHunters.get(bossName);
         ArrayList<User> newHuntersList = new ArrayList<>();
-        if(huntersList == null)
-            huntersList = new ArrayList<>();
 
-        for(User hunterInList : huntersList) {
-            if(!hunterInList.equals(hunter)) {
+        for(User hunterInList : huntersList)
+            if(!hunterInList.equals(hunter))
                 newHuntersList.add(hunterInList);
-            }
-        }
 
         huntersList = newHuntersList;
         bossHunters.put(bossName, huntersList);
