@@ -38,7 +38,6 @@ public class Fact {
         int randomNumber = (int) (Math.random() * 1000.0);
         String rootString = "";
         try {
-            if (randomNumber <= 300) {
                 // http://catfacts-api.appspot.com/api/facts
                 String sURL = "https://catfact.ninja/fact";
                 URL url = new URL(sURL);
@@ -66,7 +65,6 @@ public class Fact {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
                 /*randomNumber = (int) (Math.random() * 1000.0);
                 String sURL = "http://mentalfloss.com/api/1.0/views/amazing_facts.json?id=" + randomNumber;
                 URL url = new URL(sURL);
@@ -87,7 +85,7 @@ public class Fact {
                     }
                 }
                 rootString = r.substring(11, index);*/
-            }
+
             rootString = rootString.replaceAll("<em>", "");
             rootString = rootString.replaceAll("</em>", "");
             rootString = rootString.replaceAll("&amp", "&");

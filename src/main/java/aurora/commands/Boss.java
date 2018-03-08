@@ -78,8 +78,8 @@ public abstract class Boss {
 
     static Timer spawnTimer = new Timer();
     public static void spawnTimer() {
-        spawnTimer.cancel();
         try {
+            spawnTimer.cancel();
             spawnTimer = new Timer();
             spawnTimer.schedule(new TimerTask() {
                 @Override
@@ -89,6 +89,7 @@ public abstract class Boss {
                             long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
                             long seconds = time % 60;
                             long minutes = time / 60 % 60;
+                            System.out.println("Spawn Timer is working");
 
                             bossReport.get(bossName).editMessage(bossReport.get(bossName).getContent() +
                                     "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
@@ -222,6 +223,29 @@ public abstract class Boss {
         bossNames.removeAll(removedBossNames);
 
         return bossNames;
+    }
+
+    public static String getTitle(int killCount) {
+        String title = "";
+        if (killCount < 30)
+            title = "Recruit";
+        else if (killCount < 100)
+            title = "Scout";
+        else if (killCount < 300)
+            title = "Combat Soldier";
+        else if (killCount < 600)
+            title = "Veteran Solider";
+        else if (killCount < 1000)
+            title = "Apprentice Knight";
+        else if (killCount < 2000)
+            title = "Fighter";
+        else if (killCount < 5000)
+            title = "Elite Fighter";
+        else if (killCount < 10000)
+            title = "Field Commander";
+        else
+            title = "General";
+        return title;
     }
 
     public static String codeBlock(String messageString) {

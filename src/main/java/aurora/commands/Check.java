@@ -16,11 +16,10 @@ public class Check extends Boss {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        for(String bossName : bossNames) {
+        for(String bossName : bossNames)
             bossReport.put(bossName, channel.sendMessage(respawnTime(bossName) +
                     "\nCurrent Time: " + codeBlock(dateFormat.format(new Date())) +
                     currentHunters(bossName)).complete());
-        }
         spawnTimer();
     }
 }

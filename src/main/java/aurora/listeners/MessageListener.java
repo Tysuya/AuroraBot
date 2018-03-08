@@ -1,6 +1,7 @@
 package aurora.listeners;
 
 import net.dv8tion.jda.client.entities.Group;
+import net.dv8tion.jda.client.managers.EmoteManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.entities.*;
@@ -51,7 +52,7 @@ public class MessageListener extends ListenerAdapter {
         MessageChannel channel = event.getChannel();    //This is the MessageChannel that the message was sent to.
         //  This could be a TextChannel, PrivateChannel, or Group!
 
-        String messageContent = message.getContent();              //This returns a human readable version of the Message. Similar to
+        String messageContent = message.getContent(); //This returns a human readable version of the Message. Similar to
         // what you would see in the client.
 
         boolean bot = author.isBot();                     //This boolean is useful to determine if the User that
@@ -88,6 +89,7 @@ public class MessageListener extends ListenerAdapter {
         }
 
         if(!message.getAuthor().isBot()) {
+            messageContent = message.getContent().toLowerCase();
             if (messageContent.equals("ab!help")) {
                 channel.sendMessage("Hello, I am AuroraBot. My current commands are as follows:" +
                         "\n__General Commands:__" +
@@ -145,9 +147,29 @@ public class MessageListener extends ListenerAdapter {
                 history(channel, message);
             } else if (messageContent.contains("!kills")) {
                 kills(channel, message);
-            } else if (messageContent.startsWith("@AuroraBot")) {
+            } else if (message.isMentioned(jda.getSelfUser())) {
                 cleverBot(channel, message);
             }
         }
+
+        messageContent = message.getContent().toLowerCase();
+        if (messageContent.contains("omg"))
+            message.addReaction(message.getGuild().getEmotesByName("omg", true).get(0)).queue();
+        else if (messageContent.contains("dizzy"))
+            message.addReaction(message.getGuild().getEmotesByName("dizzy", true).get(0)).queue();
+        else if (messageContent.contains("mad"))
+            message.addReaction(message.getGuild().getEmotesByName("mad", true).get(0)).queue();
+        else if (messageContent.contains("greedy"))
+            message.addReaction(message.getGuild().getEmotesByName("greedy", true).get(0)).queue();
+        else if (messageContent.contains("surprise"))
+            message.addReaction(message.getGuild().getEmotesByName("surprise", true).get(0)).queue();
+        else if (messageContent.contains("cry"))
+            message.addReaction(message.getGuild().getEmotesByName("cry", true).get(0)).queue();
+        else if (messageContent.contains("happy"))
+            message.addReaction(message.getGuild().getEmotesByName("happy", true).get(0)).queue();
+        else if (messageContent.contains("love"))
+            message.addReaction(message.getGuild().getEmotesByName("love", true).get(0)).queue();
+        else if (messageContent.contains("heh"))
+            message.addReaction(message.getGuild().getEmotesByName("heh", true).get(0)).queue();
     }
 }
