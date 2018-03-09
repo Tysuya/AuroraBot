@@ -100,7 +100,6 @@ public abstract class Boss {
                             long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
                             long seconds = time % 60;
                             long minutes = time / 60 % 60;
-                            System.out.println("Spawn Timer is working");
 
                             bossReport.get(bossName).editMessage(bossReport.get(bossName).getContent() +
                                     "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
@@ -178,6 +177,7 @@ public abstract class Boss {
                 Integer kills = Integer.parseInt(lines[i].substring(colon + 2));
                 bossOverallKills.putIfAbsent(name, 0);
                 bossOverallKills.put(name, bossOverallKills.get(name) + kills);
+                System.out.println(bossOverallKills.toString());
             }
         }
     }
