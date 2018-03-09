@@ -110,11 +110,17 @@ public class MessageListener extends ListenerAdapter {
                         "\nBERSERK GOSUMI - BERSERK" +
                         "\nBLOODY GOSUMI - BLOODY" +
                         "\nRAVEN" +
-                        "\nBLASTER```" +
+                        "\nBLASTER" +
+                        "\nBSSSZSSS - RED BEE - RB" +
+                        "\nDESERT ASSASAIN - ASSASSIN - ASS" +
+                        "\nSTEALTH" +
+                        "\nBUZSS" +
+                        "\nBIZIZI```" +
                         "\n__Notes:__" +
                         "\n```Boss names are not case-sensitive" +
                         "\nUsing colons in times is optional" +
-                        "\nAll of the commands can take multiple boss names except for !report```" +
+                        "\nAll of the commands can take multiple boss names except for !report" +
+                        "\nYou can !pin, !pout, !report for others by @mentioning them```" +
                         "I am also a chatbot, so start a message with <@418714401617608704> and I will respond." +
                         "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.").queue();
 

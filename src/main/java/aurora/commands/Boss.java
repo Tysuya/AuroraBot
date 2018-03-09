@@ -27,7 +27,7 @@ public abstract class Boss {
 
     public static void initialize() {
         try {
-            //AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and file your most recent reports again. I apologize for any inconveniences my restart caused ^^").queue();
+            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and file your most recent reports again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }

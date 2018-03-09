@@ -1,10 +1,7 @@
 package aurora.commands;
 
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.MessageEmbed;
 
 import java.util.ArrayList;
 

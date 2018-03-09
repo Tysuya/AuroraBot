@@ -65,7 +65,6 @@ public class Report extends Boss {
             try {
                 bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
                 AuroraBot.jda.getTextChannelById("420067387644182538").editMessageById("421561504383500290", getOverallKills()).queue();
-                System.out.println(getOverallKills());
             } catch (Exception e) {
                 e.printStackTrace();
             }
