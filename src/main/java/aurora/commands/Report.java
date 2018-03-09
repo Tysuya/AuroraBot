@@ -63,6 +63,7 @@ public class Report extends Boss {
             bossKills.put(bossName, authorList);
             try {
                 bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
+                messageChannel.editMessageById("421552933922930689", getOverallKills()).queue();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -118,5 +119,48 @@ public class Report extends Boss {
             messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
 
         return "Total kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
+    }
+
+    public static String getOverallKills() {
+        updateOverallKills();
+
+        String overallKillsString = "";
+
+        Object[] entrySet = bossOverallKills.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
+            }
+        });
+
+        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
+        String emojiString = "";
+        for(int i = 1; i < 101; i++) {
+            emojiString += emojis[new Random().nextInt(5)];
+            if(i % 20 == 0)
+                emojiString += "\n";
+            else
+                emojiString += " ";
+        }
+
+        int totalKillCount = 0;
+        int rank = 1;
+        for (Object entry : entrySet) {
+            bossOverallKills.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
+            overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
+
+            if(killCount % 100 == 0)
+                messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();
+        }
+
+        if (overallKillsString.isEmpty())
+            overallKillsString = " ";
+        if (totalKillCount % 100 == 0)
+            messageChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for Aurora!\n" + emojiString).queue();
+
+        return "Total overall kills: " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 }
