@@ -141,11 +141,11 @@ public abstract class Boss {
         bossKillsIDS.put(bossNamesFinal[4], "420069734982090752");
         bossKillsIDS.put(bossNamesFinal[5], "420069760739311627");
         bossKillsIDS.put(bossNamesFinal[6], "420069761125318676");
-        bossKillsIDS.put(bossNamesFinal[7], "421552907427512321");
-        bossKillsIDS.put(bossNamesFinal[8], "421552907536564226");
-        bossKillsIDS.put(bossNamesFinal[9], "421552907817582593");
-        bossKillsIDS.put(bossNamesFinal[10], "421552908446990336");
-        bossKillsIDS.put(bossNamesFinal[11], "421552908648316928");
+        bossKillsIDS.put(bossNamesFinal[7], "421561477829492738");
+        bossKillsIDS.put(bossNamesFinal[8], "421561478328483850");
+        bossKillsIDS.put(bossNamesFinal[9], "421561478567690240");
+        bossKillsIDS.put(bossNamesFinal[10], "421561478815154176");
+        bossKillsIDS.put(bossNamesFinal[11], "421561478882000897");
 
         for(String bossName : bossNamesFinal) {
             Message bossKillsMessage = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete();

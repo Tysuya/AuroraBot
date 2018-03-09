@@ -147,14 +147,6 @@ public class MessageListener extends ListenerAdapter {
                 history(channel, message);
             } else if (messageContent.contains("!kills")) {
                 kills(channel, message);
-            } else if (messageContent.contains("!blank")) {
-                channel.sendMessage("Total kills for GS: " + " ```" + " " + "\n```").queue();
-                channel.sendMessage("Total kills for GS: " + " ```" + " " + "\n```").queue();
-                channel.sendMessage("Total kills for GS: " + " ```" + " " + "\n```").queue();
-                channel.sendMessage("Total kills for GS: " + " ```" + " " + "\n```").queue();
-                channel.sendMessage("Total kills for GS: " + " ```" + " " + "\n```").queue();
-                channel.sendMessage("Total kills for GS: " + " ```" + " " + "\n```").queue();
-
             } else if (message.isMentioned(jda.getSelfUser())) {
                 cleverBot(channel, message);
             }
