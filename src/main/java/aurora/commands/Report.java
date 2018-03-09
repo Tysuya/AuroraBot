@@ -1,5 +1,6 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
@@ -63,7 +64,7 @@ public class Report extends Boss {
             bossKills.put(bossName, authorList);
             try {
                 bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
-                messageChannel.editMessageById("421561504383500290", getOverallKills()).queue();
+                AuroraBot.jda.getTextChannelById("420067387644182538").editMessageById("421561504383500290", getOverallKills()).queue();
                 System.out.println(getOverallKills());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -157,11 +158,11 @@ public class Report extends Boss {
                 messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();
         }
 
-        if (overallKillsString.isEmpty())
-            overallKillsString = " ";
         if (totalKillCount % 100 == 0)
             messageChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for Aurora!\n" + emojiString).queue();
 
+        if (overallKillsString.isEmpty())
+            overallKillsString = " ";
         return "Total overall kills: " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 }
