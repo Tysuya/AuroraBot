@@ -166,6 +166,7 @@ public abstract class Boss {
     }
 
     public static void updateOverallKills() {
+        bossOverallKills.clear();
         for(String bossName : bossNamesFinal) {
             Message bossKillsMessage = bossKillsLog.get(bossName);
             String[] lines = bossKillsMessage.getContent().split("\\n");
