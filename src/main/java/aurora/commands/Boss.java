@@ -177,7 +177,6 @@ public abstract class Boss {
                 Integer kills = Integer.parseInt(lines[i].substring(colon + 2));
                 bossOverallKills.putIfAbsent(name, 0);
                 bossOverallKills.put(name, bossOverallKills.get(name) + kills);
-                System.out.println(bossOverallKills.toString());
             }
         }
     }
