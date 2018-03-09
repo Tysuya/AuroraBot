@@ -158,10 +158,10 @@ public class Report extends Boss {
         }
 
         if (totalKillCount % 100 == 0)
-            messageChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for Aurora!\n" + emojiString).queue();
+            messageChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
-        return "Total overall kills: " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
+        return "Total overall kills for " + bold("Aurora") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 }
