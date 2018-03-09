@@ -63,7 +63,7 @@ public class Report extends Boss {
             bossKills.put(bossName, authorList);
             try {
                 bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
-                messageChannel.editMessageById("421552933922930689", getOverallKills()).queue();
+                messageChannel.editMessageById("421561504383500290", getOverallKills()).queue();
             } catch (Exception e) {
                 e.printStackTrace();
             }
