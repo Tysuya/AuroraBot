@@ -96,15 +96,13 @@ public abstract class Boss {
             bossSpawnTimers.get(bossName).schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    for(String bossName : bossNamesFinal) {
-                        if(bossReport.get(bossName) != null && nextBossSpawnTime.get(bossName) != null) {
-                            long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
-                            long seconds = time % 60;
-                            long minutes = time / 60 % 60;
+                    if(bossReport.get(bossName) != null && nextBossSpawnTime.get(bossName) != null) {
+                        long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
+                        long seconds = time % 60;
+                        long minutes = time / 60 % 60;
 
-                            bossReport.get(bossName).editMessage(bossReport.get(bossName).getContent() +
-                                    "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
-                        }
+                        bossReport.get(bossName).editMessage(bossReport.get(bossName).getContent() +
+                                "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
                     }
                 }
             }, 0, 5000);
