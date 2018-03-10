@@ -77,7 +77,7 @@ public class Report extends Boss {
                 respawnTime(bossName) +
                 currentHunters(bossName)).complete());
 
-        spawnTimer();
+        spawnTimer(bossName);
     }
 
     public static String getKills(String bossName) {

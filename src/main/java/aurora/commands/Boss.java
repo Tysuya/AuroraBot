@@ -22,12 +22,13 @@ public abstract class Boss {
     static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
     static HashMap<String, Message> bossKillsLog = new HashMap<>();
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
+    static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI"};
 
     public static void initialize() {
         try {
-            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and file your most recent reports again. I apologize for any inconveniences my restart caused ^^").queue();
+            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,6 +49,7 @@ public abstract class Boss {
             bossHunters.put(bossName, new ArrayList<>());
             bossHistory.put(bossName, new ArrayList<>());
             bossKills.put(bossName, new HashMap<>());
+            bossSpawnTimers.put(bossName, new Timer());
         }
 
         try {
@@ -87,12 +89,11 @@ public abstract class Boss {
         }
     }
 
-    static Timer spawnTimer = new Timer();
-    public static void spawnTimer() {
+    public static void spawnTimer(String bossName) {
         try {
-            spawnTimer.cancel();
-            spawnTimer = new Timer();
-            spawnTimer.schedule(new TimerTask() {
+            bossSpawnTimers.get(bossName).cancel();
+            bossSpawnTimers.put(bossName, new Timer());
+            bossSpawnTimers.get(bossName).schedule(new TimerTask() {
                 @Override
                 public void run() {
                     for(String bossName : bossNamesFinal) {
