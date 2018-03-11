@@ -131,7 +131,7 @@ public class AuroraBot {
                     "\n2) 2mutchKek: 1\n```" +
                     "\nTotal kills for DESERT ASSASAIN: 2 ```" +
                     "\n1) TripleFury: 2\n```" +
-                    "Total kills for BIZIZI: 6 ```" +
+                    "\nTotal kills for BIZIZI: 6 ```" +
                     "\n1) TripleFury: 4" +
                     "\n2) dandera: 1" +
                     "\n3) harold: 1\n```";
