@@ -235,12 +235,16 @@ public abstract class Boss {
 
         bossLine = bossLine.replace("GS", bossNamesFinal[0]);
         bossLine = bossLine.replace("WB", bossNamesFinal[1]);
-        bossLine = bossLine.replace("BERSERK GOSUMI", bossNamesFinal[3]);
-        bossLine = bossLine.replace("BLOODY GOSUMI", bossNamesFinal[4]);
         bossLine = bossLine.replace("RED BEE", bossNamesFinal[7]);
         bossLine = bossLine.replace("RB", bossNamesFinal[7]);
         bossLine = bossLine.replace("ASSASSIN", bossNamesFinal[8]);
         bossLine = bossLine.replace("ASS", bossNamesFinal[8]);
+        bossLine = bossLine.replace("BM", bossNamesFinal[12]);
+        bossLine = bossLine.replace("LM", bossNamesFinal[13]);
+        bossLine = bossLine.replace("EB", bossNamesFinal[15]);
+        bossLine = bossLine.replace("SG", bossNamesFinal[16]);
+        bossLine = bossLine.replace("CFK", bossNamesFinal[17]);
+        bossLine = bossLine.replace("LACOS", bossNamesFinal[18]);
 
         ArrayList<String> bossNames = new ArrayList<>(Arrays.asList(bossLine.split(" ")));
 
@@ -252,6 +256,12 @@ public abstract class Boss {
                     bossNames.set(i, bossNames.get(i).replace("BLOODY", bossNamesFinal[4]));
                 case "DESERT":
                     bossNames.set(i, bossNames.get(i).replace("DESERT", bossNamesFinal[8]));
+                case "LESSER":
+                    bossNames.set(i, bossNames.get(i).replace("LESSER", bossNamesFinal[13]));
+                case "ELDER":
+                    bossNames.set(i, bossNames.get(i).replace("ELDER", bossNamesFinal[15]));
+                case "CORRUPTED":
+                    bossNames.set(i, bossNames.get(i).replace("CORRUPTED", bossNamesFinal[17]));
             }
         }
 

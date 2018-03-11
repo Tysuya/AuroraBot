@@ -112,10 +112,19 @@ public class MessageListener extends ListenerAdapter {
                         "\nRAVEN" +
                         "\nBLASTER" +
                         "\nBSSSZSSS - RED BEE - RB" +
-                        "\nDESERT ASSASAIN - ASSASSIN - ASS" +
+                        "\nDESERT ASSASAIN - DESERT - ASSASSIN - ASS" +
                         "\nSTEALTH" +
                         "\nBUZSS" +
-                        "\nBIZIZI```" +
+                        "\nBIZIZI" +
+                        "\nBIGMOUSE - BM" +
+                        "\nLESSER MADMAN - LESSER - LM" +
+                        "\nSHAAACK" +
+                        "\nSUUUK" +
+                        "\nSUSUSUK" +
+                        "\nELDER BEHOLDER - ELDER - EM" +
+                        "\nSANDGRAVE - SG" +
+                        "\nCORRUPTED FOREST KEEPER - CORRUPTED - CFK" +
+                        "\nLACOSTEZA - LACOS```" +
                         "\n__Notes:__" +
                         "\n```Boss names are not case-sensitive" +
                         "\nUsing colons in times is optional" +
