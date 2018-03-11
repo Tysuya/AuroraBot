@@ -28,7 +28,7 @@ public abstract class Boss {
 
     public static void initialize() {
         try {
-            //AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
+            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,7 +117,7 @@ public abstract class Boss {
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
         bossHuntersKills.put("GHOSTSNAKE", a);*/
 
-        bossKillsMessage = AuroraBot.jda.getTextChannelById("420058966257827841").getMessageById("422244348411904010").complete();
+        bossKillsMessage = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById("422263858934054912").complete();
         String[] bossKillsLines = bossKillsMessage.getContent().split("\nTotal");
         //System.out.println(Arrays.toString(bossKillsLines));
 

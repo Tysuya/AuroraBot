@@ -67,7 +67,7 @@ public class Report extends Boss {
                 for (String eachBossName : bossNamesFinal)
                     killsString += getKills(eachBossName);
                 bossKillsMessage.editMessage(killsString).complete();
-                AuroraBot.jda.getTextChannelById("420058966257827841").editMessageById("422244560073129986", getOverallKills()).complete();
+                AuroraBot.jda.getTextChannelById("420067387644182538").editMessageById("422263655187349525", getOverallKills()).complete();
             } catch (Exception e) {
                 e.printStackTrace();
             }
