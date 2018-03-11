@@ -19,39 +19,35 @@ public abstract class Boss {
     static MessageChannel messageChannel;
     static HashMap<String, Message> bossReport = new HashMap<>();
     static HashMap<String, ArrayList<String>> bossHistory = new HashMap<>();
-    static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
-    static HashMap<String, Message> bossKillsLog = new HashMap<>();
+    static HashMap<String, HashMap<String, Integer>> bossHuntersKills = new HashMap<>();
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
+    static Message bossKillsMessage;
 
-    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI"};
+    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CORRUPTED FOREST KEEPER", "LACOSTEZA"};
 
     public static void initialize() {
         try {
-            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
+            //AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        bossRespawnTimes.put(bossNamesFinal[0], 30);
-        bossRespawnTimes.put(bossNamesFinal[1], 20);
-        bossRespawnTimes.put(bossNamesFinal[2], 20);
-        bossRespawnTimes.put(bossNamesFinal[3], 20);
-        bossRespawnTimes.put(bossNamesFinal[4], 20);
-        bossRespawnTimes.put(bossNamesFinal[5], 20);
-        bossRespawnTimes.put(bossNamesFinal[6], 20);
-        bossRespawnTimes.put(bossNamesFinal[7], 30);
-        bossRespawnTimes.put(bossNamesFinal[8], 20);
-        bossRespawnTimes.put(bossNamesFinal[9], 20);
-        bossRespawnTimes.put(bossNamesFinal[10], 20);
-        bossRespawnTimes.put(bossNamesFinal[11], 20);
+        for (int i = 0; i < bossNamesFinal.length; i++) {
+            bossRespawnTimes.put(bossNamesFinal[i], 20);
+            if (i == 0 || i == 7 || i == 12)
+                bossRespawnTimes.put(bossNamesFinal[i], 30);
+            if (i == 17)
+                bossRespawnTimes.put(bossNamesFinal[i], 58);
+            if (i == 18)
+                bossRespawnTimes.put(bossNamesFinal[i], 1);
+        }
 
         for(String bossName : bossNamesFinal) {
             bossHunters.put(bossName, new ArrayList<>());
             bossHistory.put(bossName, new ArrayList<>());
-            bossKills.put(bossName, new HashMap<>());
+            bossHuntersKills.put(bossName, new HashMap<>());
             bossSpawnTimers.put(bossName, new Timer());
         }
-
         try {
             initializeKills();
         } catch (Exception e) {
@@ -119,66 +115,75 @@ public abstract class Boss {
         a.put("Aversionist", 2);
         a.put("my name is jeeff", 2);
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
-        bossKills.put("GHOSTSNAKE", a);
-        HashMap<String, Integer> b = new HashMap<>();
-        b.put("Vampy", 2);
-        b.put("2mutchKek", 1);
-        bossKills.put("BERSERK GOSUMI", b);
-        HashMap<String, Integer> c = new HashMap<>();
-        c.put("dandera", 9);
-        bossKills.put("SPIDEY", c);
-        HashMap<String, Integer> d = new HashMap<>();
-        d.put("dandera", 1);
-        bossKills.put("WILDBOAR", d);*/
+        bossHuntersKills.put("GHOSTSNAKE", a);*/
 
-        HashMap<String, String> bossKillsIDS = new HashMap<>();
-        bossKillsIDS.put(bossNamesFinal[0], "420069733711216661");
-        bossKillsIDS.put(bossNamesFinal[1], "420069734080577536");
-        bossKillsIDS.put(bossNamesFinal[2], "420069734021857283");
-        bossKillsIDS.put(bossNamesFinal[3], "420069734651002880");
-        bossKillsIDS.put(bossNamesFinal[4], "420069734982090752");
-        bossKillsIDS.put(bossNamesFinal[5], "420069760739311627");
-        bossKillsIDS.put(bossNamesFinal[6], "420069761125318676");
-        bossKillsIDS.put(bossNamesFinal[7], "421561477829492738");
-        bossKillsIDS.put(bossNamesFinal[8], "421561478328483850");
-        bossKillsIDS.put(bossNamesFinal[9], "421561478567690240");
-        bossKillsIDS.put(bossNamesFinal[10], "421561478815154176");
-        bossKillsIDS.put(bossNamesFinal[11], "421561478882000897");
+        bossKillsMessage = AuroraBot.jda.getTextChannelById("420058966257827841").getMessageById("422244348411904010").complete();
+        String[] bossKillsLines = bossKillsMessage.getContent().split("\nTotal");
+        //System.out.println(Arrays.toString(bossKillsLines));
 
-        for(String bossName : bossNamesFinal) {
-            Message bossKillsMessage = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById(bossKillsIDS.get(bossName)).complete();
-            String[] lines = bossKillsMessage.getContent().split("\\n");
+        for(String bossKillsLine : bossKillsLines) {
+            String[] huntersLine = bossKillsLine.split("\n");
+            //System.out.println(Arrays.toString(huntersLine));
+
             HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
-            for (int i = 1; i < lines.length - 1; i++) {
-                int parenthesis = lines[i].indexOf(")");
-                int colon = lines[i].indexOf(":");
+            for (int i = 1; i < huntersLine.length - 1; i++) {
+                int parenthesis = huntersLine[i].indexOf(")");
+                int colon = huntersLine[i].indexOf(":");
 
-                String name = lines[i].substring(parenthesis + 2, colon);
-                Integer kills = Integer.parseInt(lines[i].substring(colon + 2));
+                String name = huntersLine[i].substring(parenthesis + 2, colon);
+                Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
                 bossKillsHashMap.put(name, kills);
             }
-            System.out.println(bossKillsHashMap.toString());
-            System.out.println(bossKillsMessage.getContent());
-            bossKills.put(bossName, bossKillsHashMap);
-            bossKillsLog.put(bossName, bossKillsMessage);
+            String bossName = "";
+            for (String eachBossName : bossNamesFinal)
+                if (huntersLine[0].contains(eachBossName))
+                    bossName = eachBossName;
+            //System.out.println(bossName + " = " + bossKillsHashMap);
+            bossHuntersKills.put(bossName, bossKillsHashMap);
         }
     }
 
-    public static void updateOverallKills() {
-        bossOverallKills.clear();
-        for(String bossName : bossNamesFinal) {
-            Message bossKillsMessage = bossKillsLog.get(bossName);
-            String[] lines = bossKillsMessage.getContent().split("\\n");
-            for (int i = 1; i < lines.length - 1; i++) {
-                int parenthesis = lines[i].indexOf(")");
-                int colon = lines[i].indexOf(":");
-
-                String name = lines[i].substring(parenthesis + 2, colon);
-                Integer kills = Integer.parseInt(lines[i].substring(colon + 2));
-                bossOverallKills.putIfAbsent(name, 0);
-                bossOverallKills.put(name, bossOverallKills.get(name) + kills);
-            }
+    public static String getKills(String bossName) {
+        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
+        String emojiString = "";
+        for(int i = 1; i < 101; i++) {
+            emojiString += emojis[new Random().nextInt(5)];
+            if(i % 20 == 0)
+                emojiString += "\n";
+            else
+                emojiString += " ";
         }
+
+        String bossKillsString = "";
+        HashMap<String, Integer> killsHashMap = bossHuntersKills.get(bossName);
+
+        Object[] entrySet = killsHashMap.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
+            }
+        });
+
+
+        int totalKillCount = 0;
+        int rank = 1;
+        for (Object entry : entrySet) {
+            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
+            bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
+
+            if(killCount % 100 == 0 && killCount != 0)
+                messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+        }
+
+        if (bossKillsString.isEmpty())
+            bossKillsString = " ";
+        if (totalKillCount % 100 == 0 && totalKillCount != 0)
+            messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
+
+        return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
 
     public static String respawnTime(String bossName) {

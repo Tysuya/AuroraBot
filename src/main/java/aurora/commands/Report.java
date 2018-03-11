@@ -56,15 +56,18 @@ public class Report extends Boss {
         else {
             messageString = "Great job, " + codeBlock(author) + "!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author);
-            HashMap<String, Integer> authorList = bossKills.get(bossName);
+            HashMap<String, Integer> authorList = bossHuntersKills.get(bossName);
 
             authorList.putIfAbsent(author, 0);
             authorList.put(author, authorList.get(author) + 1);
 
-            bossKills.put(bossName, authorList);
+            bossHuntersKills.put(bossName, authorList);
             try {
-                bossKillsLog.get(bossName).editMessage(getKills(bossName)).queue();
-                AuroraBot.jda.getTextChannelById("420067387644182538").editMessageById("421561504383500290", getOverallKills()).queue();
+                String killsString = "";
+                for (String eachBossName : bossNamesFinal)
+                    killsString += getKills(eachBossName);
+                bossKillsMessage.editMessage(killsString).complete();
+                AuroraBot.jda.getTextChannelById("420058966257827841").editMessageById("422244560073129986", getOverallKills()).complete();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,50 +83,20 @@ public class Report extends Boss {
         spawnTimer(bossName);
     }
 
-    public static String getKills(String bossName) {
-        String bossKillsString = "";
-        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
-
-        Object[] entrySet = killsHashMap.entrySet().toArray();
-        Arrays.sort(entrySet, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            }
-        });
-
-        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
-        String emojiString = "";
-        for(int i = 1; i < 101; i++) {
-            emojiString += emojis[new Random().nextInt(5)];
-            if(i % 20 == 0)
-                emojiString += "\n";
-            else
-                emojiString += " ";
-        }
-
-        int totalKillCount = 0;
-        int rank = 1;
-        for (Object entry : entrySet) {
-            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
-            String name = ((Map.Entry<String, Integer>) entry).getKey();
-            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
-            totalKillCount += killCount;
-            bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
-
-            if(killCount % 100 == 0)
-                messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
-        }
-
-        if (bossKillsString.isEmpty())
-            bossKillsString = " ";
-        if (totalKillCount % 100 == 0)
-            messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
-
-        return "Total kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
-    }
-
     public static String getOverallKills() {
-        updateOverallKills();
+        bossOverallKills.clear();
+        for(String bossName : bossNamesFinal) {
+            String[] huntersLine = getKills(bossName).split("\n");
+            for (int i = 2; i < huntersLine.length - 1; i++) {
+                int parenthesis = huntersLine[i].indexOf(")");
+                int colon = huntersLine[i].indexOf(":");
+
+                String name = huntersLine[i].substring(parenthesis + 2, colon);
+                Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
+                bossOverallKills.putIfAbsent(name, 0);
+                bossOverallKills.put(name, bossOverallKills.get(name) + kills);
+            }
+        }
 
         String overallKillsString = "";
 
@@ -153,11 +126,11 @@ public class Report extends Boss {
             totalKillCount += killCount;
             overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
 
-            if(killCount % 100 == 0)
+            if(killCount % 100 == 0 && killCount != 0)
                 messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();
         }
 
-        if (totalKillCount % 100 == 0)
+        if (totalKillCount % 100 == 0 && totalKillCount != 0)
             messageChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
 
         if (overallKillsString.isEmpty())
