@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 /**
  * Created by Tyler on 1/17/2017.
  */
@@ -24,9 +23,13 @@ public abstract class Boss {
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
 
-    static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
+    /*static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
     static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
-    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
+    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");*/
+
+    static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
+    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
+    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA"};
 

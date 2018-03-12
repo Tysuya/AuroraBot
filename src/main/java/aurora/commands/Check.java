@@ -11,6 +11,7 @@ public class Check extends Boss {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!check ")[1]);
         for(String bossName : bossNames) {
             bossReport.put(bossName, channel.sendMessage(respawnTime(bossName) +
+                    "\nCurrent Time: " + codeBlock(dateFormat.format(new Date())) +
                     currentHunters(bossName)).complete());
             spawnTimer(bossName);
         }
