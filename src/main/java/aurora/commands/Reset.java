@@ -13,6 +13,7 @@ public class Reset extends Boss {
             nextBossSpawnTime.put(bossName, null);
             bossReport.put(bossName, null);
             channel.sendMessage(bold(bossName) + "'s respawn timer has been reset").queue();
+            updateBossInfo(bossName);
         }
     }
 }
