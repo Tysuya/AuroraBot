@@ -23,6 +23,7 @@ public abstract class Boss {
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
 
+    // Test
     /*static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
     static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");*/
@@ -39,7 +40,7 @@ public abstract class Boss {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
-            bossHuntersChannel.sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
+            //bossHuntersChannel.sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,8 +59,8 @@ public abstract class Boss {
             bossSpawnTimers.put(bossName, new Timer());
         }
         try {
-            initializeHunters();
             initializeKills();
+            initializeHunters();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,11 +140,13 @@ public abstract class Boss {
                         lines[i] = lines[i].replace("`", "");
 
                     try {
-                        Date time = dateFormat.parse(lines[0].split("at ")[1]);
-                        if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
-                            time.setHours(time.getHours() + 1);
-                        time.setYear(new Date().getYear());
-                        nextBossSpawnTime.put(bossName, time);
+                        if (!lines[0].split("at ")[1].equals("Unknown")) {
+                            Date time = dateFormat.parse(lines[0].split("at ")[1]);
+                            if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
+                                time.setHours(time.getHours() + 1);
+                            time.setYear(new Date().getYear());
+                            nextBossSpawnTime.put(bossName, time);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
