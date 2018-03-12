@@ -48,7 +48,6 @@ public class Report extends Boss {
 
             calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
             nextBossSpawnTime.put(bossName, calendar.getTime());
-
         }
         else {
             messageString = "Great job, " + codeBlock(author) + "!";

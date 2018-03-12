@@ -142,8 +142,8 @@ public abstract class Boss {
                     try {
                         if (!lines[0].split("at ")[1].equals("Unknown")) {
                             Date time = dateFormat.parse(lines[0].split("at ")[1]);
-                            if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
-                                time.setHours(time.getHours() + 1);
+                            /*if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
+                                time.setHours(time.getHours() + 1);*/
                             time.setYear(new Date().getYear());
                             System.out.println(bossName + " | " + time);
                             nextBossSpawnTime.put(bossName, time);
