@@ -16,9 +16,9 @@ public class PunchIn extends Boss {
             if(message.getMentionedUsers().isEmpty())
                 addHunter(channel, bossName, message.getAuthor());
             else
-                for(User hunter : message.getMentionedUsers()) {
+                for(User hunter : message.getMentionedUsers())
                     addHunter(channel, bossName, hunter);
-                }
+            updateBossInfo(bossName);
         }
     }
 

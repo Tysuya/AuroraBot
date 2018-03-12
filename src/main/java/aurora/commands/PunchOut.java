@@ -17,6 +17,7 @@ public class PunchOut extends Boss {
             else
                 for(User hunter : message.getMentionedUsers())
                     removeHunter(channel, bossName, hunter);
+            updateBossInfo(bossName);
         }
     }
 
