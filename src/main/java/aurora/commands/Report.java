@@ -3,6 +3,7 @@ package aurora.commands;
 import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.MessageHistory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,19 +18,20 @@ public class Report extends Boss {
 
         Calendar calendar = Calendar.getInstance();
 
-        if(initialReport.length > 1 && !initialReport[1].contains("LOST") && !initialReport[1].contains("@")) {
-            timeOfDeath = initialReport[1];
-            String[] timeOfDeathArray = new String[2];
-            if(timeOfDeath.contains(":")) {
-                timeOfDeathArray = timeOfDeath.split(":");
-            }
-            else {
-                timeOfDeathArray[0] = timeOfDeath.charAt(0) + "" + timeOfDeath.charAt(1);
-                timeOfDeathArray[1] = timeOfDeath.charAt(2) + "" + timeOfDeath.charAt(3);
-            }
+        for(int i = 0; i < initialReport.length; i++) {
+            if (initialReport[i].matches(".*\\d+.*")) {
+                timeOfDeath = initialReport[i];
+                String[] timeOfDeathArray = new String[2];
+                if (timeOfDeath.contains(":")) {
+                    timeOfDeathArray = timeOfDeath.split(":");
+                } else {
+                    timeOfDeathArray[0] = timeOfDeath.charAt(0) + "" + timeOfDeath.charAt(1);
+                    timeOfDeathArray[1] = timeOfDeath.charAt(2) + "" + timeOfDeath.charAt(3);
+                }
 
-            calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDeathArray[0]));
-            calendar.set(Calendar.SECOND, Integer.parseInt(timeOfDeathArray[1]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDeathArray[0]));
+                calendar.set(Calendar.SECOND, Integer.parseInt(timeOfDeathArray[1]));
+            }
         }
 
         ArrayList<String> report = changeAbbreviations(message.getContent().split("!report ")[1]);
@@ -63,11 +65,14 @@ public class Report extends Boss {
 
             bossHuntersKills.put(bossName, authorList);
             try {
-                String killsString = "";
-                for (String eachBossName : bossNamesFinal)
-                    killsString += getKills(eachBossName);
-                bossKillsMessage.editMessage(killsString).complete();
-                AuroraBot.jda.getTextChannelById("420067387644182538").editMessageById("422263655187349525", getOverallKills()).complete();
+                MessageHistory messageHistory = new MessageHistory(AuroraBot.jda.getTextChannelById("420067387644182538"));
+                List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+                for (Message eachMessage : messageHistoryList) {
+                    if (eachMessage.getContent().contains(bossName))
+                        eachMessage.editMessage(getKills(bossName)).complete();
+                    if (eachMessage.getContent().contains("overall"))
+                        eachMessage.editMessage(getOverallKills()).complete();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -135,6 +140,6 @@ public class Report extends Boss {
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
-        return "Total overall kills for " + bold("Aurora") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
+        return "Total overall kills for " + bold("AURORA") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 }

@@ -3,6 +3,7 @@ package aurora.commands;
 import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.MessageHistory;
 import net.dv8tion.jda.core.entities.User;
 
 import java.text.DateFormat;
@@ -24,20 +25,18 @@ public abstract class Boss {
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
     static Message bossKillsMessage;
 
-    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CORRUPTED FOREST KEEPER", "LACOSTEZA"};
+    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA"};
 
     public static void initialize() {
         try {
-            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
+            //AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
         for (int i = 0; i < bossNamesFinal.length; i++) {
             bossRespawnTimes.put(bossNamesFinal[i], 20);
-            if (i == 0 || i == 7 || i == 14)
+            if (i == 0 || i == 4 || i == 8 || i == 15)
                 bossRespawnTimes.put(bossNamesFinal[i], 30);
-            if (i == 19)
-                bossRespawnTimes.put(bossNamesFinal[i], 58);
             if (i == 20)
                 bossRespawnTimes.put(bossNamesFinal[i], 1);
         }
@@ -117,30 +116,36 @@ public abstract class Boss {
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
         bossHuntersKills.put("GHOSTSNAKE", a);*/
 
-        bossKillsMessage = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById("422263858934054912").complete();
-        String[] bossKillsLines = bossKillsMessage.getContent().split("\nTotal");
-        //System.out.println(Arrays.toString(bossKillsLines));
+        MessageHistory messageHistory = new MessageHistory(AuroraBot.jda.getTextChannelById("420067387644182538"));
+        List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+        for (Message message : messageHistoryList) {
+            //message = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById("422263858934054912").complete();
+            String[] bossKillsLines = message.getContent().split("\nTotal");
+            //System.out.println(Arrays.toString(bossKillsLines));
 
-        for(String bossKillsLine : bossKillsLines) {
-            String[] huntersLine = bossKillsLine.split("\n");
-            //System.out.println(Arrays.toString(huntersLine));
+            for (String bossKillsLine : bossKillsLines) {
+                String[] huntersLine = bossKillsLine.split("\n");
+                //System.out.println(Arrays.toString(huntersLine));
 
-            HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
-            for (int i = 1; i < huntersLine.length - 1; i++) {
-                int parenthesis = huntersLine[i].indexOf(")");
-                int colon = huntersLine[i].indexOf(":");
+                HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
+                for (int i = 1; i < huntersLine.length - 1; i++) {
+                    int parenthesis = huntersLine[i].indexOf(")");
+                    int colon = huntersLine[i].indexOf(":");
 
-                String name = huntersLine[i].substring(parenthesis + 2, colon);
-                Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
-                bossKillsHashMap.put(name, kills);
+                    String name = huntersLine[i].substring(parenthesis + 2, colon);
+                    Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
+                    bossKillsHashMap.put(name, kills);
+                }
+
+                String bossName = "";
+                for (String eachBossName : bossNamesFinal)
+                    if (huntersLine[0].contains(eachBossName))
+                        bossName = eachBossName;
+                //System.out.println(bossName + " = " + bossKillsHashMap);
+                bossHuntersKills.put(bossName, bossKillsHashMap);
             }
-            String bossName = "";
-            for (String eachBossName : bossNamesFinal)
-                if (huntersLine[0].contains(eachBossName))
-                    bossName = eachBossName;
-            //System.out.println(bossName + " = " + bossKillsHashMap);
-            bossHuntersKills.put(bossName, bossKillsHashMap);
         }
+        System.out.println(bossHuntersKills.toString());
     }
 
     public static String getKills(String bossName) {
@@ -233,36 +238,36 @@ public abstract class Boss {
     public static ArrayList<String> changeAbbreviations(String bossLine) {
         bossLine = bossLine.toUpperCase();
 
-        bossLine = bossLine.replace("GS", bossNamesFinal[0]);
-        bossLine = bossLine.replace("WB", bossNamesFinal[1]);
-        bossLine = bossLine.replace("RED BEE", bossNamesFinal[7]);
-        bossLine = bossLine.replace("RB", bossNamesFinal[7]);
-        bossLine = bossLine.replace("ASSASSIN", bossNamesFinal[8]);
-        bossLine = bossLine.replace("ASS", bossNamesFinal[8]);
-        bossLine = bossLine.replace("BM", bossNamesFinal[12]);
-        bossLine = bossLine.replace("LM", bossNamesFinal[13]);
-        bossLine = bossLine.replace("EB", bossNamesFinal[17]);
-        bossLine = bossLine.replace("SG", bossNamesFinal[18]);
-        bossLine = bossLine.replace("CFK", bossNamesFinal[19]);
-        bossLine = bossLine.replace("LACOS", bossNamesFinal[20]);
+        for(String bossName : bossNamesFinal)
+            if (bossName.contains(" "))
+                bossLine = bossLine.replace(bossName, bossName.split(" ")[0]);
 
         ArrayList<String> bossNames = new ArrayList<>(Arrays.asList(bossLine.split(" ")));
 
         for(int i = 0; i < bossNames.size(); i++) {
-            switch (bossNames.get(i)) {
-                case "BERSERK":
-                    bossNames.set(i, bossNames.get(i).replace("BERSERK", bossNamesFinal[3]));
-                case "BLOODY":
-                    bossNames.set(i, bossNames.get(i).replace("BLOODY", bossNamesFinal[4]));
-                case "DESERT":
-                    bossNames.set(i, bossNames.get(i).replace("DESERT", bossNamesFinal[8]));
-                case "LESSER":
-                    bossNames.set(i, bossNames.get(i).replace("LESSER", bossNamesFinal[13]));
-                case "ELDER":
-                    bossNames.set(i, bossNames.get(i).replace("ELDER", bossNamesFinal[17]));
-                case "CORRUPTED":
-                    bossNames.set(i, bossNames.get(i).replace("CORRUPTED", bossNamesFinal[19]));
-            }
+            String bossName = bossNames.get(i);
+            bossName = bossName.replace("GS", bossNamesFinal[0]);
+            bossName = bossName.replace("WB", bossNamesFinal[1]);
+            bossName = bossName.replace("WC", bossNamesFinal[4]);
+            bossName = bossName.replace("RED BEE", bossNamesFinal[8]);
+            bossName = bossName.replace("RB", bossNamesFinal[8]);
+            bossName = bossName.replace("ASSASSIN", bossNamesFinal[9]);
+            bossName = bossName.replace("ASSASAIN", bossNamesFinal[9]);
+            if (bossName.equals("ASS"))
+                bossName = bossName.replace("ASS", bossNamesFinal[9]);
+            bossName = bossName.replace("DA", bossNamesFinal[9]);
+            bossName = bossName.replace("BM", bossNamesFinal[13]);
+            bossName = bossName.replace("LM", bossNamesFinal[14]);
+            bossName = bossName.replace("EB", bossNamesFinal[18]);
+            bossName = bossName.replace("SG", bossNamesFinal[19]);
+            if (bossName.equals("LACOS"))
+                bossName = bossName.replace("LACOS", bossNamesFinal[20]);
+
+            for(String eachBossName : bossNamesFinal)
+                if (eachBossName.contains(" ") && bossName.equals(eachBossName.split(" ")[0]) && !bossName.equals(eachBossName))
+                    bossName = bossName.replace(eachBossName.split(" ")[0], eachBossName);
+
+            bossNames.set(i, bossName);
         }
 
         ArrayList<String> removedBossNames = new ArrayList<>();

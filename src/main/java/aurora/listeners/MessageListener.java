@@ -108,16 +108,17 @@ public class MessageListener extends ListenerAdapter {
                         "\nSPIDEY" +
                         "\nWILDBOAR - WB" +
                         "\nBERSERK GOSUMI - BERSERK" +
+                        "\nWHITE CROW - WHITE - WC" +
                         "\nBLOODY GOSUMI - BLOODY" +
                         "\nRAVEN" +
                         "\nBLASTER" +
                         "\nBSSSZSSS - RED BEE - RB" +
-                        "\nDESERT ASSASAIN - DESERT - ASSASSIN - ASS" +
+                        "\nDESERT ASSASAIN - DESERT - ASSASAIN - ASSASSIN - ASS - DA" +
                         "\nSTEALTH" +
                         "\nBUZSS" +
                         "\nBIZIZI" +
                         "\nBIGMOUSE - BM" +
-                        "\nLESSER MADMAN - LESSER - LM" +
+                        "\nLESSER MADMAN - LESSER - MADMAN - LM" +
                         "\nSHAAACK" +
                         "\nSUUUK" +
                         "\nSUSUSUK" +
@@ -167,24 +168,26 @@ public class MessageListener extends ListenerAdapter {
             }
         }
 
-        messageContent = message.getContent().toLowerCase();
-        if (messageContent.contains("omg"))
-            message.addReaction(message.getGuild().getEmotesByName("omg", true).get(0)).queue();
-        else if (messageContent.contains("dizzy"))
-            message.addReaction(message.getGuild().getEmotesByName("dizzy", true).get(0)).queue();
-        else if (messageContent.contains("mad"))
-            message.addReaction(message.getGuild().getEmotesByName("mad", true).get(0)).queue();
-        else if (messageContent.contains("greedy"))
-            message.addReaction(message.getGuild().getEmotesByName("greedy", true).get(0)).queue();
-        else if (messageContent.contains("surprise"))
-            message.addReaction(message.getGuild().getEmotesByName("surprise", true).get(0)).queue();
-        else if (messageContent.contains("cry"))
-            message.addReaction(message.getGuild().getEmotesByName("cry", true).get(0)).queue();
-        else if (messageContent.contains("happy"))
-            message.addReaction(message.getGuild().getEmotesByName("happy", true).get(0)).queue();
-        else if (messageContent.contains("love"))
-            message.addReaction(message.getGuild().getEmotesByName("love", true).get(0)).queue();
-        else if (messageContent.contains("heh"))
-            message.addReaction(message.getGuild().getEmotesByName("heh", true).get(0)).queue();
+        if(!author.isBot()) {
+            messageContent = message.getContent().toLowerCase();
+            if (messageContent.contains("omg"))
+                message.addReaction(message.getGuild().getEmotesByName("omg", true).get(0)).queue();
+            else if (messageContent.contains("dizzy"))
+                message.addReaction(message.getGuild().getEmotesByName("dizzy", true).get(0)).queue();
+            else if (messageContent.contains("mad"))
+                message.addReaction(message.getGuild().getEmotesByName("mad", true).get(0)).queue();
+            else if (messageContent.contains("greedy"))
+                message.addReaction(message.getGuild().getEmotesByName("greedy", true).get(0)).queue();
+            else if (messageContent.contains("surprise"))
+                message.addReaction(message.getGuild().getEmotesByName("surprise", true).get(0)).queue();
+            else if (messageContent.contains("cry"))
+                message.addReaction(message.getGuild().getEmotesByName("cry", true).get(0)).queue();
+            else if (messageContent.contains("happy"))
+                message.addReaction(message.getGuild().getEmotesByName("happy", true).get(0)).queue();
+            else if (messageContent.contains("love"))
+                message.addReaction(message.getGuild().getEmotesByName("love", true).get(0)).queue();
+            else if (messageContent.contains("heh"))
+                message.addReaction(message.getGuild().getEmotesByName("heh", true).get(0)).queue();
+        }
     }
 }
