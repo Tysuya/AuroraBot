@@ -150,7 +150,7 @@ public abstract class Boss {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (!lines[2].split(": ")[1].contains("None")) {
+                    if (!lines[1].split(": ")[1].contains("None")) {
                         String[] hunters = lines[2].split(": ")[1].split(", ");
                         List<User> huntersList = new ArrayList<>();
                         for (String hunter : hunters)
