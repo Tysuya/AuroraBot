@@ -33,9 +33,8 @@ public class Report extends Boss {
 
         String bossName = report.get(0);
 
-        if(calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
+        if(calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis())
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
-        }
 
         String author = message.getAuthor().getName();
         if(message.getContent().contains("@"))
@@ -46,6 +45,10 @@ public class Report extends Boss {
         if(message.getContent().contains("lost")) {
             messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author);
+
+            calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
+            nextBossSpawnTime.put(bossName, calendar.getTime());
+
         }
         else {
             messageString = "Great job, " + codeBlock(author) + "!";
