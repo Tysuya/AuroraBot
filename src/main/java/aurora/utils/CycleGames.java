@@ -36,7 +36,7 @@ public class CycleGames {
             }, 0, 900000);*/
 
             // Birthdays; general channel
-            timer.schedule(new TimerTask() {
+            /*timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     MessageChannel channel = AuroraBot.jda.getTextChannelById("232011880485486592");
@@ -75,7 +75,7 @@ public class CycleGames {
                         channel.sendMessage("@everyone It is now 11:59PM on 11/06! <@159201526114549760> I hope your birthday was everything you wished for and more! I'll be sure to message you next year too (if I'm still awake :zzz:).").queue();
                     }
                 }
-            }, 0, 59000);
+            }, 0, 59000);*/
         } catch (Exception e) {
             e.printStackTrace();
         }

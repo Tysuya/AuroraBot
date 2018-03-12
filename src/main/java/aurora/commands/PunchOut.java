@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PunchOut extends Boss {
     public static void punchOut(MessageChannel channel, Message message) {
@@ -20,8 +21,8 @@ public class PunchOut extends Boss {
     }
 
     public static void removeHunter(MessageChannel channel, String bossName, User hunter) {
-        ArrayList<User> huntersList = bossHunters.get(bossName);
-        ArrayList<User> newHuntersList = new ArrayList<>();
+        List<User> huntersList = bossHunters.get(bossName);
+        List<User> newHuntersList = new ArrayList<>();
 
         for(User hunterInList : huntersList)
             if(!hunterInList.equals(hunter))

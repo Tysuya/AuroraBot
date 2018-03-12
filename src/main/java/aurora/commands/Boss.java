@@ -10,26 +10,33 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 /**
  * Created by Tyler on 1/17/2017.
  */
 public abstract class Boss {
     static HashMap<String, Integer> bossRespawnTimes = new HashMap<>();
-    static HashMap<String, ArrayList<User>> bossHunters = new HashMap<>();
+    static HashMap<String, List<User>> bossHunters = new HashMap<>();
     static HashMap<String, Date> nextBossSpawnTime = new HashMap<>();
-    static MessageChannel messageChannel;
     static HashMap<String, Message> bossReport = new HashMap<>();
     static HashMap<String, ArrayList<String>> bossHistory = new HashMap<>();
-    static HashMap<String, HashMap<String, Integer>> bossHuntersKills = new HashMap<>();
+    static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
-    static Message bossKillsMessage;
+
+    static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
+    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
+    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA"};
 
+    static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd z");
+
     public static void initialize() {
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
         try {
-            AuroraBot.jda.getTextChannelById("417803228764176385").sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
+            bossHuntersChannel.sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,10 +51,11 @@ public abstract class Boss {
         for(String bossName : bossNamesFinal) {
             bossHunters.put(bossName, new ArrayList<>());
             bossHistory.put(bossName, new ArrayList<>());
-            bossHuntersKills.put(bossName, new HashMap<>());
+            bossKills.put(bossName, new HashMap<>());
             bossSpawnTimers.put(bossName, new Timer());
         }
         try {
+            initializeHunters();
             initializeKills();
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,8 +66,6 @@ public abstract class Boss {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
-                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
                     String currentDate = dateFormat.format(new Date());
 
                     Calendar calendar = Calendar.getInstance();
@@ -69,11 +75,11 @@ public abstract class Boss {
                     for(String bossName : bossNamesFinal) {
                         if(nextBossSpawnTime.get(bossName) != null) {
                             if(fastDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
-                                messageChannel.sendMessage(notifyingHunters(bossName) +
+                                bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
                                         "\n" + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
 
                             if(currentDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
-                                messageChannel.sendMessage(notifyingHunters(bossName) +
+                                bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
                                         "\n" + bold(bossName) + " has respawned! Find it and kill it!").queue();
                         }
                     }
@@ -95,14 +101,58 @@ public abstract class Boss {
                         long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
                         long seconds = time % 60;
                         long minutes = time / 60 % 60;
-
+                        
                         bossReport.get(bossName).editMessage(bossReport.get(bossName).getContent() +
                                 "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
                     }
                 }
-            }, 0, 5000);
+            }, 0, 10000);
         } catch(Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void updateBossInfo(String bossName) {
+        MessageHistory messageHistory = new MessageHistory(bossInfoChannel);
+        List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+        for (Message message : messageHistoryList) {
+            if (message.getContent().contains(bossName)) {
+                bossReport.put(bossName, message.editMessage(respawnTime(bossName) +
+                        currentHunters(bossName)).complete());
+                //spawnTimer(bossName);
+            }
+        }
+
+    }
+
+    public static void initializeHunters() {
+        MessageHistory messageHistory = new MessageHistory(bossInfoChannel);
+        List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+        for (Message message : messageHistoryList) {
+            for (String bossName : bossNamesFinal) {
+                if (message.getContent().contains(bossName)) {
+                    String[] lines = message.getContent().split("\n");
+                    for (int i = 0; i < lines.length; i++)
+                        lines[i] = lines[i].replace("`", "");
+
+                    try {
+                        Date time = dateFormat.parse(lines[0].split("at ")[1]);
+                        if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
+                            time.setHours(time.getHours() + 1);
+                        time.setYear(new Date().getYear());
+                        nextBossSpawnTime.put(bossName, time);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (!lines[2].split(": ")[1].contains("None")) {
+                        String[] hunters = lines[2].split(": ")[1].split(", ");
+                        List<User> huntersList = new ArrayList<>();
+                        for (String hunter : hunters)
+                            huntersList.addAll(AuroraBot.jda.getUsersByName(hunter, true));
+                        bossHunters.put(bossName, huntersList);
+                    }
+                }
+            }
         }
     }
 
@@ -114,12 +164,11 @@ public abstract class Boss {
         a.put("Aversionist", 2);
         a.put("my name is jeeff", 2);
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
-        bossHuntersKills.put("GHOSTSNAKE", a);*/
+        bossKills.put("GHOSTSNAKE", a);*/
 
-        MessageHistory messageHistory = new MessageHistory(AuroraBot.jda.getTextChannelById("420067387644182538"));
+        MessageHistory messageHistory = new MessageHistory(leaderboardChannel);
         List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
         for (Message message : messageHistoryList) {
-            //message = AuroraBot.jda.getTextChannelById("420067387644182538").getMessageById("422263858934054912").complete();
             String[] bossKillsLines = message.getContent().split("\nTotal");
             //System.out.println(Arrays.toString(bossKillsLines));
 
@@ -142,10 +191,10 @@ public abstract class Boss {
                     if (huntersLine[0].contains(eachBossName))
                         bossName = eachBossName;
                 //System.out.println(bossName + " = " + bossKillsHashMap);
-                bossHuntersKills.put(bossName, bossKillsHashMap);
+                bossKills.put(bossName, bossKillsHashMap);
             }
         }
-        System.out.println(bossHuntersKills.toString());
+        System.out.println(bossKills.toString());
     }
 
     public static String getKills(String bossName) {
@@ -160,7 +209,7 @@ public abstract class Boss {
         }
 
         String bossKillsString = "";
-        HashMap<String, Integer> killsHashMap = bossHuntersKills.get(bossName);
+        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
 
         Object[] entrySet = killsHashMap.entrySet().toArray();
         Arrays.sort(entrySet, new Comparator() {
@@ -180,13 +229,13 @@ public abstract class Boss {
             bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
 
             if(killCount % 100 == 0 && killCount != 0)
-                messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
         }
 
         if (bossKillsString.isEmpty())
             bossKillsString = " ";
         if (totalKillCount % 100 == 0 && totalKillCount != 0)
-            messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
@@ -196,22 +245,20 @@ public abstract class Boss {
         String note = "";
 
         if(nextBossSpawnTime.get(bossName) != null) {
-            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             nextSpawn = dateFormat.format(nextBossSpawnTime.get(bossName));
 
-            if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
-                note = " (Note: This time has already passed)";
+            /*if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
+                note = " (Note: This time has passed)";*/
         }
 
         return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn) + note;
     }
 
     public static String currentHunters(String bossName) {
-        ArrayList<User> huntersList = bossHunters.get(bossName);
+        List<User> huntersList = bossHunters.get(bossName);
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
-            huntersString += huntersList.get(i).getName();
+            huntersString += codeBlock(huntersList.get(i).getName());
             if(i != huntersList.size() - 1)
                 huntersString += ", ";
         }
@@ -219,11 +266,11 @@ public abstract class Boss {
         if(huntersString.isEmpty())
             huntersString = codeBlock("None");
 
-        return "\nCurrent Hunters: " + codeBlock(huntersString);
+        return "\nCurrent Hunters: " + huntersString;
     }
 
     public static String notifyingHunters(String bossName) {
-        ArrayList<User> huntersList = bossHunters.get(bossName);
+        List<User> huntersList = bossHunters.get(bossName);
         String huntersString = "";
         for(int i = 0; i < huntersList.size(); i++) {
             huntersString += huntersList.get(i).getAsMention();

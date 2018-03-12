@@ -1,18 +1,13 @@
 package aurora.commands;
 
-import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Report extends Boss {
     public static void report(MessageChannel channel, Message message) {
-        messageChannel = channel;
-
         String timeOfDeath = "";
         String[] initialReport = message.getContent().split("!report ")[1].split(" ");
 
@@ -42,9 +37,6 @@ public class Report extends Boss {
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
         }
 
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
         String author = message.getAuthor().getName();
         if(message.getContent().contains("@"))
             author = message.getMentionedUsers().get(0).getName();
@@ -58,14 +50,17 @@ public class Report extends Boss {
         else {
             messageString = "Great job, " + codeBlock(author) + "!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author);
-            HashMap<String, Integer> authorList = bossHuntersKills.get(bossName);
+            HashMap<String, Integer> authorList = bossKills.get(bossName);
 
             authorList.putIfAbsent(author, 0);
             authorList.put(author, authorList.get(author) + 1);
 
-            bossHuntersKills.put(bossName, authorList);
+            bossKills.put(bossName, authorList);
+
+            calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
+            nextBossSpawnTime.put(bossName, calendar.getTime());
             try {
-                MessageHistory messageHistory = new MessageHistory(AuroraBot.jda.getTextChannelById("420067387644182538"));
+                MessageHistory messageHistory = new MessageHistory(leaderboardChannel);
                 List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
                 for (Message eachMessage : messageHistoryList) {
                     if (eachMessage.getContent().contains(bossName))
@@ -73,13 +68,15 @@ public class Report extends Boss {
                     if (eachMessage.getContent().contains("overall"))
                         eachMessage.editMessage(getOverallKills()).complete();
                 }
+                messageHistory = new MessageHistory(bossInfoChannel);
+                messageHistoryList = messageHistory.retrievePast(50).complete();
+                for (Message eachMessage : messageHistoryList)
+                    if (eachMessage.getContent().contains(bossName))
+                        updateBossInfo(bossName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
-        nextBossSpawnTime.put(bossName, calendar.getTime());
 
         bossReport.put(bossName, channel.sendMessage(messageString +
                 respawnTime(bossName) +
@@ -132,11 +129,11 @@ public class Report extends Boss {
             overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
 
             if(killCount % 100 == 0 && killCount != 0)
-                messageChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();
         }
 
         if (totalKillCount % 100 == 0 && totalKillCount != 0)
-            messageChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(messageChannel.getMessageById(messageChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";

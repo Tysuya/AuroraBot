@@ -180,8 +180,8 @@ public class AuroraBot {
                 //jda.getTextChannelById("420067387644182538").sendMessage(b).queue();
             }
 
-            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm:ssa");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
+            //DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm:ssa");
+            //dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
             //channel.sendMessage("Started on `" + dateFormat.format(new Date()) + "`").queue();=
             Boss.initialize();
             cycleGames();
