@@ -145,13 +145,14 @@ public abstract class Boss {
                             if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
                                 time.setHours(time.getHours() + 1);
                             time.setYear(new Date().getYear());
+                            System.out.println(bossName + " | " + time);
                             nextBossSpawnTime.put(bossName, time);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     if (!lines[1].split(": ")[1].contains("None")) {
-                        String[] hunters = lines[2].split(": ")[1].split(", ");
+                        String[] hunters = lines[1].split(": ")[1].split(", ");
                         List<User> huntersList = new ArrayList<>();
                         for (String hunter : hunters)
                             huntersList.addAll(AuroraBot.jda.getUsersByName(hunter, true));

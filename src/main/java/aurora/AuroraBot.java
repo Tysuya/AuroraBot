@@ -177,7 +177,7 @@ public class AuroraBot {
                     "\nTotal kills for **LACOSTEZA**: `1` ```" +
                             "\n1) austin: 1\n```"};
             for (String b : a) {
-                //jda.getTextChannelById("420067387644182538").sendMessage(b).queue();
+                jda.getTextChannelById("420067387644182538").sendMessage(b).queue();
             }
 
             //DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm:ssa");
