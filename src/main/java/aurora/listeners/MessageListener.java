@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import static aurora.commands.Active.active;
 import static aurora.commands.Boss.*;
 import static aurora.commands.Check.check;
 import static aurora.commands.Fact.fact;
@@ -33,12 +34,13 @@ public class MessageListener extends ListenerAdapter {
             "\n__Boss Hunting Commands:__" +
             "\n```!pin [bossName] - to punch in to be notified when a boss spawns" +
             "\n!pout [bossName] - to punch out of notifications" +
-            "\n!report [bossName] [time] [lost] - to report when you killed a boss - add \"lost\" if you didn't actually kill the boss" +
+            "\n!report [bossName] [time] [lost] - to report when you killed a boss - add \"lost\" if you didn't kill the boss" +
             "\n!reset [bossName] - to reset a boss time to \"Unknown\"" +
             "\n!check [bossName] - to check the next time a boss is going to spawn" +
             "\n!history [bossName] - to check the history of a boss" +
             "\n!kills [bossName] - to check the number of kills on a boss" +
-            "\n!remove [bossName] [kills] - to remove a number of kills of a boss from a hunter```" +
+            "\n!remove [bossName] [kills] - to remove a number of kills of a boss from a hunter" +
+            "\n!active - to check active bosses```" +
             "\n__Boss names and abbreviations recognized by AuroraBot:__" +
             "\n```GHOSTSNAKE - GS" +
             "\nSPIDEY" +
@@ -73,7 +75,7 @@ public class MessageListener extends ListenerAdapter {
 
     public MessageListener() {
         try {
-            AuroraBot.jda.getTextChannelById("418818283102404611").editMessageById("419724800471203854", helpMessage);
+            AuroraBot.jda.getTextChannelById("418818283102404611").editMessageById("419724800471203854", helpMessage).queue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,6 +177,8 @@ public class MessageListener extends ListenerAdapter {
                 kills(channel, message);
             } else if (messageContent.contains("!remove")) {
                 remove(channel, message);
+            } else if (messageContent.contains("!active")) {
+                active(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
                 cleverBot(channel, message);
             }
