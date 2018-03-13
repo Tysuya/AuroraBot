@@ -130,12 +130,12 @@ public class Report extends Boss {
             totalKillCount += killCount;
             overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
 
-            if(killCount % 100 == 0 && killCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();
+            /*if(killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();*/
         }
 
-        if (totalKillCount % 100 == 0 && totalKillCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
+        /*if (totalKillCount % 100 == 0 && totalKillCount != 0)
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();*/
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
