@@ -12,7 +12,7 @@ public class Active extends Boss {
             if (nextBossSpawnTime.get(bossName) != null && !(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime()))
                 messageString += respawnTime(bossName);
         if (messageString.isEmpty())
-            messageString = codeBlock("None");
+            messageString = codeBlock("No active bosses");
         channel.sendMessage(messageString).queue();
     }
 }
