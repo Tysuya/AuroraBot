@@ -83,9 +83,11 @@ public abstract class Boss {
                                 bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
                                         "\n" + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
 
-                            if(currentDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
+                            if(currentDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName)))) {
                                 bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
                                         "\n" + bold(bossName) + " has respawned! Find it and kill it!").queue();
+                                updateBossInfo(bossName);
+                            }
                         }
                     }
                 }
@@ -121,9 +123,9 @@ public abstract class Boss {
         List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             String messageString = respawnTime(bossName) + currentHunters(bossName);
+
             if (message.getContent().contains(bossName) && !("\n" + message.getContent()).equals(messageString))
-                bossReport.put(bossName, message.editMessage(respawnTime(bossName) +
-                        currentHunters(bossName)).complete());
+                bossReport.put(bossName, message.editMessage(messageString).complete());
                 //spawnTimer(bossName);
         }
 
@@ -328,7 +330,11 @@ public abstract class Boss {
         if(huntersString.isEmpty())
             huntersString = codeBlock("None");
 
-        return "\nCurrent Hunters: " + huntersString;
+        String messageString = "\nCurrent Hunters: " + huntersString;
+        if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
+            messageString += "\n(Note: " + bold(bossName) + " has been dropped)";
+
+        return messageString;
     }
 
     public static String notifyingHunters(String bossName) {
