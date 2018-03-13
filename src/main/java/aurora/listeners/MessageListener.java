@@ -1,5 +1,6 @@
 package aurora.listeners;
 
+import aurora.AuroraBot;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.client.managers.EmoteManager;
 import net.dv8tion.jda.core.JDA;
@@ -16,6 +17,7 @@ import static aurora.commands.Fact.fact;
 import static aurora.commands.History.history;
 import static aurora.commands.Kills.kills;
 import static aurora.commands.PunchOut.punchOut;
+import static aurora.commands.Remove.remove;
 import static aurora.commands.Report.report;
 import static aurora.commands.Reset.reset;
 import static aurora.commands.Should.should;
@@ -24,8 +26,57 @@ import static aurora.commands.CleverBot.cleverBot;
 import static aurora.commands.PunchIn.punchIn;
 
 public class MessageListener extends ListenerAdapter {
-    public MessageListener() {
+    String helpMessage = "Hello, I am AuroraBot. My current commands are as follows:" +
+            "\n__General Commands:__" +
+            "\n```ab!ping - to ping AuroraBot to get a response time" +
+            "\nab!uptime - to check the uptime of AuroraBot```" +
+            "\n__Boss Hunting Commands:__" +
+            "\n```!pin [bossName] - to punch in to be notified when a boss spawns" +
+            "\n!pout [bossName] - to punch out of notifications" +
+            "\n!report [bossName] [time] [lost] - to report when you killed a boss - add \"lost\" if you didn't actually kill the boss" +
+            "\n!reset [bossName] - to reset a boss time to \"Unknown\"" +
+            "\n!check [bossName] - to check the next time a boss is going to spawn" +
+            "\n!history [bossName] - to check the history of a boss" +
+            "\n!kills [bossName] - to check the number of kills on a boss" +
+            "\n!remove [bossName] [kills] - to remove a number of kills of a boss from a hunter```" +
+            "\n__Boss names and abbreviations recognized by AuroraBot:__" +
+            "\n```GHOSTSNAKE - GS" +
+            "\nSPIDEY" +
+            "\nWILDBOAR - WB" +
+            "\nBERSERK GOSUMI - BERSERK" +
+            "\nWHITE CROW - WHITE - WC" +
+            "\nBLOODY GOSUMI - BLOODY" +
+            "\nRAVEN" +
+            "\nBLASTER" +
+            "\nBSSSZSSS - RED BEE - RB" +
+            "\nDESERT ASSASAIN - DESERT - ASSASAIN - ASSASSIN - ASS - DA" +
+            "\nSTEALTH" +
+            "\nBUZSS" +
+            "\nBIZIZI" +
+            "\nBIGMOUSE - BM" +
+            "\nLESSER MADMAN - LESSER - MADMAN - LM" +
+            "\nSHAAACK" +
+            "\nSUUUK" +
+            "\nSUSUSUK" +
+            "\nELDER BEHOLDER - ELDER - EM" +
+            "\nSANDGRAVE - SG" +
+            "\nCORRUPTED FOREST KEEPER - CORRUPTED - CFK" +
+            "\nLACOSTEZA - LACOS```" +
+            "\n__Notes:__" +
+            "\n```Boss names are not case-sensitive" +
+            "\nUsing colons in times is optional" +
+            "\nAll of the commands can take multiple boss names except for !report" +
+            "\nYou can !pin, !pout, !report, !remove for others by @mentioning them" +
+            "\nYou can use \"!pout all\" to punch out for all bosses```" +
+            "I am also a chatbot, so start a message with <@418714401617608704> and I will respond." +
+            "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.";
 
+    public MessageListener() {
+        try {
+            AuroraBot.jda.getTextChannelById("418818283102404611").editMessageById("419724800471203854", helpMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -91,48 +142,7 @@ public class MessageListener extends ListenerAdapter {
         if(!message.getAuthor().isBot()) {
             messageContent = message.getContent().toLowerCase();
             if (messageContent.equals("ab!help")) {
-                channel.sendMessage("Hello, I am AuroraBot. My current commands are as follows:" +
-                        "\n__General Commands:__" +
-                        "\n```ab!ping - to ping AuroraBot to get a response time" +
-                        "\nab!uptime - to check the uptime of AuroraBot```" +
-                        "\n__Boss Hunting Commands:__" +
-                        "\n```!pin [bossName] - to punch in to be notified when a boss spawns" +
-                        "\n!pout [bossName] - to punch out of notifications" +
-                        "\n!report [bossName] [time] [lost] - to report when you killed a boss - add \"lost\" if you didn't actually kill the boss" +
-                        "\n!reset [bossName] - to reset a boss time to \"Unknown\"" +
-                        "\n!check [bossName] - to check the next time a boss is going to spawn" +
-                        "\n!history [bossName] - to check the history of a boss" +
-                        "\n!kills [bossName] - to check the number of kills on a boss```" +
-                        "\n__Boss names and abbreviations recognized by AuroraBot:__" +
-                        "\n```GHOSTSNAKE - GS" +
-                        "\nSPIDEY" +
-                        "\nWILDBOAR - WB" +
-                        "\nBERSERK GOSUMI - BERSERK" +
-                        "\nWHITE CROW - WHITE - WC" +
-                        "\nBLOODY GOSUMI - BLOODY" +
-                        "\nRAVEN" +
-                        "\nBLASTER" +
-                        "\nBSSSZSSS - RED BEE - RB" +
-                        "\nDESERT ASSASAIN - DESERT - ASSASAIN - ASSASSIN - ASS - DA" +
-                        "\nSTEALTH" +
-                        "\nBUZSS" +
-                        "\nBIZIZI" +
-                        "\nBIGMOUSE - BM" +
-                        "\nLESSER MADMAN - LESSER - MADMAN - LM" +
-                        "\nSHAAACK" +
-                        "\nSUUUK" +
-                        "\nSUSUSUK" +
-                        "\nELDER BEHOLDER - ELDER - EM" +
-                        "\nSANDGRAVE - SG" +
-                        "\nCORRUPTED FOREST KEEPER - CORRUPTED - CFK" +
-                        "\nLACOSTEZA - LACOS```" +
-                        "\n__Notes:__" +
-                        "\n```Boss names are not case-sensitive" +
-                        "\nUsing colons in times is optional" +
-                        "\nAll of the commands can take multiple boss names except for !report" +
-                        "\nYou can !pin, !pout, !report for others by @mentioning them```" +
-                        "I am also a chatbot, so start a message with <@418714401617608704> and I will respond." +
-                        "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.").queue();
+                channel.sendMessage(helpMessage).queue();
 
             } else if (messageContent.equals("ab!ping")) {
                 long start = System.currentTimeMillis();
@@ -163,6 +173,8 @@ public class MessageListener extends ListenerAdapter {
                 history(channel, message);
             } else if (messageContent.contains("!kills")) {
                 kills(channel, message);
+            } else if (messageContent.contains("!remove")) {
+                remove(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
                 cleverBot(channel, message);
             }

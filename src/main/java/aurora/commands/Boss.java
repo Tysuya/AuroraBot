@@ -37,6 +37,7 @@ public abstract class Boss {
     static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd z");
 
     public static void initialize() {
+
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
@@ -117,8 +118,7 @@ public abstract class Boss {
     }
 
     public static void updateBossInfo(String bossName) {
-        MessageHistory messageHistory = new MessageHistory(bossInfoChannel);
-        List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             String messageString = respawnTime(bossName) + currentHunters(bossName);
             if (message.getContent().contains(bossName) && !("\n" + message.getContent()).equals(messageString))
@@ -130,8 +130,7 @@ public abstract class Boss {
     }
 
     public static void initializeHunters() {
-        MessageHistory messageHistory = new MessageHistory(bossInfoChannel);
-        List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             for (String bossName : bossNamesFinal) {
                 if (message.getContent().contains(bossName)) {
@@ -175,8 +174,7 @@ public abstract class Boss {
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
         bossKills.put("GHOSTSNAKE", a);*/
 
-        MessageHistory messageHistory = new MessageHistory(leaderboardChannel);
-        List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             String[] bossKillsLines = message.getContent().split("\nTotal");
             //System.out.println(Arrays.toString(bossKillsLines));
@@ -247,6 +245,61 @@ public abstract class Boss {
             bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
+    }
+
+    public static String getOverallKills() {
+        bossOverallKills.clear();
+        for(String bossName : bossNamesFinal) {
+            String[] huntersLine = getKills(bossName).split("\n");
+            for (int i = 2; i < huntersLine.length - 1; i++) {
+                int parenthesis = huntersLine[i].indexOf(")");
+                int colon = huntersLine[i].indexOf(":");
+
+                String name = huntersLine[i].substring(parenthesis + 2, colon);
+                Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
+                bossOverallKills.putIfAbsent(name, 0);
+                bossOverallKills.put(name, bossOverallKills.get(name) + kills);
+            }
+        }
+
+        String overallKillsString = "";
+
+        Object[] entrySet = bossOverallKills.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
+            }
+        });
+
+        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
+        String emojiString = "";
+        for(int i = 1; i < 101; i++) {
+            emojiString += emojis[new Random().nextInt(5)];
+            if(i % 20 == 0)
+                emojiString += "\n";
+            else
+                emojiString += " ";
+        }
+
+        int totalKillCount = 0;
+        int rank = 1;
+        for (Object entry : entrySet) {
+            bossOverallKills.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
+            overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
+
+            /*if(killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();*/
+        }
+
+        /*if (totalKillCount % 100 == 0 && totalKillCount != 0)
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();*/
+
+        if (overallKillsString.isEmpty())
+            overallKillsString = " ";
+        return "Total overall kills for " + bold("AURORA") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 
     public static String respawnTime(String bossName) {
