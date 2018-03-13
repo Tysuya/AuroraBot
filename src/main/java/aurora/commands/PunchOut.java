@@ -11,6 +11,14 @@ public class PunchOut extends Boss {
     public static void punchOut(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
+        if (message.getContent().contains("all")) {
+            if(message.getMentionedUsers().isEmpty())
+                removeAll(channel, message.getAuthor());
+            else
+                for(User hunter : message.getMentionedUsers())
+                    removeAll(channel, hunter);
+        }
+
         for(String bossName : bossNames) {
             if(message.getMentionedUsers().isEmpty())
                 removeHunter(channel, bossName, message.getAuthor());
@@ -22,18 +30,19 @@ public class PunchOut extends Boss {
     }
 
     public static void removeHunter(MessageChannel channel, String bossName, User hunter) {
-        List<User> huntersList = bossHunters.get(bossName);
-        List<User> newHuntersList = new ArrayList<>();
-
-        for(User hunterInList : huntersList)
-            if(!hunterInList.equals(hunter))
-                newHuntersList.add(hunterInList);
-
-        huntersList = newHuntersList;
-        bossHunters.put(bossName, huntersList);
+        bossHunters.get(bossName).remove(hunter);
 
         String messageString = codeBlock(hunter.getName()) + " just punched out for " + bold(bossName) + ". Thanks for your service!";
 
         channel.sendMessage(messageString + currentHunters(bossName)).queue();
+    }
+
+    public static void removeAll(MessageChannel channel, User hunter) {
+        channel.sendMessage(codeBlock(hunter.getName()) + " just punched out for " + bold("ALL BOSSES") + ". Thanks for your service!").queue();
+
+        for (String bossName : bossNamesFinal) {
+            bossHunters.get(bossName).remove(hunter);
+            updateBossInfo(bossName);
+        }
     }
 }

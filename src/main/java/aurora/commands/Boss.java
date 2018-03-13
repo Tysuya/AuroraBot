@@ -120,11 +120,11 @@ public abstract class Boss {
         MessageHistory messageHistory = new MessageHistory(bossInfoChannel);
         List<Message> messageHistoryList = messageHistory.retrievePast(50).complete();
         for (Message message : messageHistoryList) {
-            if (message.getContent().contains(bossName)) {
+            String messageString = respawnTime(bossName) + currentHunters(bossName);
+            if (message.getContent().contains(bossName) && !("\n" + message.getContent()).equals(messageString))
                 bossReport.put(bossName, message.editMessage(respawnTime(bossName) +
                         currentHunters(bossName)).complete());
                 //spawnTimer(bossName);
-            }
         }
 
     }
@@ -144,6 +144,8 @@ public abstract class Boss {
                             Date time = dateFormat.parse(lines[0].split("at ")[1]);
                             /*if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
                                 time.setHours(time.getHours() + 1);*/
+                            if(bossHuntersChannel.getId().equals("418683981291192331"))
+                                time.setHours(time.getHours() + 1);
                             time.setYear(new Date().getYear());
                             System.out.println(bossName + " | " + time);
                             nextBossSpawnTime.put(bossName, time);
