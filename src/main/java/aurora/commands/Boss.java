@@ -235,14 +235,14 @@ public abstract class Boss {
             totalKillCount += killCount;
             bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
 
-            if(killCount % 100 == 0 && killCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+            /*if(killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
         }
 
         if (bossKillsString.isEmpty())
             bossKillsString = " ";
-        if (totalKillCount % 100 == 0 && totalKillCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
+        /*if (totalKillCount % 100 == 0 && totalKillCount != 0)
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
