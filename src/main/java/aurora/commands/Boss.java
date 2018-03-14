@@ -17,7 +17,6 @@ public abstract class Boss {
     static HashMap<String, Integer> bossRespawnTimes = new HashMap<>();
     static HashMap<String, List<User>> bossHunters = new HashMap<>();
     static HashMap<String, Date> nextBossSpawnTime = new HashMap<>();
-    static HashMap<String, Message> bossReport = new HashMap<>();
     static HashMap<String, ArrayList<String>> bossHistory = new HashMap<>();
     static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
     static HashMap<String, Integer> hunterOverallKills = new HashMap<>();
@@ -99,19 +98,19 @@ public abstract class Boss {
         }
     }
 
-    public static void spawnTimer(String bossName) {
+    public static void spawnTimer(String bossName, Message bossReport) {
         try {
             bossSpawnTimers.get(bossName).cancel();
             bossSpawnTimers.put(bossName, new Timer());
             bossSpawnTimers.get(bossName).schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(bossReport.get(bossName) != null && nextBossSpawnTime.get(bossName) != null) {
+                    if(bossReport != null && nextBossSpawnTime.get(bossName) != null) {
                         long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
                         long seconds = time % 60;
                         long minutes = time / 60 % 60;
                         
-                        bossReport.get(bossName).editMessage(bossReport.get(bossName).getContent() +
+                        bossReport.editMessage(bossReport.getContent() +
                                 "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
                     }
                 }
@@ -127,8 +126,7 @@ public abstract class Boss {
             String messageString = respawnTime(bossName) + currentHunters(bossName);
 
             if (message.getContent().contains(bossName) && !("\n" + message.getContent()).equals(messageString))
-                bossReport.put(bossName, message.editMessage(messageString).complete());
-                //spawnTimer(bossName);
+                message.editMessage(messageString).complete();
         }
 
     }
@@ -156,8 +154,8 @@ public abstract class Boss {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (!lines[1].split(": ")[1].contains("None")) {
-                        String[] hunters = lines[1].split(": ")[1].split(", ");
+                    if (!lines[lines.length - 1].split(": ")[1].contains("None")) {
+                        String[] hunters = lines[lines.length - 1].split(": ")[1].split(", ");
                         List<User> huntersList = new ArrayList<>();
                         for (String hunter : hunters)
                             huntersList.addAll(AuroraBot.jda.getUsersByName(hunter, true));
@@ -303,9 +301,8 @@ public abstract class Boss {
 
         if(nextBossSpawnTime.get(bossName) != null) {
             nextSpawn = dateFormat.format(nextBossSpawnTime.get(bossName));
-
-            /*if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
-                note = " (Note: This time has passed)";*/
+            if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
+                note = "\n(Note: " + bold(bossName) + " has been dropped)";
         }
 
         return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn) + note;
@@ -323,11 +320,7 @@ public abstract class Boss {
         if(huntersString.isEmpty())
             huntersString = codeBlock("None");
 
-        String messageString = "\nCurrent Hunters: " + huntersString;
-        if(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())
-            messageString += "\n(Note: " + bold(bossName) + " has been dropped)";
-
-        return messageString;
+        return "\nCurrent Hunters: " + huntersString;
     }
 
     public static String notifyingHunters(String bossName) {

@@ -11,7 +11,6 @@ public class Reset extends Boss {
 
         for(String bossName : bossNames) {
             nextBossSpawnTime.put(bossName, null);
-            bossReport.put(bossName, null);
             channel.sendMessage(bold(bossName) + "'s respawn timer has been reset").queue();
             updateBossInfo(bossName);
         }
