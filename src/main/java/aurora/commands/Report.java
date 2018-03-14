@@ -13,7 +13,7 @@ public class Report extends Boss {
 
         Calendar calendar = Calendar.getInstance();
 
-        for(int i = 0; i < initialReport.length; i++) {
+        for (int i = 0; i < initialReport.length; i++) {
             if (initialReport[i].matches(".*\\d+.*")) {
                 timeOfDeath = initialReport[i];
                 String[] timeOfDeathArray = new String[2];
@@ -33,23 +33,22 @@ public class Report extends Boss {
 
         String bossName = report.get(0);
 
-        if(calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis())
+        if (calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis())
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
 
         String author = message.getAuthor().getName();
-        if(!message.getMentionedUsers().isEmpty())
+        if (!message.getMentionedUsers().isEmpty())
             author = message.getMentionedUsers().get(0).getName();
 
         String messageString = "";
 
-        if(message.getContent().contains("lost")) {
+        if (message.getContent().contains("lost")) {
             messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author);
 
             calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
             nextBossSpawnTime.put(bossName, calendar.getTime());
-        }
-        else {
+        } else {
             messageString = "Great job, " + codeBlock(author) + "!";
             bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author);
             HashMap<String, Integer> authorList = bossKills.get(bossName);
@@ -61,6 +60,32 @@ public class Report extends Boss {
 
             calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
             nextBossSpawnTime.put(bossName, calendar.getTime());
+
+            String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
+            String emojiString = "";
+            for (int i = 1; i < 101; i++) {
+                emojiString += emojis[new Random().nextInt(5)];
+                if (i % 20 == 0)
+                    emojiString += "\n";
+                else
+                    emojiString += " ";
+            }
+
+            int killCount = bossKills.get(bossName).get(author);
+            if (killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+
+            killCount = hunterOverallKills.get(author);
+            if (killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th overall kill!\n" + emojiString).queue();
+
+            killCount = bossOverallKills.get(bossName);
+            if (killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
+
+            killCount = auroraOverallKills;
+            if (killCount % 500 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(killCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
             try {
                 List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
                 for (Message eachMessage : messageHistoryList) {
@@ -77,24 +102,7 @@ public class Report extends Boss {
                 e.printStackTrace();
             }
 
-            int killCount = bossKills.get(bossName).get(author);
-            int totalKillCount = hunterOverallKills.get(author);
-
-            /*if(killCount % 100 == 0 && killCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
-
-            if(totalKillCount % 100 == 0 && totalKillCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th overall kill!\n" + emojiString).queue();*/
-
-            /*if (killCount % 100 == 0 && killCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
-
-            /*if (totalKillCount % 500 == 0 && totalKillCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();*/
-
-
         }
-
         spawnTimer(bossName, channel.sendMessage(messageString +
                 respawnTime(bossName) +
                 currentHunters(bossName)).complete());

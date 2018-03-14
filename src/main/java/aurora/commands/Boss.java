@@ -207,16 +207,6 @@ public abstract class Boss {
     }
 
     public static String getKills(String bossName) {
-        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
-        String emojiString = "";
-        for(int i = 1; i < 101; i++) {
-            emojiString += emojis[new Random().nextInt(5)];
-            if(i % 20 == 0)
-                emojiString += "\n";
-            else
-                emojiString += " ";
-        }
-
         String bossKillsString = "";
         HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
 
@@ -270,16 +260,6 @@ public abstract class Boss {
             }
         });
 
-        String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
-        String emojiString = "";
-        for(int i = 1; i < 101; i++) {
-            emojiString += emojis[new Random().nextInt(5)];
-            if(i % 20 == 0)
-                emojiString += "\n";
-            else
-                emojiString += " ";
-        }
-
         int totalKillCount = 0;
         int rank = 1;
         for (Object entry : entrySet) {
@@ -289,6 +269,8 @@ public abstract class Boss {
             totalKillCount += killCount;
             overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
         }
+
+        auroraOverallKills = totalKillCount;
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
