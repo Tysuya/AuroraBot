@@ -76,6 +76,23 @@ public class Report extends Boss {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            int killCount = bossKills.get(bossName).get(author);
+            int totalKillCount = hunterOverallKills.get(author);
+
+            if(killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+
+            if(totalKillCount % 100 == 0 && totalKillCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th overall kill!\n" + emojiString).queue();
+
+            /*if (killCount % 100 == 0 && killCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
+
+            /*if (totalKillCount % 500 == 0 && totalKillCount != 0)
+                bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();*/
+
+
         }
 
         bossReport.put(bossName, channel.sendMessage(messageString +

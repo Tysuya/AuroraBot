@@ -20,8 +20,10 @@ public abstract class Boss {
     static HashMap<String, Message> bossReport = new HashMap<>();
     static HashMap<String, ArrayList<String>> bossHistory = new HashMap<>();
     static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
+    static HashMap<String, Integer> hunterOverallKills = new HashMap<>();
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
+    static int auroraOverallKills = 0;
 
     // Test
     /*static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
@@ -236,21 +238,18 @@ public abstract class Boss {
             int killCount = ((Map.Entry<String, Integer>) entry).getValue();
             totalKillCount += killCount;
             bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
-
-            /*if(killCount % 100 == 0 && killCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
         }
+
+        bossOverallKills.put(bossName, totalKillCount);
 
         if (bossKillsString.isEmpty())
             bossKillsString = " ";
-        /*if (totalKillCount % 100 == 0 && totalKillCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + "! You have just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();*/
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
 
     public static String getOverallKills() {
-        bossOverallKills.clear();
+        hunterOverallKills.clear();
         for(String bossName : bossNamesFinal) {
             String[] huntersLine = getKills(bossName).split("\n");
             for (int i = 2; i < huntersLine.length - 1; i++) {
@@ -259,14 +258,14 @@ public abstract class Boss {
 
                 String name = huntersLine[i].substring(parenthesis + 2, colon);
                 Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
-                bossOverallKills.putIfAbsent(name, 0);
-                bossOverallKills.put(name, bossOverallKills.get(name) + kills);
+                hunterOverallKills.putIfAbsent(name, 0);
+                hunterOverallKills.put(name, hunterOverallKills.get(name) + kills);
             }
         }
 
         String overallKillsString = "";
 
-        Object[] entrySet = bossOverallKills.entrySet().toArray();
+        Object[] entrySet = hunterOverallKills.entrySet().toArray();
         Arrays.sort(entrySet, new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
@@ -286,18 +285,12 @@ public abstract class Boss {
         int totalKillCount = 0;
         int rank = 1;
         for (Object entry : entrySet) {
-            bossOverallKills.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            hunterOverallKills.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
             String name = ((Map.Entry<String, Integer>) entry).getKey();
             int killCount = ((Map.Entry<String, Integer>) entry).getValue();
             totalKillCount += killCount;
             overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
-
-            /*if(killCount % 100 == 0 && killCount != 0)
-                bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(name) + "! You have just reported your " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill!\n" + emojiString).queue();*/
         }
-
-        /*if (totalKillCount % 100 == 0 && totalKillCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(bossHuntersChannel.getMessageById(bossHuntersChannel.getLatestMessageId()).complete().getAuthor().getName()) + " just reported the " + codeBlock(Integer.toString(totalKillCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();*/
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
