@@ -334,6 +334,7 @@ public abstract class Boss {
 
         for(int i = 0; i < bossNames.size(); i++) {
             String bossName = bossNames.get(i);
+            System.out.println(bossName);
             bossName = bossName.replace("GS", bossNamesFinal[0]);
             bossName = bossName.replace("WB", bossNamesFinal[1]);
             bossName = bossName.replace("WC", bossNamesFinal[4]);
@@ -350,8 +351,10 @@ public abstract class Boss {
             bossName = bossName.replace("SG", bossNamesFinal[19]);
             if (bossName.equals("LACOS"))
                 bossName = bossName.replace("LACOS", bossNamesFinal[20]);
-            bossName = bossName.replace("BS", bossNamesFinal[21]);
+            if (bossName.equals("BS"))
+                bossName = bossName.replace("BS", bossNamesFinal[21]);
             bossName = bossName.replace("TZ", bossNamesFinal[22]);
+            System.out.println(bossName);
 
             for(String eachBossName : bossNamesFinal)
                 if (eachBossName.contains(" ") && bossName.equals(eachBossName.split(" ")[0]) && !bossName.equals(eachBossName))
