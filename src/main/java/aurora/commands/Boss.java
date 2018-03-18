@@ -33,7 +33,7 @@ public abstract class Boss {
     static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
 
-    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA"};
+    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
 
     static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd z");
 
@@ -52,6 +52,10 @@ public abstract class Boss {
                 bossRespawnTimes.put(bossNamesFinal[i], 30);
             if (i == 20)
                 bossRespawnTimes.put(bossNamesFinal[i], 1);
+            if (i == 21)
+                bossRespawnTimes.put(bossNamesFinal[i], 65);
+            if (i == 22)
+                bossRespawnTimes.put(bossNamesFinal[i], 333);
         }
 
         for(String bossName : bossNamesFinal) {
@@ -109,9 +113,10 @@ public abstract class Boss {
                         long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
                         long seconds = time % 60;
                         long minutes = time / 60 % 60;
-                        
+                        long hours = time / 3600 % 24;
+
                         bossReport.editMessage(bossReport.getContent() +
-                                "\nSpawn Timer: " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
+                                "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
                     }
                 }
             }, 0, 10000);
@@ -345,6 +350,8 @@ public abstract class Boss {
             bossName = bossName.replace("SG", bossNamesFinal[19]);
             if (bossName.equals("LACOS"))
                 bossName = bossName.replace("LACOS", bossNamesFinal[20]);
+            bossName = bossName.replace("BS", bossNamesFinal[21]);
+            bossName = bossName.replace("TZ", bossNamesFinal[22]);
 
             for(String eachBossName : bossNamesFinal)
                 if (eachBossName.contains(" ") && bossName.equals(eachBossName.split(" ")[0]) && !bossName.equals(eachBossName))
