@@ -115,7 +115,13 @@ public abstract class Boss {
                         long minutes = time / 60 % 60;
                         long hours = time / 3600 % 24;
 
-                        bossReport.editMessage(bossReport.getContent() +
+                        List<User> usersList = bossReport.getMentionedUsers();
+                        List<String> usersString = new ArrayList<>();
+                        for (User user : usersList)
+                            usersString.add(user.getAsMention());
+
+                        bossReport.editMessage(String.join(", ", usersString) + "\n" +
+                                bossReport.getContent().substring(bossReport.getContent().indexOf('\n') + 1) +
                                 "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
                     }
                 }
@@ -331,42 +337,33 @@ public abstract class Boss {
                 bossLine = bossLine.replace(bossName, bossName.split(" ")[0]);
 
         ArrayList<String> bossNames = new ArrayList<>(Arrays.asList(bossLine.split(" ")));
-
-        for(int i = 0; i < bossNames.size(); i++) {
-            String bossName = bossNames.get(i);
-            System.out.println(bossName);
-            bossName = bossName.replace("GS", bossNamesFinal[0]);
-            bossName = bossName.replace("WB", bossNamesFinal[1]);
-            bossName = bossName.replace("WC", bossNamesFinal[4]);
-            bossName = bossName.replace("RED BEE", bossNamesFinal[8]);
-            bossName = bossName.replace("RB", bossNamesFinal[8]);
-            bossName = bossName.replace("ASSASSIN", bossNamesFinal[9]);
-            bossName = bossName.replace("ASSASAIN", bossNamesFinal[9]);
-            if (bossName.equals("ASS"))
-                bossName = bossName.replace("ASS", bossNamesFinal[9]);
-            bossName = bossName.replace("DA", bossNamesFinal[9]);
-            bossName = bossName.replace("BM", bossNamesFinal[13]);
-            bossName = bossName.replace("LM", bossNamesFinal[14]);
-            bossName = bossName.replace("EB", bossNamesFinal[18]);
-            bossName = bossName.replace("SG", bossNamesFinal[19]);
-            if (bossName.equals("LACOS"))
-                bossName = bossName.replace("LACOS", bossNamesFinal[20]);
-            if (bossName.equals("BS"))
-                bossName = bossName.replace("BS", bossNamesFinal[21]);
-            bossName = bossName.replace("TZ", bossNamesFinal[22]);
-            System.out.println(bossName);
-
-            for(String eachBossName : bossNamesFinal)
-                if (eachBossName.contains(" ") && bossName.equals(eachBossName.split(" ")[0]) && !bossName.equals(eachBossName))
-                    bossName = bossName.replace(eachBossName.split(" ")[0], eachBossName);
-
-            bossNames.set(i, bossName);
-        }
+        HashMap<String, List<String>> replacements = new HashMap<>();
+        replacements.put(bossNamesFinal[0], Arrays.asList("GS"));
+        replacements.put(bossNamesFinal[1], Arrays.asList("WB"));
+        replacements.put(bossNamesFinal[4], Arrays.asList("WC"));
+        replacements.put(bossNamesFinal[8], Arrays.asList("RED BEE", "RB"));
+        replacements.put(bossNamesFinal[9], Arrays.asList("ASSASSIN", "ASSASAIN", "ASS", "DA"));
+        replacements.put(bossNamesFinal[13], Arrays.asList("BM"));
+        replacements.put(bossNamesFinal[14], Arrays.asList("LM"));
+        replacements.put(bossNamesFinal[18], Arrays.asList("EB"));
+        replacements.put(bossNamesFinal[19], Arrays.asList("SG"));
+        replacements.put(bossNamesFinal[20], Arrays.asList("LACOS"));
+        replacements.put(bossNamesFinal[21], Arrays.asList("BS"));
+        replacements.put(bossNamesFinal[22], Arrays.asList("TZ"));
 
         ArrayList<String> removedBossNames = new ArrayList<>();
-        for(String bossName : bossNames)
+        for(int i = 0; i < bossNames.size(); i++) {
+            String bossName = bossNames.get(i);
+            for (String eachBossName : bossNamesFinal) {
+                if (replacements.get(eachBossName) != null && replacements.get(eachBossName).contains(bossName))
+                    bossName = eachBossName;
+                if (eachBossName.contains(" ") && bossName.equals(eachBossName.split(" ")[0]) && !bossName.equals(eachBossName))
+                    bossName = bossName.replace(eachBossName.split(" ")[0], eachBossName);
+                bossNames.set(i, bossName);
+            }
             if(!new ArrayList<>(Arrays.asList(bossNamesFinal)).contains(bossName))
                 removedBossNames.add(bossName);
+        }
         bossNames.removeAll(removedBossNames);
 
         return bossNames;

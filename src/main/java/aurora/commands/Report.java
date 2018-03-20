@@ -103,7 +103,8 @@ public class Report extends Boss {
             }
 
         }
-        spawnTimer(bossName, channel.sendMessage(messageString +
+        spawnTimer(bossName, channel.sendMessage(notifyingHunters(bossName) + "\n" +
+                messageString +
                 respawnTime(bossName) +
                 currentHunters(bossName)).complete());
     }
