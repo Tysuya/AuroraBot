@@ -38,9 +38,7 @@ public abstract class Boss {
     static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd z");
 
     public static void initialize() {
-
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
         try {
             //bossHuntersChannel.sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
         } catch (Exception e) {
