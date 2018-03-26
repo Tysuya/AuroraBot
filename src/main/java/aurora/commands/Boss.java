@@ -118,8 +118,12 @@ public abstract class Boss {
                         for (User user : usersList)
                             usersString.add(user.getAsMention());
 
+                        String messageString = bossReport.getContent().substring(bossReport.getContent().indexOf('\n') + 1);
+                        if (usersList.isEmpty())
+                            messageString = bossReport.getContent();
+
                         bossReport.editMessage(String.join(", ", usersString) + "\n" +
-                                bossReport.getContent().substring(bossReport.getContent().indexOf('\n') + 1) +
+                                 messageString +
                                 "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
                     }
                 }
