@@ -12,6 +12,14 @@ public class PunchIn extends Boss {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pin ")[1]);
         System.out.println(bossNames.toString());
 
+        if (message.getContent().contains("all")) {
+            if (message.getMentionedUsers().isEmpty())
+                addAll(channel, message.getAuthor());
+            else
+                for (User hunter : message.getMentionedUsers())
+                    addAll(channel, hunter);
+        }
+
         for(String bossName : bossNames) {
             if(message.getMentionedUsers().isEmpty())
                 addHunter(channel, bossName, message.getAuthor());
@@ -36,5 +44,16 @@ public class PunchIn extends Boss {
         bossHunters.put(bossName, huntersList);
 
         channel.sendMessage(punchedStatus + respawnTime(bossName) + currentHunters(bossName)).queue();
+    }
+
+    public static void addAll(MessageChannel channel, User hunter) {
+        channel.sendMessage(codeBlock(hunter.getName()) + " just punched in for " + bold("ALL BOSSES")).queue();
+
+        for (String bossName : bossNamesFinal) {
+            List<User> huntersList = bossHunters.get(bossName);
+            if(!huntersList.contains(hunter))
+                huntersList.add(hunter);
+            updateBossInfo(bossName);
+        }
     }
 }
