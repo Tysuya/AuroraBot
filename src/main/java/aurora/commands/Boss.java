@@ -84,7 +84,7 @@ public abstract class Boss {
                         if(nextBossSpawnTime.get(bossName) != null) {
                             if(fastDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
                                 bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
-                                        "\n" + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
+                                        "\n" + bold(bossNamesFinal[new Random().nextInt(bossNamesFinal.length)]) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
 
                             if(currentDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName)))) {
                                 bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
@@ -300,7 +300,7 @@ public abstract class Boss {
                 note = "\n(Note: " + bold(bossName) + " has been dropped)";
         }
 
-        return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn) + note;
+        return "\n" + bold(bossNamesFinal[new Random().nextInt(bossNamesFinal.length)]) + " will respawn next at " + codeBlock(nextSpawn) + note;
     }
 
     public static String currentHunters(String bossName) {

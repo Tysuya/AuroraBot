@@ -14,5 +14,11 @@ public class Active extends Boss {
         if (messageString.isEmpty())
             messageString = codeBlock("No active bosses");
         channel.sendMessage(messageString).queue();
+
+        if (message.getContent().contains("dump")) {
+            channel.sendMessage(getOverallKills()).queue();
+            for (String bossName : bossNamesFinal)
+                channel.sendMessage(getKills(bossName)).queue();
+        }
     }
 }

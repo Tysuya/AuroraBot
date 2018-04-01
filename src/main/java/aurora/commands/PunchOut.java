@@ -11,7 +11,9 @@ public class PunchOut extends Boss {
     public static void punchOut(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
-        if (message.getContent().contains("all")) {
+        channel.sendMessage(codeBlock(message.getAuthor().getName()) + " was unsuccessful in punching out").queue();
+
+    /*    if (message.getContent().contains("all")) {
             if(message.getMentionedUsers().isEmpty())
                 removeAll(channel, message.getAuthor());
             else
@@ -26,7 +28,7 @@ public class PunchOut extends Boss {
                 for(User hunter : message.getMentionedUsers())
                     removeHunter(channel, bossName, hunter);
             updateBossInfo(bossName);
-        }
+        }*/
     }
 
     public static void removeHunter(MessageChannel channel, String bossName, User hunter) {

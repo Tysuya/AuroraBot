@@ -71,6 +71,7 @@ public class MessageListener extends ListenerAdapter {
             "\nUsing colons in times is optional" +
             "\nAll of the commands can take multiple boss names except for !report" +
             "\nYou can !pin, !pout, !report, !remove for others by @mentioning them" +
+            "\nYou can use \"!pin all\" to punch in for all bosses" +
             "\nYou can use \"!pout all\" to punch out for all bosses```" +
             "I am also a chatbot, so start a message with <@418714401617608704> and I will respond." +
             "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.";
