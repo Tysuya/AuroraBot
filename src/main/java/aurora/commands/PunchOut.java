@@ -11,7 +11,7 @@ public class PunchOut extends Boss {
     public static void punchOut(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
-        channel.sendMessage(codeBlock(message.getAuthor().getName()) + " was unsuccessful in punching out").queue();
+        channel.sendMessage(codeBlock(message.getAuthor().getName()) + " failed to punch out").queue();
 
     /*    if (message.getContent().contains("all")) {
             if(message.getMentionedUsers().isEmpty())
