@@ -16,9 +16,9 @@ public class Active extends Boss {
         channel.sendMessage(messageString).queue();
 
         if (message.getContent().contains("dump")) {
-            channel.sendMessage(getOverallKills(true)).queue();
+            channel.sendMessage(getOverallKills()).queue();
             for (String bossName : bossNamesFinal)
-                channel.sendMessage(getKills(bossName, true)).queue();
+                channel.sendMessage(getKills(bossName)).queue();
         }
     }
 }

@@ -249,36 +249,6 @@ public abstract class Boss {
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
 
-    public static String getKills(String bossName, boolean a) {
-        String bossKillsString = "";
-        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
-
-        Object[] entrySet = killsHashMap.entrySet().toArray();
-        Arrays.sort(entrySet, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            }
-        });
-
-
-        int totalKillCount = 0;
-        int rank = 1;
-        for (Object entry : entrySet) {
-            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
-            String name = ((Map.Entry<String, Integer>) entry).getKey();
-            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
-            totalKillCount += killCount;
-            bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
-        }
-
-        bossOverallKills.put(bossName, totalKillCount);
-
-        if (bossKillsString.isEmpty())
-            bossKillsString = " ";
-
-        return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
-    }
-
     public static String getOverallKills() {
         hunterOverallKills.clear();
         for(String bossName : bossNamesFinal) {
