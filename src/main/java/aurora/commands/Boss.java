@@ -189,7 +189,7 @@ public abstract class Boss {
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
         bossKills.put("GHOSTSNAKE", a);*/
 
-        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(AuroraBot.jda.getTextChannelById("429940463290810368")).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             String[] bossKillsLines = message.getContent().split("\nTotal");
             //System.out.println(Arrays.toString(bossKillsLines));
@@ -218,6 +218,7 @@ public abstract class Boss {
         }
         System.out.println(bossKills.toString());
 
+        messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
         for (Message eachMessage : messageHistoryList) {
             for (String bossName : bossNamesFinal) {
                 if (eachMessage.getContent().contains(bossName))
