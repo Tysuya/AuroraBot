@@ -31,7 +31,7 @@ public abstract class Boss {
 
     static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
     //static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
-    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("429940463290810368");\
+    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("429940463290810368");
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
@@ -218,15 +218,6 @@ public abstract class Boss {
             }
         }
         System.out.println(bossKills.toString());
-
-        for (Message eachMessage : messageHistoryList) {
-            for (String bossName : bossNamesFinal) {
-                if (eachMessage.getContent().contains(bossName))
-                    eachMessage.editMessage(getKills(bossName)).complete();
-                if (eachMessage.getContent().contains("overall"))
-                    eachMessage.editMessage(getOverallKills()).complete();
-            }
-        }
     }
 
     public static String getKills(String bossName) {
