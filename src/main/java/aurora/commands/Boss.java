@@ -256,6 +256,7 @@ public abstract class Boss {
             bossKillsString = " ";
 
         bossKillsString = "NO DATA FOUND";
+        totalKillCount = 0;
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
