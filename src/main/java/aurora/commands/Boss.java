@@ -217,6 +217,15 @@ public abstract class Boss {
             }
         }
         System.out.println(bossKills.toString());
+
+        for (Message eachMessage : messageHistoryList) {
+            for (String bossName : bossNamesFinal) {
+                if (eachMessage.getContent().contains(bossName))
+                    eachMessage.editMessage(getKills(bossName)).complete();
+                if (eachMessage.getContent().contains("overall"))
+                    eachMessage.editMessage(getOverallKills()).complete();
+            }
+        }
     }
 
     public static String getKills(String bossName) {
@@ -246,7 +255,81 @@ public abstract class Boss {
         if (bossKillsString.isEmpty())
             bossKillsString = " ";
 
+        bossKillsString = "NO DATA FOUND";
+
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
+    }
+
+    public static String getKills(String bossName, boolean a) {
+        String bossKillsString = "";
+        HashMap<String, Integer> killsHashMap = bossKills.get(bossName);
+
+        Object[] entrySet = killsHashMap.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
+            }
+        });
+
+
+        int totalKillCount = 0;
+        int rank = 1;
+        for (Object entry : entrySet) {
+            killsHashMap.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
+            bossKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
+        }
+
+        bossOverallKills.put(bossName, totalKillCount);
+
+        if (bossKillsString.isEmpty())
+            bossKillsString = " ";
+
+        return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
+    }
+
+    public static String getOverallKills(boolean a) {
+        hunterOverallKills.clear();
+        for (String bossName : bossNamesFinal) {
+            String[] huntersLine = getKills(bossName).split("\n");
+            for (int i = 2; i < huntersLine.length - 1; i++) {
+                int parenthesis = huntersLine[i].indexOf(")");
+                int colon = huntersLine[i].indexOf(":");
+
+                String name = huntersLine[i].substring(parenthesis + 2, colon);
+                Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
+                hunterOverallKills.putIfAbsent(name, 0);
+                hunterOverallKills.put(name, hunterOverallKills.get(name) + kills);
+            }
+        }
+
+        String overallKillsString = "";
+
+        Object[] entrySet = hunterOverallKills.entrySet().toArray();
+        Arrays.sort(entrySet, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
+            }
+        });
+
+        int totalKillCount = 0;
+        int rank = 1;
+        for (Object entry : entrySet) {
+            hunterOverallKills.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
+            String name = ((Map.Entry<String, Integer>) entry).getKey();
+            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
+            totalKillCount += killCount;
+            overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
+        }
+
+        auroraOverallKills = totalKillCount;
+
+        if (overallKillsString.isEmpty())
+            overallKillsString = " ";
+
+        return "Total overall kills for " + bold("AURORA") + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 
     public static String getOverallKills() {
@@ -287,6 +370,9 @@ public abstract class Boss {
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
+
+        overallKillsString = "NO DATA FOUND";
+
         return "Total overall kills for " + bold("AURORA") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 
