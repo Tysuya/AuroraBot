@@ -30,7 +30,8 @@ public abstract class Boss {
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");*/
 
     static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
-    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
+    //static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
+    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("429940463290810368");\
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
@@ -189,7 +190,7 @@ public abstract class Boss {
         a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
         bossKills.put("GHOSTSNAKE", a);*/
 
-        List<Message> messageHistoryList = new MessageHistory(AuroraBot.jda.getTextChannelById("429940463290810368")).retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             String[] bossKillsLines = message.getContent().split("\nTotal");
             //System.out.println(Arrays.toString(bossKillsLines));
@@ -218,7 +219,6 @@ public abstract class Boss {
         }
         System.out.println(bossKills.toString());
 
-        messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
         for (Message eachMessage : messageHistoryList) {
             for (String bossName : bossNamesFinal) {
                 if (eachMessage.getContent().contains(bossName))
@@ -240,7 +240,6 @@ public abstract class Boss {
             }
         });
 
-
         int totalKillCount = 0;
         int rank = 1;
         for (Object entry : entrySet) {
@@ -255,9 +254,6 @@ public abstract class Boss {
 
         if (bossKillsString.isEmpty())
             bossKillsString = " ";
-
-        bossKillsString = "NO DATA FOUND";
-        totalKillCount = 0;
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
     }
@@ -290,48 +286,6 @@ public abstract class Boss {
             bossKillsString = " ";
 
         return "\nTotal kills for " + bold(bossName) + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + bossKillsString + "\n```";
-    }
-
-    public static String getOverallKills(boolean a) {
-        hunterOverallKills.clear();
-        for (String bossName : bossNamesFinal) {
-            String[] huntersLine = getKills(bossName).split("\n");
-            for (int i = 2; i < huntersLine.length - 1; i++) {
-                int parenthesis = huntersLine[i].indexOf(")");
-                int colon = huntersLine[i].indexOf(":");
-
-                String name = huntersLine[i].substring(parenthesis + 2, colon);
-                Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
-                hunterOverallKills.putIfAbsent(name, 0);
-                hunterOverallKills.put(name, hunterOverallKills.get(name) + kills);
-            }
-        }
-
-        String overallKillsString = "";
-
-        Object[] entrySet = hunterOverallKills.entrySet().toArray();
-        Arrays.sort(entrySet, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
-            }
-        });
-
-        int totalKillCount = 0;
-        int rank = 1;
-        for (Object entry : entrySet) {
-            hunterOverallKills.put(((Map.Entry<String, Integer>) entry).getKey(), ((Map.Entry<String, Integer>) entry).getValue());
-            String name = ((Map.Entry<String, Integer>) entry).getKey();
-            int killCount = ((Map.Entry<String, Integer>) entry).getValue();
-            totalKillCount += killCount;
-            overallKillsString += "\n" + rank++ + ") " + name + ": " + killCount;
-        }
-
-        auroraOverallKills = totalKillCount;
-
-        if (overallKillsString.isEmpty())
-            overallKillsString = " ";
-
-        return "Total overall kills for " + bold("AURORA") + ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 
     public static String getOverallKills() {
@@ -372,8 +326,6 @@ public abstract class Boss {
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
-
-        overallKillsString = "NO DATA FOUND";
 
         return "Total overall kills for " + bold("AURORA") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
