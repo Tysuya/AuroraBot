@@ -10,8 +10,7 @@ public class Delete {
     public static void delete(MessageChannel channel, Message message) {
         int amount = Integer.parseInt(message.getContent().split("!delete ")[1]);
         List<Message> messageHistoryList = new MessageHistory(channel).retrievePast(amount).complete();
-        for (Message eachMessage : messageHistoryList) {
+        for (Message eachMessage : messageHistoryList)
             eachMessage.delete().queue();
-        }
     }
 }
