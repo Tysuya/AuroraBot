@@ -141,7 +141,6 @@ public abstract class Boss {
             if (message.getContent().contains(bossName) && !("\n" + message.getContent()).equals(messageString))
                 message.editMessage(messageString).complete();
         }
-
     }
 
     public static void initializeHunters() {

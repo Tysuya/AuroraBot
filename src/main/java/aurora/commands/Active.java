@@ -1,5 +1,6 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
@@ -14,5 +15,8 @@ public class Active extends Boss {
         if (messageString.isEmpty())
             messageString = codeBlock("No active bosses");
         channel.sendMessage(messageString).queue();
+
+        for (String bossName : bossNamesFinal)
+            AuroraBot.jda.getTextChannelById("422701643566678016").sendMessage(respawnTime(bossName) + currentHunters(bossName)).queue();
     }
 }

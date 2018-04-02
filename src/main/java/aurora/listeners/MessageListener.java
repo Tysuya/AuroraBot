@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import static aurora.commands.Active.active;
 import static aurora.commands.Boss.*;
 import static aurora.commands.Check.check;
+import static aurora.commands.Delete.delete;
 import static aurora.commands.Fact.fact;
 import static aurora.commands.History.history;
 import static aurora.commands.Kills.kills;
@@ -164,6 +165,8 @@ public class MessageListener extends ListenerAdapter {
                 fact(channel, message);
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
+            } else if (messageContent.contains("!delete")) {
+                delete(channel, message);
             } else if (messageContent.contains("!pin")) {
                 punchIn(channel, message);
             } else if (messageContent.contains("!pout")) {
