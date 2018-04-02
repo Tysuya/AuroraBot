@@ -6,7 +6,6 @@ import net.dv8tion.jda.core.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class PunchIn extends Boss {
     public static void punchIn(MessageChannel channel, Message message) {
@@ -37,10 +36,10 @@ public class PunchIn extends Boss {
         String punchedStatus = codeBlock(hunter.getName());
         if(!huntersList.contains(hunter)) {
             huntersList.add(hunter);
-            punchedStatus += " just punched in for " + bold(bossNamesFinal[new Random().nextInt(bossNamesFinal.length)]);
+            punchedStatus += " just punched in for " + bold(bossName);
         }
         else {
-            punchedStatus += " has already been punched in for " + bold(bossNamesFinal[new Random().nextInt(bossNamesFinal.length)]);
+            punchedStatus += " has already been punched in for " + bold(bossName);
         }
         bossHunters.put(bossName, huntersList);
 

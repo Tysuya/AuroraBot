@@ -30,8 +30,7 @@ public abstract class Boss {
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");*/
 
     static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
-    //static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
-    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("429940463290810368");
+    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
@@ -85,7 +84,7 @@ public abstract class Boss {
                         if(nextBossSpawnTime.get(bossName) != null) {
                             if(fastDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName))))
                                 bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
-                                        "\n" + bold(bossNamesFinal[new Random().nextInt(bossNamesFinal.length)]) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
+                                        "\n" + bold(bossName) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
 
                             if(currentDate.equals(dateFormat.format(nextBossSpawnTime.get(bossName)))) {
                                 bossHuntersChannel.sendMessage(notifyingHunters(bossName) +
@@ -287,7 +286,6 @@ public abstract class Boss {
 
         if (overallKillsString.isEmpty())
             overallKillsString = " ";
-
         return "Total overall kills for " + bold("AURORA") +  ": " + codeBlock(Integer.toString(totalKillCount)) + " ```" + overallKillsString + "\n```";
     }
 
@@ -301,7 +299,7 @@ public abstract class Boss {
                 note = "\n(Note: " + bold(bossName) + " has been dropped)";
         }
 
-        return "\n" + bold(bossNamesFinal[new Random().nextInt(bossNamesFinal.length)]) + " will respawn next at " + codeBlock(nextSpawn) + note;
+        return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn) + note;
     }
 
     public static String currentHunters(String bossName) {

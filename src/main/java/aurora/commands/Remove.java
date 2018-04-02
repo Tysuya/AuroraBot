@@ -4,13 +4,18 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Remove extends Boss {
     public static void remove(MessageChannel channel, Message message) {
         String bossName = changeAbbreviations(message.getContent().split("!remove ")[1]).get(0);
-        int amount = Integer.parseInt(message.getContent().split(" ")[2]);
+        int amount = 1;
+        for (String amountString : message.getContent().split(" ")) {
+            if (amountString.chars().allMatch(Character::isDigit))
+                amount = Integer.parseInt(amountString);
+        }
         String author = message.getAuthor().getName();
         if(!message.getMentionedUsers().isEmpty())
             author = message.getMentionedUsers().get(0).getName();

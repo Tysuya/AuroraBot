@@ -22,7 +22,7 @@ public class CycleGames {
                 public void run() {
                     String[] games = {"League of Legends", "Starcraft II", "Overwatch", "Twitch.tv", "Pokémon", "Stardew Valley", "LoZ:BOTW", "CS:GO", "Halo 3", "Heroku", "Animal Crossing", "Mega Man", "Pac-Man", "Ping-Pong", "Magic", "Hearthstone", "CodeFights", "CodeWars", "The Land of Chai 2", "Chainary", "RetroCube", "Temple Run", "Flappy Bird", "Reddit", "Music", "Piano", "Guitar", "Ukulele", "Bass", "Drums", "Triangle", "Xylophone", "Kazoo", "Nothing"};
                     int random = new Random().nextInt(games.length);
-                    presence.setGame(Game.of("April Fool's" + " | ab!help"));
+                    presence.setGame(Game.of(games[random] + " | ab!help"));
                     System.out.println(games[random] + " | ab!help");
                 }
             }, 0, 300000);
