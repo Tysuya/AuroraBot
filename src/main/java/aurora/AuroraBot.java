@@ -25,8 +25,13 @@ public class AuroraBot {
 
         try {
             token = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("token"))).split("\n")[0];
-            eu.rekawek.coffeegb.gui.Main.main(new String[]{""});
         } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            eu.rekawek.coffeegb.gui.Main.main(new String[]{""});
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
