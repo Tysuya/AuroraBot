@@ -26,6 +26,7 @@ import static aurora.commands.Should.should;
 import static aurora.commands.Uptime.uptime;
 import static aurora.commands.CleverBot.cleverBot;
 import static aurora.commands.PunchIn.punchIn;
+import static aurora.commands.Pokemon.pokemon;
 
 public class MessageListener extends ListenerAdapter {
     String helpMessage = "Hello, I am AuroraBot. My current commands are as follows:" +
@@ -185,6 +186,8 @@ public class MessageListener extends ListenerAdapter {
                 remove(channel, message);
             } else if (messageContent.contains("!active")) {
                 active(channel, message);
+            } else if (messageContent.contains("!poke")) {
+                pokemon(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
                 cleverBot(channel, message);
             }

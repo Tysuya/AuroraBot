@@ -25,9 +25,11 @@ public class AuroraBot {
 
         try {
             token = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("token"))).split("\n")[0];
+            eu.rekawek.coffeegb.gui.Main.main(new String[]{""});
         } catch(Exception e) {
             e.printStackTrace();
         }
+
 
         JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT).setToken(token);
 

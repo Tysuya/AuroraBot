@@ -39,11 +39,7 @@ public abstract class Boss {
 
     public static void initialize() {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-        try {
-            //bossHuntersChannel.sendMessage("Good morning, I just woke up! Please punch in and report your most recent kills again. I apologize for any inconveniences my restart caused ^^").queue();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         for (int i = 0; i < bossNamesFinal.length; i++) {
             bossRespawnTimes.put(bossNamesFinal[i], 20);
             if (i == 0 || i == 4 || i == 8 || i == 15)
@@ -68,7 +64,7 @@ public abstract class Boss {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Check every second if boss respawned
+        // Check every second if boss has respawned
         try {
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -149,6 +145,7 @@ public abstract class Boss {
             for (String bossName : bossNamesFinal) {
                 if (message.getContent().contains(bossName)) {
                     String[] lines = message.getContent().split("\n");
+
                     for (int i = 0; i < lines.length; i++)
                         lines[i] = lines[i].replace("`", "");
 
@@ -179,15 +176,6 @@ public abstract class Boss {
     }
 
     public static void initializeKills() {
-        /*HashMap<String, Integer> a = new HashMap<>();
-        a.put("dandera", 10);
-        a.put("Jenny", 10);
-        a.put("Vampy", 3);
-        a.put("Aversionist", 2);
-        a.put("my name is jeeff", 2);
-        a.put("Syeira A.F (Bleu1mage/Angelkar)", 1);
-        bossKills.put("GHOSTSNAKE", a);*/
-
         List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             String[] bossKillsLines = message.getContent().split("\nTotal");
