@@ -1,13 +1,18 @@
 package aurora.listeners;
 
 import aurora.AuroraBot;
+import aurora.commands.Pokemon;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.client.managers.EmoteManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDAInfo;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.impl.MessageImpl;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -18,6 +23,7 @@ import static aurora.commands.Delete.delete;
 import static aurora.commands.Fact.fact;
 import static aurora.commands.History.history;
 import static aurora.commands.Kills.kills;
+import static aurora.commands.Pokemon.*;
 import static aurora.commands.PunchOut.punchOut;
 import static aurora.commands.Remove.remove;
 import static aurora.commands.Report.report;
@@ -26,7 +32,6 @@ import static aurora.commands.Should.should;
 import static aurora.commands.Uptime.uptime;
 import static aurora.commands.CleverBot.cleverBot;
 import static aurora.commands.PunchIn.punchIn;
-import static aurora.commands.Pokemon.pokemon;
 
 public class MessageListener extends ListenerAdapter {
     String helpMessage = "Hello, I am AuroraBot. My current commands are as follows:" +
@@ -92,6 +97,12 @@ public class MessageListener extends ListenerAdapter {
         User user = event.getUser();
         MessageChannel channel = event.getChannel();
         JDAInfo jdaInfo = new JDAInfo();
+    }
+
+    @Override
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        if (!event.getUser().isBot())
+            input(parseReaction(event.getReactionEmote().getName()));
     }
 
     @Override
