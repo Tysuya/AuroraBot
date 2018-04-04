@@ -69,28 +69,20 @@ public class Pokemon extends ListenerAdapter {
     public static String parseReaction(String input) {
         switch (input) {
             case "\u2B05":
-                System.out.println("l");
                 return "l";
             case "\u27A1":
-                System.out.println("r");
                 return "r";
             case "\u2B06":
-                System.out.println("u");
                 return "u";
             case "\u2B07":
-                System.out.println("d");
                 return "d";
             case "\uD83C\uDD70":
-                System.out.println("a");
                 return "a";
             case "\uD83C\uDD71":
-                System.out.println("b");
                 return "b";
             case "\uD83C\uDDFD":
-                System.out.println("start");
                 return "start";
             case "\uD83C\uDDFE":
-                System.out.println("select");
                 return "select";
             case "\u23ED":
                 sendImage();
