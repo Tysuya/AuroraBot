@@ -17,24 +17,25 @@ public class Pokemon extends ListenerAdapter {
 
     public static void pokemon(MessageChannel channel, Message message) {
         Pokemon.channel = channel;
-        sendImage();
+        sendImage(true);
     }
 
     public static void input(String input) {
         if (input != null) {
             eu.rekawek.coffeegb.gui.Main.input(input);
+            sendImage(false);
 
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2500);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            sendImage();
+            sendImage(true);
         }
     }
 
-    public static void sendImage() {
+    public static void sendImage(boolean addReactions) {
         try {
             if (originalImage != null)
                 originalImage.delete().queue();
@@ -52,15 +53,17 @@ public class Pokemon extends ListenerAdapter {
 
             originalImage = channel.sendFile(inputStream, "pokemon.png", null).complete();
 
-            originalImage.addReaction("\u2B05").queue();
-            originalImage.addReaction("\u27A1").queue();
-            originalImage.addReaction("\u2B06").queue();
-            originalImage.addReaction("\u2B07").queue();
-            originalImage.addReaction("\uD83C\uDD70").queue();
-            originalImage.addReaction("\uD83C\uDD71").queue();
-            originalImage.addReaction("\uD83C\uDDFD").queue();
-            originalImage.addReaction("\uD83C\uDDFE").queue();
-            originalImage.addReaction("\u23ED").queue();
+            if (addReactions) {
+                originalImage.addReaction("\u2B05").queue();
+                originalImage.addReaction("\u27A1").queue();
+                originalImage.addReaction("\u2B06").queue();
+                originalImage.addReaction("\u2B07").queue();
+                originalImage.addReaction("\uD83C\uDD70").queue();
+                originalImage.addReaction("\uD83C\uDD71").queue();
+                originalImage.addReaction("\uD83C\uDDFD").queue();
+                originalImage.addReaction("\uD83C\uDDFE").queue();
+                originalImage.addReaction("\u23ED").queue();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,23 +72,31 @@ public class Pokemon extends ListenerAdapter {
     public static String parseReaction(String input) {
         switch (input) {
             case "\u2B05":
+                System.out.println("l");
                 return "l";
             case "\u27A1":
+                System.out.println("r");
                 return "r";
             case "\u2B06":
+                System.out.println("u");
                 return "u";
             case "\u2B07":
+                System.out.println("d");
                 return "d";
             case "\uD83C\uDD70":
+                System.out.println("a");
                 return "a";
             case "\uD83C\uDD71":
+                System.out.println("b");
                 return "b";
             case "\uD83C\uDDFD":
+                System.out.println("start");
                 return "start";
             case "\uD83C\uDDFE":
+                System.out.println("select");
                 return "select";
             case "\u23ED":
-                sendImage();
+                sendImage(true);
         }
 
         return null;

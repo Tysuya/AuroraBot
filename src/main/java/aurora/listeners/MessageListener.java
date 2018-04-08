@@ -69,7 +69,10 @@ public class MessageListener extends ListenerAdapter {
             "\nSUSUSUK" +
             "\nELDER BEHOLDER - ELDER - EM" +
             "\nSANDGRAVE - SG" +
-            "\nCORRUPTED FOREST KEEPER - CORRUPTED - CFK" +
+            "\nCHIEF MAGIEF - CHIEF - CM" +
+            "\nMAGMA SENIOR THIEF - MAGMA - MST" +
+            "\nBBINIKJOE - BB - JOE" +
+            "\nBURNING STONE - BURNING - BS" +
             "\nLACOSTEZA - LACOS" +
             "\nBLACKSKULL - BS" +
             "\nTURTLE Z - TZ```" +
