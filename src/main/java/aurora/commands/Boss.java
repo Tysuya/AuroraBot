@@ -286,6 +286,9 @@ public abstract class Boss {
                 note = "\n(Note: " + bold(bossName) + " has been dropped)";
         }
 
+        if (nextSpawn.equals("Unknown"))
+            note = "\n(Note: " + bold(bossName) + " has been dropped)";
+
         return "\n" + bold(bossName) + " will respawn next at " + codeBlock(nextSpawn) + note;
     }
 

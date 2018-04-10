@@ -37,7 +37,7 @@ public class Battlefield {
                 }
                 if (Integer.parseInt(hour) % 2 == 0 && minute.equals("59") && second.equals("00")) {
                     try {
-                        AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `1` minutes.").queue();
+                        AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `1` minute.").queue();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
