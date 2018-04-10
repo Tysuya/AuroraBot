@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static aurora.commands.Battlefield.battlefield;
 import static aurora.servlet.BindToPort.bindToPort;
 import static aurora.servlet.BindToPort.keepAwake;
 import static aurora.utils.CycleGames.cycleGames;
@@ -47,6 +48,7 @@ public class AuroraBot {
             //dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
             //channel.sendMessage("Started on `" + dateFormat.format(new Date()) + "`").queue();=
             Boss.initialize();
+            battlefield();
             cycleGames();
             keepAwake();
             bindToPort();

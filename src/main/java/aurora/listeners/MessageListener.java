@@ -75,7 +75,7 @@ public class MessageListener extends ListenerAdapter {
             "\nBURNING STONE - BURNING - BS" +
             "\nLACOSTEZA - LACOS" +
             "\nBLACKSKULL - BS" +
-            "\nTURTLE Z - TZ```" +
+            "\nTURTLE Z - TURTLE - TZ```" +
             "\n__Notes:__" +
             "\n```Boss names are not case-sensitive" +
             "\nUsing colons in times is optional" +
