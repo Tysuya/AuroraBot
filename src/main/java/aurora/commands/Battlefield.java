@@ -28,16 +28,16 @@ public class Battlefield {
                         e.printStackTrace();
                     }
                 }
-                if (Integer.parseInt(hour) % 2 != 0 && minute.equals("55") && second.equals("00")) {
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("55") && second.equals("00")) {
                     try {
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `5` minutes.").queue();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                if (Integer.parseInt(hour) % 2 != 0 && minute.equals("57") && second.equals("30")) {
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("59") && second.equals("00")) {
                     try {
-                        AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `5` minutes.").queue();
+                        AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `1` minutes.").queue();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
