@@ -20,7 +20,7 @@ public class Battlefield {
                 String hour = date[0];
                 String minute = date[1];
                 String second = date[2];
-                
+
                 if (Integer.parseInt(hour) % 2 == 0 && minute.equals("50") && second.equals("00")) {
                     try {
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `10` minutes.").queue();
@@ -29,6 +29,13 @@ public class Battlefield {
                     }
                 }
                 if (Integer.parseInt(hour) % 2 != 0 && minute.equals("55") && second.equals("00")) {
+                    try {
+                        AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `5` minutes.").queue();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (Integer.parseInt(hour) % 2 != 0 && minute.equals("57") && second.equals("30")) {
                     try {
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `5` minutes.").queue();
                     } catch (Exception e) {
