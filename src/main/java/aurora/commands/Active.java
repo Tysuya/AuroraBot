@@ -1,6 +1,5 @@
 package aurora.commands;
 
-import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 

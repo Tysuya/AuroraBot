@@ -11,16 +11,17 @@ public class Battlefield {
 
     public static void battlefield() {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-        String[] date = dateFormat.format(new Date()).split(":");
-        String hour = date[0];
-        String minute = date[1];
-        String second = date[2];
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (Integer.parseInt(hour) % 2 != 0 && minute.equals("50") && second.equals("00")) {
+                String[] date = dateFormat.format(new Date()).split(":");
+                String hour = date[0];
+                String minute = date[1];
+                String second = date[2];
+                
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("50") && second.equals("00")) {
                     try {
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `10` minutes.").queue();
                     } catch (Exception e) {
