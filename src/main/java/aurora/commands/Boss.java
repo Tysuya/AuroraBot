@@ -120,7 +120,7 @@ public abstract class Boss {
                     bossReport.editMessage(String.join(", ", usersString) + "\n" +
                             messageString +
                             "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
-                    System.out.println("bossName" +
+                    System.out.println(bossName +
                             "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds");
                 }
             }
