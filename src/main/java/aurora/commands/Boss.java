@@ -97,36 +97,34 @@ public abstract class Boss {
     }
 
     public static void spawnTimer(String bossName, Message bossReport) {
-        try {
-            bossSpawnTimers.get(bossName).cancel();
-            bossSpawnTimers.put(bossName, new Timer());
-            bossSpawnTimers.get(bossName).schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(bossReport != null && nextBossSpawnTime.get(bossName) != null) {
-                        long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
-                        long seconds = time % 60;
-                        long minutes = time / 60 % 60;
-                        long hours = time / 3600 % 24;
+        bossSpawnTimers.get(bossName).cancel();
+        bossSpawnTimers.put(bossName, new Timer());
+        bossSpawnTimers.get(bossName).scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (bossReport != null && nextBossSpawnTime.get(bossName) != null) {
+                    long time = (nextBossSpawnTime.get(bossName).getTime() - Calendar.getInstance().getTimeInMillis()) / 1000;
+                    long seconds = time % 60;
+                    long minutes = time / 60 % 60;
+                    long hours = time / 3600 % 24;
 
-                        List<User> usersList = bossReport.getMentionedUsers();
-                        List<String> usersString = new ArrayList<>();
-                        for (User user : usersList)
-                            usersString.add(user.getAsMention());
+                    List<User> usersList = bossReport.getMentionedUsers();
+                    List<String> usersString = new ArrayList<>();
+                    for (User user : usersList)
+                        usersString.add(user.getAsMention());
 
-                        String messageString = bossReport.getContent().substring(bossReport.getContent().indexOf('\n') + 1);
-                        if (usersList.isEmpty())
-                            messageString = bossReport.getContent();
+                    String messageString = bossReport.getContent().substring(bossReport.getContent().indexOf('\n') + 1);
+                    if (usersList.isEmpty())
+                        messageString = bossReport.getContent();
 
-                        bossReport.editMessage(String.join(", ", usersString) + "\n" +
-                                 messageString +
-                                "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
-                    }
+                    bossReport.editMessage(String.join(", ", usersString) + "\n" +
+                            messageString +
+                            "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").queue();
+                    System.out.println("bossName" +
+                            "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds");
                 }
-            }, 0, 10000);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+            }
+        }, 0, 10000);
     }
 
     public static void updateBossInfo(String bossName) {
