@@ -35,6 +35,13 @@ public class Battlefield {
                         e.printStackTrace();
                     }
                 }
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("59") && second.equals("59")) {
+                    try {
+                        AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `1` second.").queue();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }, 0, 1000);
     }
