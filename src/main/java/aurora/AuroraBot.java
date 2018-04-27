@@ -48,7 +48,7 @@ public class AuroraBot {
             //dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
             //channel.sendMessage("Started on `" + dateFormat.format(new Date()) + "`").queue();=
             Boss.initialize();
-            battlefield();
+            //battlefield();
             cycleGames();
             keepAwake();
             bindToPort();
