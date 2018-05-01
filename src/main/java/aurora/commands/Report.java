@@ -33,8 +33,13 @@ public class Report extends BossAbstract {
             }
         }
 
-        ArrayList<String> report = changeAbbreviations(message.getContent().split("!report ")[1]);
+        ArrayList<String> report = new ArrayList<>();
 
+        if(message.getContent().contains("!r "))
+            report = changeAbbreviations(message.getContent().split("!r ")[1]);
+        else
+            report = changeAbbreviations(message.getContent().split("!report ")[1]);
+        
         String bossName = report.get(0);
 
         if (calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis())
