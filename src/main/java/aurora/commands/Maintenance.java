@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Maintenance {
+    //static String channelID = "418683981291192331";
+    static String channelID = "418818283102404611";
     static Date maintenanceStart = new Date();
     static Date maintenanceEnd = new Date();
     static String maintenanceInfo = "";
@@ -22,7 +24,7 @@ public class Maintenance {
             Element rawHTML = document.select("ul.list_notice > li > a > span").first();
             String[] info = rawHTML.text().substring(13).split(" ");
             String month = info[0];
-            String day = info[1].replace("th", "");
+            String day = "30".replace("th", "");
             String startTime = info[3].substring(1);
             String endTime = info[5];
             String timeZone = info[6].substring(0, info[6].length() - 1);
@@ -51,12 +53,12 @@ public class Maintenance {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (Calendar.getInstance().get(Calendar.HOUR) == 0 && Calendar.getInstance().get(Calendar.MINUTE) == 0 && Calendar.getInstance().get(Calendar.SECOND) == 0)
-                        AuroraBot.jda.getTextChannelById("418683981291192331").sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
+                    if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 0 && Calendar.getInstance().get(Calendar.MINUTE) == 0 && Calendar.getInstance().get(Calendar.SECOND) == 0)
+                        AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
                     if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
-                        AuroraBot.jda.getTextChannelById("418683981291192331").sendMessage("@everyone Today's maintenance has begun!").queue();
+                        AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone Today's maintenance has begun!").queue();
                     if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date())))
-                        AuroraBot.jda.getTextChannelById("418683981291192331").sendMessage("@everyone Today's maintenance has ended!").queue();
+                        AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone Today's maintenance has ended!").queue();
                 }
             }, 0, 1000);
         }
