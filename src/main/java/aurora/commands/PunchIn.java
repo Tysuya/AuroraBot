@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PunchIn extends Boss {
+public class PunchIn extends BossAbstract {
     public static void punchIn(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pin ")[1]);
         System.out.println(bossNames.toString());

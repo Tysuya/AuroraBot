@@ -5,9 +5,8 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class PunchOut extends Boss {
+public class PunchOut extends BossAbstract {
     public static void punchOut(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
 

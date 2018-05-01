@@ -28,6 +28,7 @@ dependencies {
     compile group: 'ca.pjer', name: 'chatter-bot-api', version: '1.4.5'
     compile group: 'com.michaelwflaherty', name: 'cleverbotapi', version: '1.0-RELEASE'
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.0.v20161208'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     compile files('coffee-gb.jar')
 }
 

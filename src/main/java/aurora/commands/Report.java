@@ -6,10 +6,14 @@ import net.dv8tion.jda.core.entities.MessageHistory;
 
 import java.util.*;
 
-public class Report extends Boss {
+public class Report extends BossAbstract {
     public static void report(MessageChannel channel, Message message) {
         String timeOfDeath = "";
-        String[] initialReport = message.getContent().split("!report ")[1].split(" ");
+        String[] initialReport = null;
+        if(message.getContent().contains("!r "))
+            initialReport = message.getContent().split("!r ")[1].split(" ");
+        else
+            initialReport = message.getContent().split("!report ")[1].split(" ");
 
         Calendar calendar = Calendar.getInstance();
 

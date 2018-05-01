@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.entities.MessageHistory;
 import java.util.HashMap;
 import java.util.List;
 
-public class Remove extends Boss {
+public class Remove extends BossAbstract {
     public static void remove(MessageChannel channel, Message message) {
         String bossName = changeAbbreviations(message.getContent().split("!remove ")[1]).get(0);
         int amount = 1;

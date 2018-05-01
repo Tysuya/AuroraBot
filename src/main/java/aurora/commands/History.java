@@ -5,7 +5,7 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayList;
 
-public class History extends Boss {
+public class History extends BossAbstract {
     public static void history(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!history ")[1]);
 

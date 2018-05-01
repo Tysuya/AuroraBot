@@ -2,12 +2,10 @@ package aurora.commands;
 
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Reset extends Boss {
+public class Reset extends BossAbstract {
     public static void reset(MessageChannel channel, Message message) {
         ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!reset ")[1]);
 

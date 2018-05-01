@@ -1,23 +1,17 @@
 package aurora.listeners;
 
 import aurora.AuroraBot;
-import aurora.commands.Pokemon;
 import net.dv8tion.jda.client.entities.Group;
-import net.dv8tion.jda.client.managers.EmoteManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDAInfo;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.entities.impl.MessageImpl;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import static aurora.commands.Active.active;
-import static aurora.commands.Boss.*;
 import static aurora.commands.Check.check;
 import static aurora.commands.Delete.delete;
 import static aurora.commands.Fact.fact;
@@ -72,7 +66,7 @@ public class MessageListener extends ListenerAdapter {
             "\nCHIEF MAGIEF - CHIEF - CM" +
             "\nMAGMA SENIOR THIEF - MAGMA - MST" +
             "\nBBINIKJOE - BB - JOE" +
-            "\nBURNING STONE - BURNING - BS" +
+            "\nBURNING STONE - BURNING" +
             "\nLACOSTEZA - LACOS" +
             "\nBLACKSKULL - BS" +
             "\nTURTLE Z - TURTLE - TZ```" +
@@ -186,7 +180,7 @@ public class MessageListener extends ListenerAdapter {
                 punchIn(channel, message);
             } else if (messageContent.contains("!pout")) {
                 punchOut(channel, message);
-            } else if (messageContent.contains("!report")) {
+            } else if (messageContent.contains("!report") || messageContent.contains("!r")) {
                 report(channel, message);
             } else if (messageContent.contains("!reset")) {
                 reset(channel, message);
@@ -211,21 +205,21 @@ public class MessageListener extends ListenerAdapter {
             messageContent = message.getContent().toLowerCase();
             if (messageContent.contains("omg"))
                 message.addReaction(message.getGuild().getEmotesByName("omg", true).get(0)).queue();
-            else if (messageContent.contains("dizzy"))
+            if (messageContent.contains("dizzy"))
                 message.addReaction(message.getGuild().getEmotesByName("dizzy", true).get(0)).queue();
-            else if (messageContent.contains("mad"))
+            if (messageContent.contains("mad"))
                 message.addReaction(message.getGuild().getEmotesByName("mad", true).get(0)).queue();
-            else if (messageContent.contains("greedy"))
+            if (messageContent.contains("greedy"))
                 message.addReaction(message.getGuild().getEmotesByName("greedy", true).get(0)).queue();
-            else if (messageContent.contains("surprise"))
+            if (messageContent.contains("surprise"))
                 message.addReaction(message.getGuild().getEmotesByName("surprise", true).get(0)).queue();
-            else if (messageContent.contains("cry"))
+            if (messageContent.contains("cry"))
                 message.addReaction(message.getGuild().getEmotesByName("cry", true).get(0)).queue();
-            else if (messageContent.contains("happy"))
+            if (messageContent.contains("happy"))
                 message.addReaction(message.getGuild().getEmotesByName("happy", true).get(0)).queue();
-            else if (messageContent.contains("love"))
+            if (messageContent.contains("love"))
                 message.addReaction(message.getGuild().getEmotesByName("love", true).get(0)).queue();
-            else if (messageContent.contains("heh"))
+            if (messageContent.contains("heh"))
                 message.addReaction(message.getGuild().getEmotesByName("heh", true).get(0)).queue();
         }
     }
