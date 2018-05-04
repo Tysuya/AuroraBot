@@ -21,6 +21,8 @@ public class Maintenance {
         try {
             // Parse start and end times
             Document document = Jsoup.connect("https://www.withhive.com/game/desc/32/22").get();
+            if (!document.toString().contains("[Maintenance]"))
+                return;
             Element rawHTML = document.select("ul.list_notice > li > a > span").first();
             String[] info = rawHTML.text().substring(13).split(" ");
             String month = info[0];

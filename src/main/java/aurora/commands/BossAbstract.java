@@ -146,10 +146,7 @@ public abstract class BossAbstract {
         for (Message message : messageHistoryList) {
             for (String bossName : bossNamesFinal) {
                 if (message.getContent().contains(bossName)) {
-                    String[] lines = message.getContent().split("\n");
-
-                    for (int i = 0; i < lines.length; i++)
-                        lines[i] = lines[i].replace("`", "");
+                    String[] lines = message.getContent().replace("`", "").split("\n");
 
                     try {
                         if (!lines[0].split("at ")[1].equals("Unknown")) {
@@ -193,8 +190,12 @@ public abstract class BossAbstract {
                     int colon = huntersLine[i].indexOf(":");
 
                     String name = huntersLine[i].substring(parenthesis + 2, colon);
+                    //System.out.println(name);
+                    /*if (name.equals("Domm1e/Henry"))
+                        name = "narrak/Henry";*/
                     Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2));
-                    bossKillsHashMap.put(name, kills);
+                    if (kills > 0)
+                        bossKillsHashMap.put(name, kills);
                 }
 
                 String bossName = "";

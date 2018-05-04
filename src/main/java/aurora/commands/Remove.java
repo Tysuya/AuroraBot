@@ -22,6 +22,9 @@ public class Remove extends BossAbstract {
         HashMap<String, Integer> authorList = bossKills.get(bossName);
         authorList.put(author, authorList.get(author) - amount);
 
+        if (authorList.get(author) <= 0)
+            authorList.remove(author);
+
         bossKills.put(bossName, authorList);
 
         try {

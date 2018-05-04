@@ -35,7 +35,7 @@ public class MessageListener extends ListenerAdapter {
             "\n__Boss Hunting Commands:__" +
             "\n```!pin [bossName] - to punch in to be notified when a boss spawns" +
             "\n!pout [bossName] - to punch out of notifications" +
-            "\n!report [bossName] [time] [lost] - to report when you killed a boss - add \"lost\" if you didn't kill the boss" +
+            "\n!report [bossName] [time] [lost] - !r - to report when you killed a boss - add \"lost\" if you didn't kill the boss" +
             "\n!reset [bossName] - to reset a boss time to \"Unknown\"" +
             "\n!check [bossName] - to check the next time a boss is going to spawn" +
             "\n!history [bossName] - to check the history of a boss" +
@@ -180,7 +180,7 @@ public class MessageListener extends ListenerAdapter {
                 punchIn(channel, message);
             } else if (messageContent.contains("!pout")) {
                 punchOut(channel, message);
-            } else if (messageContent.contains("!report") || messageContent.contains("!r")) {
+            } else if (messageContent.contains("!report") || messageContent.contains("!r ")) {
                 report(channel, message);
             } else if (messageContent.contains("!reset")) {
                 reset(channel, message);
