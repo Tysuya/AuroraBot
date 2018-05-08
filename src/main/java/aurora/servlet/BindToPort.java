@@ -20,7 +20,9 @@ import java.util.TimerTask;
  */
 public class BindToPort extends HttpServlet {
     public static void bindToPort() throws Exception {
-        Server server = new Server(Integer.valueOf(System.getenv("PORT")));
+        Server server = new Server();
+        if (System.getenv("PORT") != null)
+            server = new Server(Integer.valueOf(System.getenv("PORT")));
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         server.setHandler(context);
