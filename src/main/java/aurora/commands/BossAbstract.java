@@ -5,10 +5,6 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
 import net.dv8tion.jda.core.entities.User;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,12 +17,13 @@ public abstract class BossAbstract {
     static HashMap<String, Integer> bossRespawnTimes = new HashMap<>();
     static HashMap<String, List<User>> bossHunters = new HashMap<>();
     static HashMap<String, Date> nextBossSpawnTime = new HashMap<>();
-    static HashMap<String, ArrayList<String>> bossHistory = new HashMap<>();
+    static HashMap<String, String> bossHistory = new HashMap<>();
     static HashMap<String, HashMap<String, Integer>> bossKills = new HashMap<>();
     static HashMap<String, Integer> hunterOverallKills = new HashMap<>();
     static HashMap<String, Integer> bossOverallKills = new HashMap<>();
     static HashMap<String, Timer> bossSpawnTimers = new HashMap<>();
     static int auroraOverallKills = 0;
+    static Dropbox dropbox = new Dropbox();
 
     // Test
     /*static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
@@ -58,9 +55,10 @@ public abstract class BossAbstract {
 
         for(String bossName : bossNamesFinal) {
             bossHunters.put(bossName, new ArrayList<>());
-            bossHistory.put(bossName, new ArrayList<>());
             bossKills.put(bossName, new HashMap<>());
             bossSpawnTimers.put(bossName, new Timer());
+
+            bossHistory.put(bossName, dropbox.getHistory(bossName));
         }
         try {
             initializeKills();
@@ -124,8 +122,8 @@ public abstract class BossAbstract {
                     bossReport.editMessage(String.join(", ", usersString) + "\n" +
                             messageString +
                             "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds").complete();
-                    System.out.println(bossName +
-                            "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds");
+                    /*System.out.println(bossName +
+                            "\nSpawn Timer: " + codeBlock(Long.toString(hours)) + " hours " + codeBlock(Long.toString(minutes)) + " minutes " + codeBlock(Long.toString(seconds)) + " seconds");*/
                 }
             }
         }, 0, 10000);

@@ -38,7 +38,7 @@ public class MessageListener extends ListenerAdapter {
             "\n!report [bossName] [time] [lost] - !r - to report when you killed a boss - add \"lost\" if you didn't kill the boss" +
             "\n!reset [bossName] - to reset a boss time to \"Unknown\"" +
             "\n!check [bossName] - to check the next time a boss is going to spawn" +
-            "\n!history [bossName] - to check the history of a boss" +
+            "\n!history [bossName] [amount] - to check the history of a boss" +
             "\n!kills [bossName] - to check the number of kills on a boss" +
             "\n!remove [bossName] [kills] - to remove a number of kills of a boss from a hunter" +
             "\n!active - to check active bosses```" +
@@ -73,7 +73,7 @@ public class MessageListener extends ListenerAdapter {
             "\n__Notes:__" +
             "\n```Boss names are not case-sensitive" +
             "\nUsing colons in times is optional" +
-            "\nAll of the commands can take multiple boss names except for !report" +
+            "\nMost of the commands can take multiple boss names" +
             "\nYou can !pin, !pout, !report, !remove for others by @mentioning them" +
             "\nYou can use \"!pin all\" to punch in for all bosses" +
             "\nYou can use \"!pout all\" to punch out for all bosses```" +
@@ -154,7 +154,9 @@ public class MessageListener extends ListenerAdapter {
             System.out.printf("[GRP: %s]<%s>: %s\n", groupName, author.getName(), messageContent);
         }
 
-        if(!message.getAuthor().isBot()) {
+        if (!message.getAuthor().isBot()) {
+            channel.sendTyping().complete();
+
             messageContent = message.getContent().toLowerCase();
             if (messageContent.equals("ab!help")) {
                 channel.sendMessage(helpMessage).queue();
@@ -201,7 +203,7 @@ public class MessageListener extends ListenerAdapter {
             }
         }
 
-        if(!author.isBot()) {
+        if (!author.isBot()) {
             messageContent = message.getContent().toLowerCase();
             if (messageContent.contains("omg"))
                 message.addReaction(message.getGuild().getEmotesByName("omg", true).get(0)).queue();

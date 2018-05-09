@@ -10,7 +10,7 @@ public class Report extends BossAbstract {
     public static void report(MessageChannel channel, Message message) {
         String timeOfDeath = "";
         String[] initialReport = null;
-        if(message.getContent().contains("!r "))
+        if (message.getContent().contains("!r "))
             initialReport = message.getContent().split("!r ")[1].split(" ");
         else
             initialReport = message.getContent().split("!report ")[1].split(" ");
@@ -35,7 +35,7 @@ public class Report extends BossAbstract {
 
         ArrayList<String> report = new ArrayList<>();
 
-        if(message.getContent().contains("!r "))
+        if (message.getContent().contains("!r "))
             report = changeAbbreviations(message.getContent().split("!r ")[1]);
         else
             report = changeAbbreviations(message.getContent().split("!report ")[1]);
@@ -49,28 +49,31 @@ public class Report extends BossAbstract {
         if (!message.getMentionedUsers().isEmpty())
             author = message.getMentionedUsers().get(0).getName();
 
-        String messageString = "";
 
+        String messageString = "Great job, " + codeBlock(author) + "!";
+        String historyString = "At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author;
         if (message.getContent().contains("lost")) {
             messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
-            bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author);
-
-            calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
-            nextBossSpawnTime.put(bossName, calendar.getTime());
+            historyString = "At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author;
         }
-        else {
-            messageString = "Great job, " + codeBlock(author) + "!";
-            bossHistory.get(bossName).add("At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author);
-            HashMap<String, Integer> authorList = bossKills.get(bossName);
 
-            authorList.putIfAbsent(author, 0);
-            authorList.put(author, authorList.get(author) + 1);
+        calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
+        nextBossSpawnTime.put(bossName, calendar.getTime());
 
-            bossKills.put(bossName, authorList);
+        spawnTimer(bossName, channel.sendMessage(notifyingHunters(bossName) + "\n" +
+                messageString +
+                respawnTime(bossName) +
+                currentHunters(bossName)).complete());
 
-            calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
-            nextBossSpawnTime.put(bossName, calendar.getTime());
+        bossHistory.put(bossName, bossHistory.get(bossName) + "\n" + historyString);
+        dropbox.setHistory(bossName, bossHistory.get(bossName).trim());
 
+        HashMap<String, Integer> authorList = bossKills.get(bossName);
+        authorList.putIfAbsent(author, 0);
+        authorList.put(author, authorList.get(author) + 1);
+        bossKills.put(bossName, authorList);
+
+        if (!message.getContent().contains("lost")) {
             try {
                 List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
                 for (Message eachMessage : messageHistoryList) {
@@ -86,13 +89,8 @@ public class Report extends BossAbstract {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             checkKills(bossName, author);
         }
-        spawnTimer(bossName, channel.sendMessage(notifyingHunters(bossName) + "\n" +
-                messageString +
-                respawnTime(bossName) +
-                currentHunters(bossName)).complete());
     }
 
     public static void checkKills(String bossName, String author) {
