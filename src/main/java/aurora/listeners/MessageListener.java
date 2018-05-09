@@ -155,8 +155,6 @@ public class MessageListener extends ListenerAdapter {
         }
 
         if (!message.getAuthor().isBot()) {
-            channel.sendTyping().complete();
-
             messageContent = message.getContent().toLowerCase();
             if (messageContent.equals("ab!help")) {
                 channel.sendMessage(helpMessage).queue();
@@ -171,34 +169,46 @@ public class MessageListener extends ListenerAdapter {
                 }
 
             } else if (messageContent.equals("ab!uptime")) {
+                channel.sendTyping().complete();
                 uptime(channel);
             } else if (messageContent.contains("fact") && !message.getAuthor().isBot()) {
+                channel.sendTyping().complete();
                 fact(channel, message);
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
             } else if (messageContent.contains("!delete")) {
                 delete(channel, message);
             } else if (messageContent.contains("!pin")) {
+                channel.sendTyping().complete();
                 punchIn(channel, message);
             } else if (messageContent.contains("!pout")) {
+                channel.sendTyping().complete();
                 punchOut(channel, message);
             } else if (messageContent.contains("!report") || messageContent.contains("!r ")) {
+                channel.sendTyping().complete();
                 report(channel, message);
             } else if (messageContent.contains("!reset")) {
+                channel.sendTyping().complete();
                 reset(channel, message);
             } else if (messageContent.contains("!check")) {
+                channel.sendTyping().complete();
                 check(channel, message);
             } else if (messageContent.contains("!history")) {
+                channel.sendTyping().complete();
                 history(channel, message);
             } else if (messageContent.contains("!kills")) {
+                channel.sendTyping().complete();
                 kills(channel, message);
             } else if (messageContent.contains("!remove")) {
+                channel.sendTyping().complete();
                 remove(channel, message);
             } else if (messageContent.contains("!active")) {
+                channel.sendTyping().complete();
                 active(channel, message);
             } else if (messageContent.contains("!poke")) {
                 pokemon(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
+                channel.sendTyping().complete();
                 cleverBot(channel, message);
             }
         }
