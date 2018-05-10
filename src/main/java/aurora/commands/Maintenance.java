@@ -16,6 +16,7 @@ public class Maintenance {
     static Date maintenanceEnd = new Date();
     static String maintenanceInfo = "";
     static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    static boolean sentMaintenance = false;
 
     public static void maintenance() {
         try {
@@ -50,17 +51,23 @@ public class Maintenance {
             e.printStackTrace();
         }
 
-        if (new Date().getTime() < maintenanceStart.getTime()) {
+        if (maintenanceStart.getTime() > new Date().getTime()) {
+            System.out.println("Maintenance coming up!");
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 0 && Calendar.getInstance().get(Calendar.MINUTE) == 0 && Calendar.getInstance().get(Calendar.SECOND) == 0)
-                        AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
-                    if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
-                        AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone Today's maintenance has begun!").queue();
-                    if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date())))
-                        AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone Today's maintenance has ended!").queue();
+                    if (maintenanceStart.getDay() == new Date().getDay()) {
+                        System.out.println("Maintenance today!");
+                        if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 0 && Calendar.getInstance().get(Calendar.MINUTE) == 0  && !sentMaintenance) {
+                            AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
+                            sentMaintenance = true;
+                        }
+                        if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
+                            AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone Today's maintenance has begun!").queue();
+                        if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date())))
+                            AuroraBot.jda.getTextChannelById(channelID).sendMessage("@everyone Today's maintenance has ended!").queue();
+                    }
                 }
             }, 0, 1000);
         }
