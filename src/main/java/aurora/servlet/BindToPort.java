@@ -9,18 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * Created by Tyler on 1/19/2017.
  */
 public class BindToPort extends HttpServlet {
     public static void bindToPort() throws Exception {
-        Server server = new Server();
+        Server server = new Server(8080);
         if (System.getenv("PORT") != null)
             server = new Server(Integer.valueOf(System.getenv("PORT")));
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -62,5 +62,12 @@ public class BindToPort extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.getWriter().print("Hello, I am AuroraBot!\n");
+    }
+
+    // Method to handle POST method request.
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        doGet(request, response);
     }
 }

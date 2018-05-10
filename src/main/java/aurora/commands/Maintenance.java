@@ -50,7 +50,7 @@ public class Maintenance {
             e.printStackTrace();
         }
 
-        if (maintenanceStart.getDay() == new Date().getDay()) {
+        if (new Date().getTime() < maintenanceStart.getTime()) {
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
