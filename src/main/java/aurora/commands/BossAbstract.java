@@ -230,7 +230,7 @@ public abstract class BossAbstract {
             /*String a = rank++ + ") " + name + ": ";
             String b = String.format("%-25s" + killCount + " - " + percent + "%%", a);
             System.out.println(b);*/
-            killsString += "\n" + rank++ + ") " + name + ": " + killCount + " - " + percent + "%";
+            killsString += "\n" + rank++ + ") " + name + ": " + killCount;
         }
         if (killsString.isEmpty())
             killsString = " ";
