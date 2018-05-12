@@ -9,17 +9,11 @@ public class Active extends BossAbstract {
     public static void active(MessageChannel channel, Message message) {
         String messageString = "";
         int total = 0;
-        for (String bossName : bossNamesFinal)
-            if (nextBossSpawnTime.get(bossName) != null && !(new Date().getTime() > nextBossSpawnTime.get(bossName).getTime())) {
-                messageString += respawnTime(bossName);
+        for (Boss boss : bossList)
+            if (boss.getNextSpawnTime() != null && !(new Date().getTime() > boss.getNextSpawnTime().getTime())) {
+                messageString += boss.respawnTime();
                 total++;
             }
-        channel.sendMessage("Currently tracked bosses: " + codeBlock(Integer.toString(total)) + "\n" + messageString).queue();
-
-        /*AuroraBot.jda.getTextChannelById("420067387644182538").sendMessage(getOverallKills()).queue();
-        for (String bossName : bossNamesFinal) {
-            AuroraBot.jda.getTextChannelById("420067387644182538").sendMessage(getKills(bossName)).queue();
-            AuroraBot.jda.getTextChannelById("422701643566678016").sendMessage(respawnTime(bossName) + currentHunters(bossName)).queue();
-        }*/
+        channel.sendMessage("Currently tracked bossList: " + codeBlock(Integer.toString(total)) + "\n" + messageString).queue();
     }
 }

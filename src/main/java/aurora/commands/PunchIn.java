@@ -9,8 +9,8 @@ import java.util.List;
 
 public class PunchIn extends BossAbstract {
     public static void punchIn(MessageChannel channel, Message message) {
-        ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pin ")[1]);
-        System.out.println(bossNames.toString());
+        ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!pin ")[1]);
+        System.out.println(bosses.toString());
 
         if (message.getContent().contains("all")) {
             if (message.getMentionedUsers().isEmpty())
@@ -20,40 +20,41 @@ public class PunchIn extends BossAbstract {
                     addAll(channel, hunter);
         }
 
-        for(String bossName : bossNames) {
+        for(Boss boss : bosses) {
             if(message.getMentionedUsers().isEmpty())
-                addHunter(channel, bossName, message.getAuthor());
+                addHunter(channel, boss, message.getAuthor());
             else
                 for(User hunter : message.getMentionedUsers())
-                    addHunter(channel, bossName, hunter);
-            updateBossInfo(bossName);
+                    addHunter(channel, boss, hunter);
         }
+
+        for (Boss boss : bossList)
+            boss.updateBossInfo();
     }
 
-    public static void addHunter(MessageChannel channel, String bossName, User hunter) {
-        List<User> huntersList = bossHunters.get(bossName);
+    public static void addHunter(MessageChannel channel, Boss boss, User hunter) {
+        List<User> huntersList = boss.getHunters();
 
         String punchedStatus = codeBlock(hunter.getName());
         if(!huntersList.contains(hunter)) {
             huntersList.add(hunter);
-            punchedStatus += " just punched in for " + bold(bossName);
+            punchedStatus += " just punched in for " + bold(boss.getBossName());
         }
         else {
-            punchedStatus += " has already been punched in for " + bold(bossName);
+            punchedStatus += " has already been punched in for " + bold(boss.getBossName());
         }
-        bossHunters.put(bossName, huntersList);
+        boss.setHunters(huntersList);
 
-        channel.sendMessage(punchedStatus + respawnTime(bossName) + currentHunters(bossName)).queue();
+        channel.sendMessage(punchedStatus + boss.respawnTime() + boss.currentHunters()).queue();
     }
 
     public static void addAll(MessageChannel channel, User hunter) {
         channel.sendMessage(codeBlock(hunter.getName()) + " just punched in for " + bold("ALL BOSSES")).queue();
 
-        for (String bossName : bossNamesFinal) {
-            List<User> huntersList = bossHunters.get(bossName);
+        for (Boss boss : bossList) {
+            List<User> huntersList = boss.getHunters();
             if(!huntersList.contains(hunter))
                 huntersList.add(hunter);
-            updateBossInfo(bossName);
         }
     }
 }

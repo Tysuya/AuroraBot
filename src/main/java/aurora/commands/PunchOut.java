@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class PunchOut extends BossAbstract {
     public static void punchOut(MessageChannel channel, Message message) {
-        ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!pout ")[1]);
+        ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
         if (message.getContent().contains("all")) {
             if(message.getMentionedUsers().isEmpty())
@@ -18,30 +18,30 @@ public class PunchOut extends BossAbstract {
                     removeAll(channel, hunter);
         }
 
-        for(String bossName : bossNames) {
+        for(Boss boss : bosses) {
             if(message.getMentionedUsers().isEmpty())
-                removeHunter(channel, bossName, message.getAuthor());
+                removeHunter(channel, boss, message.getAuthor());
             else
                 for(User hunter : message.getMentionedUsers())
-                    removeHunter(channel, bossName, hunter);
-            updateBossInfo(bossName);
+                    removeHunter(channel, boss, hunter);
         }
+
+        for (Boss boss : bossList)
+            boss.updateBossInfo();
     }
 
-    public static void removeHunter(MessageChannel channel, String bossName, User hunter) {
-        bossHunters.get(bossName).remove(hunter);
+    public static void removeHunter(MessageChannel channel, Boss boss, User hunter) {
+        boss.getHunters().remove(hunter);
 
-        String messageString = codeBlock(hunter.getName()) + " just punched out for " + bold(bossName) + ". Thanks for your service!";
+        String messageString = codeBlock(hunter.getName()) + " just punched out for " + bold(boss.getBossName()) + ". Thanks for your service!";
 
-        channel.sendMessage(messageString + currentHunters(bossName)).queue();
+        channel.sendMessage(messageString + boss.currentHunters()).queue();
     }
 
     public static void removeAll(MessageChannel channel, User hunter) {
         channel.sendMessage(codeBlock(hunter.getName()) + " just punched out for " + bold("ALL BOSSES") + ". Thanks for your service!").queue();
 
-        for (String bossName : bossNamesFinal) {
-            bossHunters.get(bossName).remove(hunter);
-            updateBossInfo(bossName);
-        }
+        for (Boss boss : bossList)
+            boss.getHunters().remove(hunter);
     }
 }

@@ -33,14 +33,14 @@ public class Report extends BossAbstract {
             }
         }
 
-        ArrayList<String> report = new ArrayList<>();
+        ArrayList<Boss> bosses;
 
         if (message.getContent().contains("!r "))
-            report = changeAbbreviations(message.getContent().split("!r ")[1]);
+            bosses = changeAbbreviations(message.getContent().split("!r ")[1]);
         else
-            report = changeAbbreviations(message.getContent().split("!report ")[1]);
+            bosses = changeAbbreviations(message.getContent().split("!report ")[1]);
 
-        String bossName = report.get(0);
+        Boss boss = bosses.get(0);
 
         if (calendar.getTimeInMillis() > Calendar.getInstance().getTimeInMillis())
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
@@ -49,51 +49,34 @@ public class Report extends BossAbstract {
         if (!message.getMentionedUsers().isEmpty())
             author = message.getMentionedUsers().get(0).getName();
 
-
         String messageString = "Great job, " + codeBlock(author) + "!";
-        String historyString = "At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was killed by " + author;
+        String historyString = "At " + dateFormat.format(calendar.getTime()) + " " + boss.getBossName() + " was killed by " + author;
         if (message.getContent().contains("lost")) {
             messageString = "That's okay, " + codeBlock(author) + "! We all fail sometimes!";
-            historyString = "At " + dateFormat.format(calendar.getTime()) + " " + bossName + " was lost   by " + author;
+            historyString = "At " + dateFormat.format(calendar.getTime()) + " " + boss.getBossName() + " was lost   by " + author;
         }
 
-        calendar.add(Calendar.MINUTE, bossRespawnTimes.get(bossName));
-        nextBossSpawnTime.put(bossName, calendar.getTime());
+        calendar.add(Calendar.MINUTE, boss.getRespawnTime());
+        boss.setNextSpawnTime(calendar.getTime());
 
-        spawnTimer(bossName, channel.sendMessage(notifyingHunters(bossName) + "\n" +
+        boss.spawnTimer(channel.sendMessage(boss.notifyingHunters() + "\n" +
                 messageString +
-                respawnTime(bossName) +
-                currentHunters(bossName)).complete());
+                boss.respawnTime() +
+                boss.currentHunters()).complete());
+        boss.setHistory(boss.getHistory() + "\n" + historyString);
+        dropbox.writeHistory(boss.getBossName(), boss.getHistory().trim());
 
-        bossHistory.put(bossName, bossHistory.get(bossName) + "\n" + historyString);
-        dropbox.setHistory(bossName, bossHistory.get(bossName).trim());
-
-        HashMap<String, Integer> authorList = bossKills.get(bossName);
+        HashMap<String, Integer> authorList = boss.getKills();
         authorList.putIfAbsent(author, 0);
         authorList.put(author, authorList.get(author) + 1);
-        bossKills.put(bossName, authorList);
+        boss.setKills(authorList);
 
-        if (!message.getContent().contains("lost")) {
-            try {
-                List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
-                for (Message eachMessage : messageHistoryList) {
-                    if (eachMessage.getContent().contains(bossName))
-                        eachMessage.editMessage(getKills(bossName)).complete();
-                    if (eachMessage.getContent().contains("overall"))
-                        eachMessage.editMessage(getOverallKills()).complete();
-                }
-                messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
-                for (Message eachMessage : messageHistoryList)
-                    if (eachMessage.getContent().contains(bossName))
-                        updateBossInfo(bossName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            checkKills(bossName, author);
-        }
+        // Update #leaderboard and #bossinfo
+        if (!message.getContent().contains("lost"))
+            updateChannels(boss, author);
     }
 
-    public static void checkKills(String bossName, String author) {
+    public static void checkKills(Boss boss, String author) {
         String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
         String emojiString = "";
         for (int i = 1; i < 101; i++) {
@@ -104,20 +87,39 @@ public class Report extends BossAbstract {
                 emojiString += " ";
         }
 
-        int killCount = bossKills.get(bossName).get(author);
+        int killCount = boss.getKills().get(author);
         if (killCount % 100 == 0 && killCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(bossName) + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(boss.getBossName()) + "!\n" + emojiString).queue();
 
         killCount = hunterOverallKills.get(author);
         if (killCount % 100 == 0 && killCount != 0)
             bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th overall kill!\n" + emojiString).queue();
 
-        killCount = bossOverallKills.get(bossName);
+        killCount = boss.getOverallKills();
         if (killCount % 100 == 0 && killCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(bossName) + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(boss.getBossName()) + "!\n" + emojiString).queue();
 
         killCount = auroraOverallKills;
         if (killCount % 500 == 0 && killCount != 0)
             bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(killCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
+    }
+
+    public static void updateChannels(Boss boss, String author) {
+        try {
+            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
+            for (Message eachMessage : messageHistoryList) {
+                if (eachMessage.getContent().contains(boss.getBossName()))
+                    eachMessage.editMessage(getKills(boss)).complete();
+                if (eachMessage.getContent().contains("overall"))
+                    eachMessage.editMessage(getOverallKills()).complete();
+            }
+            messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
+            for (Message eachMessage : messageHistoryList)
+                if (eachMessage.getContent().contains(boss.getBossName()))
+                     boss.updateBossInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        checkKills(boss, author);
     }
 }

@@ -47,6 +47,7 @@ public class AuroraBot {
 
             BossAbstract.initialize();
             //battlefield();
+            System.out.println("Checking for maintenance...");
             maintenance();
             cycleGames();
             keepAwake();

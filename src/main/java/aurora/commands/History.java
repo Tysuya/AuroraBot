@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class History extends BossAbstract {
     public static void history(MessageChannel channel, Message message) {
-        String bossName = changeAbbreviations(message.getContent().split("!history ")[1]).get(0);
+        Boss boss = changeAbbreviations(message.getContent().split("!history ")[1]).get(0);
 
         String bossHistoryString = "";
-        String[] bossHistoryArray = bossHistory.get(bossName).split("\n");
+        String[] bossHistoryArray = boss.getHistory().split("\n");
 
         int amount = 10;
         for (String amountString : message.getContent().split(" "))
@@ -23,6 +23,6 @@ public class History extends BossAbstract {
             bossHistoryString += "\n" + bossHistoryArray[i];
         if (bossHistoryString.isEmpty())
             bossHistoryString = " ";
-        channel.sendMessage("History for " + codeBlock(Integer.toString(amount)) + " kills of " + bold(bossName) + ":```" + bossHistoryString + "```").queue();
+        channel.sendMessage("History for " + codeBlock(Integer.toString(amount)) + " kills of " + bold(boss.getBossName()) + ":```" + bossHistoryString + "```").queue();
     }
 }

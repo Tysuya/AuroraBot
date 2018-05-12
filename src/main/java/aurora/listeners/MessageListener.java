@@ -67,6 +67,11 @@ public class MessageListener extends ListenerAdapter {
             "\nMAGMA SENIOR THIEF - MAGMA - MST" +
             "\nBBINIKJOE - BB - JOE" +
             "\nBURNING STONE - BURNING" +
+            "\nELEMENTAL QUEEN - ELEMENTAL - QUEEN - EQ" +
+            "\nTWISTER" +
+            "\nMAELSTROM" +
+            "\nSWIRL FLAME - SWIRL - FLAME - SF" +
+            "\nTANK" +
             "\nLACOSTEZA - LACOS" +
             "\nBLACKSKULL - BS" +
             "\nTURTLE Z - TURTLE - TZ```" +

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Remove extends BossAbstract {
     public static void remove(MessageChannel channel, Message message) {
-        String bossName = changeAbbreviations(message.getContent().split("!remove ")[1]).get(0);
+        Boss boss = changeAbbreviations(message.getContent().split("!remove ")[1]).get(0);
         int amount = 1;
         for (String amountString : message.getContent().split(" "))
             if (amountString.chars().allMatch(Character::isDigit))
@@ -19,28 +19,28 @@ public class Remove extends BossAbstract {
         if(!message.getMentionedUsers().isEmpty())
             author = message.getMentionedUsers().get(0).getName();
 
-        HashMap<String, Integer> authorList = bossKills.get(bossName);
+        HashMap<String, Integer> authorList = boss.getKills();
         authorList.put(author, authorList.get(author) - amount);
 
         if (authorList.get(author) <= 0)
             authorList.remove(author);
 
-        bossKills.put(bossName, authorList);
+        boss.setKills(authorList);
 
         try {
             List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
             for (Message eachMessage : messageHistoryList) {
-                if (eachMessage.getContent().contains(bossName))
-                    eachMessage.editMessage(getKills(bossName)).complete();
+                if (eachMessage.getContent().contains(boss.getBossName()))
+                    eachMessage.editMessage(getKills(boss)).complete();
                 if (eachMessage.getContent().contains("overall"))
                     eachMessage.editMessage(getOverallKills()).complete();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String messageString = "Removed " + codeBlock(Integer.toString(amount)) + " kill of " + bold(bossName) + " from " + codeBlock(author);
+        String messageString = "Removed " + codeBlock(Integer.toString(amount)) + " kill of " + bold(boss.getBossName()) + " from " + codeBlock(author);
         if (amount > 1)
-            messageString = "Removed " + codeBlock(Integer.toString(amount)) + " kills of " + bold(bossName) + " from " + codeBlock(author);
+            messageString = "Removed " + codeBlock(Integer.toString(amount)) + " kills of " + bold(boss.getBossName()) + " from " + codeBlock(author);
         channel.sendMessage(messageString).queue();
     }
 }

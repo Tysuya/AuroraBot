@@ -7,20 +7,20 @@ import java.util.ArrayList;
 
 public class Reset extends BossAbstract {
     public static void reset(MessageChannel channel, Message message) {
-        ArrayList<String> bossNames = changeAbbreviations(message.getContent().split("!reset ")[1]);
+        ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!reset ")[1]);
 
         if(message.getContent().contains("all")) {
             channel.sendMessage(bold("ALL BOSS") + " respawn timers have been reset").queue();
-            for (String bossName : bossNamesFinal) {
-                nextBossSpawnTime.put(bossName, null);
-                updateBossInfo(bossName);
-            }
+            for (Boss boss : bossList)
+                boss.setNextSpawnTime(null);
         }
 
-        for(String bossName : bossNames) {
-            nextBossSpawnTime.put(bossName, null);
-            channel.sendMessage(bold(bossName) + "'s respawn timer has been reset").queue();
-            updateBossInfo(bossName);
+        for(Boss boss : bosses) {
+            boss.setNextSpawnTime(null);
+            channel.sendMessage(bold(boss.getBossName()) + "'s respawn timer has been reset").queue();
         }
+
+        for (Boss boss : bossList)
+            boss.updateBossInfo();
     }
 }

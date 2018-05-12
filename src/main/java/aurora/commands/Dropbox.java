@@ -30,7 +30,7 @@ public class Dropbox {
         client = new DbxClientV2(config, ACCESS_TOKEN);
     }
 
-    public String getHistory(String fileName) {
+    public String readHistory(String fileName) {
         try {
             // Get files and folder metadata from Dropbox root directory
             ListFolderResult result = client.files().listFolder("");
@@ -39,10 +39,8 @@ public class Dropbox {
                 for (Metadata metadata : result.getEntries())
                     if(metadata.getName().contains(fileName))
                         found = true;
-
                 if (!result.getHasMore())
                     break;
-
                 result = client.files().listFolderContinue(result.getCursor());
             }
 
@@ -64,7 +62,7 @@ public class Dropbox {
         return output;
     }
 
-    public void setHistory(String fileName, String output) {
+    public void writeHistory(String fileName, String output) {
         try {
             InputStream inputStream = new ByteArrayInputStream(output.getBytes());
             client.files().uploadBuilder("/" + fileName + ".txt").withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
