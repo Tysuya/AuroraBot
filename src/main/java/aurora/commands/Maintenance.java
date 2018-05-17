@@ -13,8 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Maintenance {
-    private static MessageChannel channel = AuroraBot.jda.getTextChannelById("418683981291192331");
-    //private static MessageChannel channel = AuroraBot.jda.getTextChannelById("418818283102404611");
+    private static MessageChannel channel = AuroraBot.jda.getTextChannelById("418818283102404611");
     private static Date maintenanceStart = new Date();
     private static Date maintenanceEnd = new Date();
     private static String maintenanceInfo = "";
@@ -23,6 +22,8 @@ public class Maintenance {
     private static Timer maintenanceTimer = new Timer();
 
     public static void maintenance() {
+        if (!AuroraBot.debugMode)
+            channel = BossAbstract.bossHuntersChannel;
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
