@@ -19,14 +19,9 @@ public abstract class BossAbstract {
     static Dropbox dropbox = new Dropbox();
     static ArrayList<Boss> bossList = new ArrayList<>();
 
-    // Test
-    /*static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
+    static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
     static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
-    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");*/
-
-    static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
-    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
-    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
+    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CHIEF MAGIEF", "MAGMA SENIOR THIEF", "BBINIKJOE", "BURNING STONE", "ELEMENTAL QUEEN", "TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
 
@@ -51,9 +46,13 @@ public abstract class BossAbstract {
                 bossRespawnTime = 333;
             bossList.add(new Boss(bossName, bossRespawnTime));
         }
-
-        for (Boss boss : bossList)
-            boss.setHistory(dropbox.readHistory(boss.getBossName()));
+        if (!AuroraBot.debugMode) {
+            bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
+            leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
+            bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
+            for (Boss boss : bossList)
+                boss.setHistory(dropbox.readHistory(boss.getBossName()));
+        }
 
         try {
             System.out.println("Initializing kills...");
@@ -108,7 +107,7 @@ public abstract class BossAbstract {
                             Date time = dateFormat.parse(lines[0].split("at ")[1]);
                             /*if (!TimeZone.getTimeZone("PST").inDaylightTime(time))
                                 time.setHours(time.getHours() + 1);*/
-                            if (bossHuntersChannel.getId().equals("418683981291192331"))
+                            if (AuroraBot.debugMode)
                                 time.setHours(time.getHours() + 1);
                             time.setYear(new Date().getYear());
                             System.out.println(boss.getBossName() + " | " + time);

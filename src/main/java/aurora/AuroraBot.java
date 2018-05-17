@@ -1,7 +1,6 @@
 package aurora;
 
 import aurora.commands.BossAbstract;
-import aurora.commands.Dropbox;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -18,11 +17,14 @@ import static aurora.utils.CycleGames.cycleGames;
 public class AuroraBot {
     public static JDA jda;
     public static long startTime = System.currentTimeMillis();
+    public static boolean debugMode = false;
     public static void main(String[] args) {
         String token = System.getenv("token");
 
         try {
             token = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("token"))).split("\n")[0];
+            debugMode = true;
+            System.out.println("Debug mode activated...");
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +49,6 @@ public class AuroraBot {
 
             BossAbstract.initialize();
             //battlefield();
-            System.out.println("Checking for maintenance...");
             maintenance();
             cycleGames();
             keepAwake();

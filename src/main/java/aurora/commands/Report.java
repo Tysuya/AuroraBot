@@ -1,5 +1,6 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
@@ -64,7 +65,8 @@ public class Report extends BossAbstract {
                 boss.respawnTime() +
                 boss.currentHunters()).complete());
         boss.setHistory(boss.getHistory() + "\n" + historyString);
-        dropbox.writeHistory(boss.getBossName(), boss.getHistory().trim());
+        if (!AuroraBot.debugMode)
+            dropbox.writeHistory(boss.getBossName(), boss.getHistory().trim());
 
         HashMap<String, Integer> authorList = boss.getKills();
         authorList.putIfAbsent(author, 0);

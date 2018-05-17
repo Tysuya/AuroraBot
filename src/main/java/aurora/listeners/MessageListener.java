@@ -86,11 +86,12 @@ public class MessageListener extends ListenerAdapter {
             "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.";
 
     public MessageListener() {
-        try {
-            AuroraBot.jda.getTextChannelById("418818283102404611").editMessageById("419724800471203854", helpMessage).queue();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (!AuroraBot.debugMode)
+            try {
+                AuroraBot.jda.getTextChannelById("418818283102404611").editMessageById("419724800471203854", helpMessage).queue();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
@@ -213,7 +214,8 @@ public class MessageListener extends ListenerAdapter {
             } else if (messageContent.contains("!poke")) {
                 pokemon(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
-                channel.sendTyping().complete();
+                if (messageContent.contains("AuroraBot"))
+                    channel.sendTyping().complete();
                 cleverBot(channel, message);
             }
         }
