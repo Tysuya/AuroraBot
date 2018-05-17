@@ -119,10 +119,6 @@ public class Boss {
         return bossName;
     }
 
-    public void setBossName(String bossName) {
-        this.bossName = bossName;
-    }
-
     public List<User> getHunters() {
         return hunters;
     }

@@ -76,7 +76,7 @@ public class Maintenance {
     }
 
     private static void startMaintenanceTimer() {
-        if (maintenanceStart.getTime() > new Date().getTime()) {
+        if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
             if (maintenanceStart.getDay() == new Date().getDay())
                 System.out.println("Maintenance today!");

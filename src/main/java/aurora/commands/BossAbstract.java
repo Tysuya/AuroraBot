@@ -50,6 +50,7 @@ public abstract class BossAbstract {
             bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
             leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
             bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
+            System.out.println("Reading history...");
             for (Boss boss : bossList)
                 boss.setHistory(dropbox.readHistory(boss.getBossName()));
         }
@@ -110,7 +111,7 @@ public abstract class BossAbstract {
                             if (AuroraBot.debugMode)
                                 time.setHours(time.getHours() + 1);
                             time.setYear(new Date().getYear());
-                            System.out.println(boss.getBossName() + " | " + time);
+                            //System.out.println(boss.getBossName() + " | " + time);
                             boss.setNextSpawnTime(time);
                         }
                     } catch (Exception e) {
@@ -270,9 +271,6 @@ public abstract class BossAbstract {
                 replacements.get(bossName).add(bossName.split(" ")[0]);
             }
         }
-
-        /*for (int i = 0; i < bossNamesFinal.length; i++)
-            System.out.println(i + " " + bossNamesFinal[i]);*/
 
         ArrayList<String> removedBossNames = new ArrayList<>();
         for (int i = 0; i < bossNames.size(); i++) {

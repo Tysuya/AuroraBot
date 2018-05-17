@@ -9,8 +9,8 @@ import java.util.*;
 
 public class Report extends BossAbstract {
     public static void report(MessageChannel channel, Message message) {
-        String timeOfDeath = "";
-        String[] initialReport = null;
+        String timeOfDeath;
+        String[] initialReport;
         if (message.getContent().contains("!r "))
             initialReport = message.getContent().split("!r ")[1].split(" ");
         else
@@ -78,7 +78,26 @@ public class Report extends BossAbstract {
             updateChannels(boss, author);
     }
 
-    public static void checkKills(Boss boss, String author) {
+    private static void updateChannels(Boss boss, String author) {
+        try {
+            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
+            for (Message eachMessage : messageHistoryList) {
+                if (eachMessage.getContent().contains(boss.getBossName()))
+                    eachMessage.editMessage(getKills(boss)).complete();
+                if (eachMessage.getContent().contains("overall"))
+                    eachMessage.editMessage(getOverallKills()).complete();
+            }
+            messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
+            for (Message eachMessage : messageHistoryList)
+                if (eachMessage.getContent().contains(boss.getBossName()))
+                    boss.updateBossInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        checkKills(boss, author);
+    }
+
+    private static void checkKills(Boss boss, String author) {
         String[] emojis = {":birthday:", ":fireworks:", ":sparkler:", ":tada:", ":confetti_ball:"};
         String emojiString = "";
         for (int i = 1; i < 101; i++) {
@@ -104,24 +123,5 @@ public class Report extends BossAbstract {
         killCount = auroraOverallKills;
         if (killCount % 500 == 0 && killCount != 0)
             bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(killCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
-    }
-
-    public static void updateChannels(Boss boss, String author) {
-        try {
-            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
-            for (Message eachMessage : messageHistoryList) {
-                if (eachMessage.getContent().contains(boss.getBossName()))
-                    eachMessage.editMessage(getKills(boss)).complete();
-                if (eachMessage.getContent().contains("overall"))
-                    eachMessage.editMessage(getOverallKills()).complete();
-            }
-            messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
-            for (Message eachMessage : messageHistoryList)
-                if (eachMessage.getContent().contains(boss.getBossName()))
-                     boss.updateBossInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        checkKills(boss, author);
     }
 }
