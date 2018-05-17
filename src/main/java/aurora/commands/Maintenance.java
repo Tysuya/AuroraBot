@@ -22,14 +22,15 @@ public class Maintenance {
     private static Timer maintenanceTimer = new Timer();
 
     public static void maintenance() {
-        if (!AuroraBot.debugMode)
+        if (AuroraBot.debugMode)
             channel = BossAbstract.bossHuntersChannel;
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 System.out.println("Checking for maintenance...");
                 checkForMaintenance();
-                runMaintenanceTimer();
+                startMaintenanceTimer();
             }
         }, 0, 21600000);
     }
@@ -74,7 +75,7 @@ public class Maintenance {
         }
     }
 
-    private static void runMaintenanceTimer() {
+    private static void startMaintenanceTimer() {
         if (maintenanceStart.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
             if (maintenanceStart.getDay() == new Date().getDay())
