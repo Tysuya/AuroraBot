@@ -261,12 +261,12 @@ public abstract class BossAbstract {
         replacements.put(bossNamesFinal[22], new ArrayList<>(Arrays.asList("BB", "JOE")));
         replacements.put(bossNamesFinal[24], new ArrayList<>(Arrays.asList("QUEEN")));
         replacements.put(bossNamesFinal[27], new ArrayList<>(Arrays.asList("FLAME")));
-        replacements.put(bossNamesFinal[28], new ArrayList<>(Arrays.asList("STEAM", "PUNK", "SP")));
-        replacements.put(bossNamesFinal[29], new ArrayList<>(Arrays.asList("LAND", "MINE")));
-        replacements.put(bossNamesFinal[30], new ArrayList<>(Arrays.asList("GOLEM")));
-        replacements.put(bossNamesFinal[31], new ArrayList<>(Arrays.asList("LACOS")));
-        replacements.put(bossNamesFinal[32], new ArrayList<>(Arrays.asList("BS")));
-        replacements.put(bossNamesFinal[33], new ArrayList<>(Arrays.asList("TZ")));
+        replacements.put(bossNamesFinal[29], new ArrayList<>(Arrays.asList("STEAM", "PUNK", "SP")));
+        replacements.put(bossNamesFinal[30], new ArrayList<>(Arrays.asList("LAND", "MINE")));
+        replacements.put(bossNamesFinal[31], new ArrayList<>(Arrays.asList("TIT", "GOLEM")));
+        replacements.put(bossNamesFinal[32], new ArrayList<>(Arrays.asList("LACOS")));
+        replacements.put(bossNamesFinal[33], new ArrayList<>(Arrays.asList("BS")));
+        replacements.put(bossNamesFinal[34], new ArrayList<>(Arrays.asList("TZ")));
 
         for (String bossName : bossNamesFinal) {
             if (bossName.contains(" ")) {
