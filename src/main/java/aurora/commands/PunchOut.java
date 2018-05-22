@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class PunchOut extends BossAbstract {
     public static void punchOut(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!pout ")[1]);
 
         if (message.getContent().contains("all")) {

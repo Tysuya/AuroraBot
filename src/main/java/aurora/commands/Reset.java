@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Reset extends BossAbstract {
     public static void reset(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!reset ")[1]);
 
         if(message.getContent().contains("all")) {

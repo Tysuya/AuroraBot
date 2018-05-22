@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class Active extends BossAbstract {
     public static void active(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         String messageString = "";
         int total = 0;
         for (Boss boss : bossList)

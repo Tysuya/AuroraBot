@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class History extends BossAbstract {
     public static void history(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         Boss boss = changeAbbreviations(message.getContent().split("!history ")[1]).get(0);
 
         String bossHistoryString = "";

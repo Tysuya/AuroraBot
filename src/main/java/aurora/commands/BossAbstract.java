@@ -268,9 +268,7 @@ public abstract class BossAbstract {
         replacements.put(bossNamesFinal[32], new ArrayList<>(Arrays.asList("BS")));
         replacements.put(bossNamesFinal[33], new ArrayList<>(Arrays.asList("TZ")));
 
-        int j = 0;
         for (String bossName : bossNamesFinal) {
-            System.out.println(bossName + " " + j++);
             if (bossName.contains(" ")) {
                 String[] names = bossName.split(" ");
                 String initials = "";

@@ -9,6 +9,7 @@ import java.util.*;
 
 public class Report extends BossAbstract {
     public static void report(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         String timeOfDeath;
         String[] initialReport;
         if (message.getContent().contains("!r "))

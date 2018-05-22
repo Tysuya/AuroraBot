@@ -9,6 +9,7 @@ import java.util.List;
 
 public class PunchIn extends BossAbstract {
     public static void punchIn(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!pin ")[1]);
         System.out.println(bosses.toString());
 

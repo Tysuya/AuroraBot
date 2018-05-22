@@ -8,6 +8,7 @@ import aurora.AuroraBot;
  */
 public class Uptime {
     public static void uptime(MessageChannel channel) {
+        channel.sendTyping().complete();
         long time = (System.currentTimeMillis() - AuroraBot.startTime) / 1000;
         System.out.println("time: " + time);
         long seconds = time % 60;

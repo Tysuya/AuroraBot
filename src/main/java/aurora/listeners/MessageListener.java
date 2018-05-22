@@ -30,7 +30,7 @@ import static aurora.commands.PunchIn.punchIn;
 public class MessageListener extends ListenerAdapter {
     String helpMessage = "Hello, I am AuroraBot. My current commands are as follows:" +
             "\n__General Commands:__" +
-            "\n```ab!ping - to ping AuroraBot to get a response time" +
+            "\n```ab!ping - to ping AuroraBot and get a response time" +
             "\nab!uptime - to check the uptime of AuroraBot```" +
             "\n__Boss Hunting Commands:__" +
             "\n```!pin [bossName] - to punch in to be notified when a boss spawns" +
@@ -77,14 +77,13 @@ public class MessageListener extends ListenerAdapter {
             "\nTITANIUM GOLEM - TITANIUM - GOLEM - TG" +
             "\nLACOSTEZA - LACOS" +
             "\nBLACKSKULL - BS" +
-            "\nTURTLE Z - TURTLE - TZ```" +
-            "\n__Notes:__" +
+            "\nTURTLE Z - TURTLE - TZ```";
+    String helpMessage2 = "__Notes:__" +
             "\n```Boss names are not case-sensitive" +
             "\nUsing colons in times is optional" +
             "\nMost of the commands can take multiple boss names" +
-            "\nYou can !pin, !pout, !report, !remove for others by @mentioning them" +
-            "\nYou can use \"!pin all\" to punch in for all bosses" +
-            "\nYou can use \"!pout all\" to punch out for all bosses```" +
+            "\nYou can use @mention to perform commands for others" +
+            "\nYou can use \"!pin all\" and \"pout all\" to punch in/out for all bosses```" +
             "I am also a chatbot, so start a message with <@418714401617608704> and I will respond." +
             "\nI am still in development, so some things may break. Send any bugs to my creator, <@159201526114549760>.";
 
@@ -163,11 +162,12 @@ public class MessageListener extends ListenerAdapter {
             System.out.printf("[GRP: %s]<%s>: %s\n", groupName, author.getName(), messageContent);
         }
 
-        if (!message.getAuthor().isBot()) {
+        if (!author.isBot()) {
             messageContent = message.getContent().toLowerCase();
             if (messageContent.equals("ab!help")) {
+                channel.sendTyping().complete();
                 channel.sendMessage(helpMessage).queue();
-
+                channel.sendMessage(helpMessage2).queue();
             } else if (messageContent.equals("ab!ping")) {
                 long start = System.currentTimeMillis();
                 try {
@@ -176,73 +176,43 @@ public class MessageListener extends ListenerAdapter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             } else if (messageContent.equals("ab!uptime")) {
-                channel.sendTyping().complete();
                 uptime(channel);
             } else if (messageContent.contains("fact") && !message.getAuthor().isBot()) {
-                channel.sendTyping().complete();
                 fact(channel, message);
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
             } else if (messageContent.contains("!delete")) {
                 delete(channel, message);
             } else if (messageContent.contains("!pin")) {
-                channel.sendTyping().complete();
                 punchIn(channel, message);
             } else if (messageContent.contains("!pout")) {
-                channel.sendTyping().complete();
                 punchOut(channel, message);
             } else if (messageContent.contains("!report") || messageContent.contains("!r ")) {
-                channel.sendTyping().complete();
                 report(channel, message);
             } else if (messageContent.contains("!reset")) {
-                channel.sendTyping().complete();
                 reset(channel, message);
             } else if (messageContent.contains("!check")) {
-                channel.sendTyping().complete();
                 check(channel, message);
             } else if (messageContent.contains("!history")) {
-                channel.sendTyping().complete();
                 history(channel, message);
             } else if (messageContent.contains("!kills")) {
-                channel.sendTyping().complete();
                 kills(channel, message);
             } else if (messageContent.contains("!remove")) {
-                channel.sendTyping().complete();
                 remove(channel, message);
             } else if (messageContent.contains("!active")) {
-                channel.sendTyping().complete();
                 active(channel, message);
             } else if (messageContent.contains("!poke")) {
                 pokemon(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
                 if (messageContent.contains("AuroraBot"))
-                    channel.sendTyping().complete();
-                cleverBot(channel, message);
+                    cleverBot(channel, message);
             }
-        }
 
-        if (!author.isBot()) {
-            messageContent = message.getContent().toLowerCase();
-            if (messageContent.contains("omg"))
-                message.addReaction(message.getGuild().getEmotesByName("omg", true).get(0)).queue();
-            if (messageContent.contains("dizzy"))
-                message.addReaction(message.getGuild().getEmotesByName("dizzy", true).get(0)).queue();
-            if (messageContent.contains("mad"))
-                message.addReaction(message.getGuild().getEmotesByName("mad", true).get(0)).queue();
-            if (messageContent.contains("greedy"))
-                message.addReaction(message.getGuild().getEmotesByName("greedy", true).get(0)).queue();
-            if (messageContent.contains("surprise"))
-                message.addReaction(message.getGuild().getEmotesByName("surprise", true).get(0)).queue();
-            if (messageContent.contains("cry"))
-                message.addReaction(message.getGuild().getEmotesByName("cry", true).get(0)).queue();
-            if (messageContent.contains("happy"))
-                message.addReaction(message.getGuild().getEmotesByName("happy", true).get(0)).queue();
-            if (messageContent.contains("love"))
-                message.addReaction(message.getGuild().getEmotesByName("love", true).get(0)).queue();
-            if (messageContent.contains("heh"))
-                message.addReaction(message.getGuild().getEmotesByName("heh", true).get(0)).queue();
+            String[] emoteNames = {"omg", "dizzy", "mad", "greedy", "surprise", "cry", "happy", "love", "heh"};
+            for (String emoteName : emoteNames)
+                if (messageContent.contains(emoteName))
+                    message.addReaction(message.getGuild().getEmotesByName(emoteName, true).get(0)).queue();
         }
     }
 }

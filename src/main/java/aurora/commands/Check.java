@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class Check extends BossAbstract {
     public static void check(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         ArrayList<Boss> bosses = changeAbbreviations(message.getContent().split("!check ")[1]);
         for(Boss boss : bosses) {
             boss.spawnTimer(channel.sendMessage(boss.respawnTime() +

@@ -26,6 +26,7 @@ import static aurora.utils.SendMentionMessage.sendMentionMessage;
  */
 public class Fact {
     public static void fact(MessageChannel channel, Message message) {
+        channel.sendTyping().complete();
         Message lastMessage = null;
         try {
             lastMessage = channel.sendMessage(message.getAuthor().getAsMention() + " Loading...").complete();
