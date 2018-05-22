@@ -31,7 +31,7 @@ public class BindToPort extends HttpServlet {
         server.join();
     }
 
-    public static void keepAwake() throws Exception {
+    public static void keepAwake() {
         try {
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -42,9 +42,8 @@ public class BindToPort extends HttpServlet {
                         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                         httpURLConnection.connect();
                         int responseCode = httpURLConnection.getResponseCode();
-                        if(responseCode != 200) {
+                        if(responseCode != 200)
                             System.out.println("Response code is not 200!");
-                        }
                     } catch(MalformedURLException e) {
                         e.printStackTrace();
                     } catch(IOException e) {
@@ -102,7 +101,6 @@ public class BindToPort extends HttpServlet {
     // Method to handle POST method request.
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         doGet(request, response);
     }
 }

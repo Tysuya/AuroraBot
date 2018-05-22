@@ -1,5 +1,6 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
@@ -20,11 +21,13 @@ public class Dropbox {
     public Dropbox() {
         ACCESS_TOKEN = System.getenv("dbtoken");
 
-        try {
-            ACCESS_TOKEN = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("dbtoken"))).split("\n")[0];
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        if (AuroraBot.debugMode)
+            try {
+                ACCESS_TOKEN = new String(Files.readAllBytes(Paths.get("").toAbsolutePath().resolve("dbtoken"))).split("\n")[0];
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
         // Create Dropbox client
         DbxRequestConfig config = new DbxRequestConfig("Tysuya");
         client = new DbxClientV2(config, ACCESS_TOKEN);

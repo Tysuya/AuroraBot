@@ -23,29 +23,15 @@ public abstract class BossAbstract {
     static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
 
-    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CHIEF MAGIEF", "MAGMA SENIOR THIEF", "BBINIKJOE", "BURNING STONE", "ELEMENTAL QUEEN", "TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
+    static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CHIEF MAGIEF", "MAGMA SENIOR THIEF", "BBINIKJOE", "BURNING STONE", "ELEMENTAL QUEEN", "TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "STEAMPUNK", "LANDMINE", "TITANIUM GOLEM", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
 
     static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd z");
 
     public static void initialize() {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        for (String bossName : bossNamesFinal) {
-            int bossRespawnTime = 20;
-            if (bossName.equals("GHOSTSNAKE") || bossName.equals("WHITE CROW") || bossName.equals("BSSSZSSS") || bossName.equals("SHAAACK") || bossName.equals("CHIEF MAGIEF"))
-                bossRespawnTime = 30;
-            if (bossName.equals("TWISTER") || bossName.equals("MAELSTROM") || bossName.equals("SWIRL FLAME") || bossName.equals("TANK"))
-                bossRespawnTime = 58;
-            if (bossName.equals("ELEMENTAL QUEEN"))
-                bossRespawnTime = 150;
-            if (bossName.equals("LACOSTEZA"))
-                bossRespawnTime = 1;
-            if (bossName.equals("BLACKSKULL"))
-                bossRespawnTime = 65;
-            if (bossName.equals("TURTLE Z"))
-                bossRespawnTime = 333;
-            bossList.add(new Boss(bossName, bossRespawnTime));
-        }
+        setRespawnTimes();
+
         if (!AuroraBot.debugMode) {
             bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
             leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
@@ -96,13 +82,33 @@ public abstract class BossAbstract {
         }
     }
 
+    private static void setRespawnTimes() {
+        for (String bossName : bossNamesFinal) {
+            int bossRespawnTime = 20;
+            if (Arrays.asList("LACOSTEZA").contains(bossName))
+                bossRespawnTime = 1;
+            if (Arrays.asList("GHOSTSNAKE", "WHITE CROW", "BSSSZSSS", "SHAAACK", "CHIEF MAGIEF").contains(bossName))
+                bossRespawnTime = 30;
+            if (Arrays.asList("TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "LANDMINE").contains(bossName))
+                bossRespawnTime = 58;
+            if (Arrays.asList("TITANIUM GOLEM").contains(bossName))
+                bossRespawnTime = 60;
+            if (Arrays.asList("BLACKSKULL").contains(bossName))
+                bossRespawnTime = 65;
+            if (Arrays.asList("ELEMENTAL QUEEN", "STEAMPUNK").contains(bossName))
+                bossRespawnTime = 150;
+            if (Arrays.asList("TURTLE Z").contains(bossName))
+                bossRespawnTime = 333;
+            bossList.add(new Boss(bossName, bossRespawnTime));
+        }
+    }
+
     public static void initializeHunters() {
         List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
         for (Message message : messageHistoryList) {
             for (Boss boss : bossList) {
                 if (message.getContent().contains(boss.getBossName())) {
                     String[] lines = message.getContent().replace("`", "").split("\n");
-
                     try {
                         if (!lines[0].split("at ")[1].equals("Unknown")) {
                             Date time = dateFormat.parse(lines[0].split("at ")[1]);
@@ -173,7 +179,7 @@ public abstract class BossAbstract {
             huntersLine = Arrays.copyOfRange(huntersLine, 1, huntersLine.length);
 
             HashMap<String, Integer> bossKillsHashMap = parseKills(huntersLine);
-            for(String key : bossKillsHashMap.keySet()) {
+            for (String key : bossKillsHashMap.keySet()) {
                 hunterOverallKills.putIfAbsent(key, 0);
                 hunterOverallKills.put(key, hunterOverallKills.get(key) + bossKillsHashMap.get(key));
             }
@@ -255,18 +261,23 @@ public abstract class BossAbstract {
         replacements.put(bossNamesFinal[22], new ArrayList<>(Arrays.asList("BB", "JOE")));
         replacements.put(bossNamesFinal[24], new ArrayList<>(Arrays.asList("QUEEN")));
         replacements.put(bossNamesFinal[27], new ArrayList<>(Arrays.asList("FLAME")));
-        replacements.put(bossNamesFinal[29], new ArrayList<>(Arrays.asList("LACOS")));
-        replacements.put(bossNamesFinal[30], new ArrayList<>(Arrays.asList("BS")));
-        replacements.put(bossNamesFinal[31], new ArrayList<>(Arrays.asList("TZ")));
+        replacements.put(bossNamesFinal[28], new ArrayList<>(Arrays.asList("STEAM", "PUNK", "SP")));
+        replacements.put(bossNamesFinal[29], new ArrayList<>(Arrays.asList("LAND", "MINE")));
+        replacements.put(bossNamesFinal[30], new ArrayList<>(Arrays.asList("GOLEM")));
+        replacements.put(bossNamesFinal[31], new ArrayList<>(Arrays.asList("LACOS")));
+        replacements.put(bossNamesFinal[32], new ArrayList<>(Arrays.asList("BS")));
+        replacements.put(bossNamesFinal[33], new ArrayList<>(Arrays.asList("TZ")));
 
+        int j = 0;
         for (String bossName : bossNamesFinal) {
+            System.out.println(bossName + " " + j++);
             if (bossName.contains(" ")) {
                 String[] names = bossName.split(" ");
                 String initials = "";
                 for (String name : names)
                     initials += name.charAt(0);
                 replacements.putIfAbsent(bossName, new ArrayList<>());
-                if (!bossName.equals("BERSERK GOSUMI") && !bossName.equals("BLOODY GOSUMI") && !bossName.equals("BURNING STONE"))
+                if (!Arrays.asList("BERSERK GOSUMI", "BLOODY GOSUMI", "BURNING STONE").contains(bossName))
                     replacements.get(bossName).add(initials);
                 replacements.get(bossName).add(bossName.split(" ")[0]);
             }

@@ -72,6 +72,9 @@ public class MessageListener extends ListenerAdapter {
             "\nMAELSTROM" +
             "\nSWIRL FLAME - SWIRL - FLAME - SF" +
             "\nTANK" +
+            "\nSTEAMPUNK - STEAM - PUNK - SP" +
+            "\nLANDMINE - LAND - MINE" +
+            "\nTITANIUM GOLEM - TITANIUM - GOLEM - TG" +
             "\nLACOSTEZA - LACOS" +
             "\nBLACKSKULL - BS" +
             "\nTURTLE Z - TURTLE - TZ```" +
