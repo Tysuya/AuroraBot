@@ -76,18 +76,21 @@ public class Maintenance {
     }
 
     private static void startMaintenanceTimer() {
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date());
+        Calendar maintenanceCal = Calendar.getInstance();
+        maintenanceCal.setTime(maintenanceStart);
+
         if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
-            if (maintenanceStart.getDay() == new Date().getDay())
+            if (maintenanceCal.get(Calendar.DATE) == now.get(Calendar.DATE))
                 System.out.println("Maintenance today!");
             maintenanceTimer.cancel();
             maintenanceTimer = new Timer();
             maintenanceTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (maintenanceStart.getDay() == new Date().getDay()) {
-                        System.out.println("Maintenance today!");
-
+                    if (maintenanceCal.get(Calendar.DATE) == now.get(Calendar.DATE)) {
                         if (Calendar.getInstance().get(Calendar.MINUTE) == 0 && !sentMaintenance) {
                             channel.sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
                             sentMaintenance = true;
