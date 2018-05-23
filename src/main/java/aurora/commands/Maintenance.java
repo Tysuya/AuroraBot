@@ -77,26 +77,18 @@ public class Maintenance {
     }
 
     private static void startMaintenanceTimer() {
-        Calendar now = Calendar.getInstance();
-        now.setTime(new Date());
-        Calendar maintenanceCal = Calendar.getInstance();
-        maintenanceCal.setTime(maintenanceStart);
-        System.out.println(maintenanceStart);
-        System.out.println(new Date());
-
         if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
-            System.out.println(maintenanceCal.get(Calendar.DATE) + " " + now.get(Calendar.DATE));
-            if (maintenanceCal.get(Calendar.DATE) == now.get(Calendar.DATE))
+            if (maintenanceStart.getTime() - new Date().getTime() <= 86400000)
                 System.out.println("Maintenance today!");
             maintenanceTimer.cancel();
             maintenanceTimer = new Timer();
             maintenanceTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (maintenanceCal.get(Calendar.DATE) == now.get(Calendar.DATE)) {
+                    if (maintenanceStart.getTime() - new Date().getTime() <= 86400000) {
                         if (Calendar.getInstance().get(Calendar.MINUTE) == 0 && !sentMaintenance) {
-                            channel.sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
+                            channel.sendMessage("@everyone There will be a maintenance in <24 hours! Here are the details:\n" + maintenanceInfo).queue();
                             sentMaintenance = true;
                         }
                         if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
