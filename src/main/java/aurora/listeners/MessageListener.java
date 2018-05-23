@@ -211,7 +211,7 @@ public class MessageListener extends ListenerAdapter {
 
             String[] emoteNames = {"omg", "dizzy", "mad", "greedy", "surprise", "cry", "happy", "love", "heh"};
             for (String emoteName : emoteNames)
-                if (messageContent.contains(emoteName))
+                if (messageContent.equals(emoteName))
                     message.addReaction(message.getGuild().getEmotesByName(emoteName, true).get(0)).queue();
         }
     }
