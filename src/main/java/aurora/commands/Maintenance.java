@@ -86,6 +86,8 @@ public class Maintenance {
                 @Override
                 public void run() {
                     if (maintenanceStart.getDay() == new Date().getDay()) {
+                        System.out.println("Maintenance today!");
+
                         if (Calendar.getInstance().get(Calendar.MINUTE) == 0 && !sentMaintenance) {
                             channel.sendMessage("@everyone There will be a maintenance later today! Here are the details:\n" + maintenanceInfo).queue();
                             sentMaintenance = true;
