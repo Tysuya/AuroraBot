@@ -76,7 +76,7 @@ public class Maintenance {
     }
 
     private static void startMaintenanceTimer() {
-        Calendar now = Calendar.getInstance();
+        Calendar now = Calendar.getInstance(TimeZone.getDefault());
         now.setTime(new Date());
         Calendar maintenanceCal = Calendar.getInstance();
         maintenanceCal.setTime(maintenanceStart);
