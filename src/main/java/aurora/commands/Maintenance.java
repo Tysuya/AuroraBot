@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class Maintenance {
@@ -76,11 +77,12 @@ public class Maintenance {
     }
 
     private static void startMaintenanceTimer() {
-        Calendar now = Calendar.getInstance(TimeZone.getDefault());
+        Calendar now = Calendar.getInstance();
         now.setTime(new Date());
         Calendar maintenanceCal = Calendar.getInstance();
         maintenanceCal.setTime(maintenanceStart);
         System.out.println(maintenanceStart);
+        System.out.println(new Date());
 
         if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
