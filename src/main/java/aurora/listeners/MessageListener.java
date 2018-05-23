@@ -4,6 +4,7 @@ import aurora.AuroraBot;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDAInfo;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -132,6 +133,8 @@ public class MessageListener extends ListenerAdapter {
         boolean bot = author.isBot();                     //This boolean is useful to determine if the User that
         // sent the Message is a BOT or not!
 
+        Member member = null;
+
         if (event.isFromType(ChannelType.TEXT))         //If this message was sent to a Guild TextChannel
         {
             //Because we now know that this message was sent in a Guild, we can do guild specific things
@@ -140,7 +143,7 @@ public class MessageListener extends ListenerAdapter {
 
             Guild guild = event.getGuild();             //The Guild that this message was sent in. (note, in the API, Guilds are Servers)
             TextChannel textChannel = event.getTextChannel(); //The TextChannel that this message was sent to.
-            Member member = event.getMember();          //This Member that sent the message. Contains Guild specific information about the User!
+            member = event.getMember();          //This Member that sent the message. Contains Guild specific information about the User!
 
             String name = member.getEffectiveName();    //This will either use the Member's nickname if they have one,
             // otherwise it will default to their username. (User#getName())
@@ -183,7 +186,8 @@ public class MessageListener extends ListenerAdapter {
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
             } else if (messageContent.contains("!delete")) {
-                delete(channel, message);
+                if (member != null & member.hasPermission(Permission.ADMINISTRATOR))
+                    delete(channel, message);
             } else if (messageContent.contains("!pin")) {
                 punchIn(channel, message);
             } else if (messageContent.contains("!pout")) {

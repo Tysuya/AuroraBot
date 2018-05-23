@@ -44,7 +44,7 @@ public class Maintenance {
             Element rawHTML = document.select("ul.list_notice > li > a > span").first();
             String[] info = rawHTML.text().substring(13).split(" ");
             String month = info[0];
-            String day = info[1].replace("th", "");
+            String day = info[1].replace("st", "").replace("nd", "").replace("rd", "").replace("th", "");
             String startTime = info[3].substring(1);
             String endTime = info[5];
             String timeZone = info[6].substring(0, info[6].length() - 1);
