@@ -80,6 +80,7 @@ public class Maintenance {
         now.setTime(new Date());
         Calendar maintenanceCal = Calendar.getInstance();
         maintenanceCal.setTime(maintenanceStart);
+        System.out.println(maintenanceStart);
 
         if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
