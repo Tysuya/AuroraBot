@@ -92,7 +92,7 @@ public abstract class BossAbstract {
             if (Arrays.asList("TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "LANDMINE").contains(bossName))
                 bossRespawnTime = 58;
             if (Arrays.asList("TITANIUM GOLEM").contains(bossName))
-                bossRespawnTime = 60;
+                bossRespawnTime = 59;
             if (Arrays.asList("BLACKSKULL").contains(bossName))
                 bossRespawnTime = 65;
             if (Arrays.asList("ELEMENTAL QUEEN", "STEAMPUNK").contains(bossName))
