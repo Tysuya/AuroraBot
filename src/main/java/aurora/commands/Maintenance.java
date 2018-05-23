@@ -83,6 +83,7 @@ public class Maintenance {
 
         if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
+            System.out.println(maintenanceCal.get(Calendar.DATE) + " " + now.get(Calendar.DATE));
             if (maintenanceCal.get(Calendar.DATE) == now.get(Calendar.DATE))
                 System.out.println("Maintenance today!");
             maintenanceTimer.cancel();
