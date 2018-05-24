@@ -80,7 +80,7 @@ public class Maintenance {
         if (maintenanceEnd.getTime() > new Date().getTime()) {
             System.out.println("Maintenance coming up!");
             if (maintenanceStart.getTime() - new Date().getTime() <= 86400000)
-                System.out.println("Maintenance today!");
+                System.out.println("Maintenance in <24 hours!");
             maintenanceTimer.cancel();
             maintenanceTimer = new Timer();
             maintenanceTimer.schedule(new TimerTask() {

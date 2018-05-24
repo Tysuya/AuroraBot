@@ -209,7 +209,7 @@ public class MessageListener extends ListenerAdapter {
             } else if (messageContent.contains("!poke")) {
                 pokemon(channel, message);
             } else if (message.isMentioned(jda.getSelfUser())) {
-                if (messageContent.contains("AuroraBot"))
+                if (messageContent.contains("aurorabot"))
                     cleverBot(channel, message);
             }
 
