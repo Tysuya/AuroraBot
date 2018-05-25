@@ -12,6 +12,7 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import static aurora.SpamFilter.spamFilter;
 import static aurora.commands.Active.active;
 import static aurora.commands.Check.check;
 import static aurora.commands.Delete.delete;
@@ -166,6 +167,7 @@ public class MessageListener extends ListenerAdapter {
         }
 
         if (!author.isBot()) {
+            spamFilter(channel, message);
             messageContent = message.getContent().toLowerCase();
             if (messageContent.equals("ab!help")) {
                 channel.sendTyping().complete();
