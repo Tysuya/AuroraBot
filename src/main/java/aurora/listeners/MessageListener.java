@@ -215,10 +215,10 @@ public class MessageListener extends ListenerAdapter {
                     cleverBot(channel, message);
             }
 
-            String[] emoteNames = {"omg", "dizzy", "mad", "greedy", "surprise", "cry", "happy", "love", "heh"};
+            /*String[] emoteNames = {"omg", "dizzy", "mad", "greedy", "surprise", "cry", "happy", "love", "heh"};
             for (String emoteName : emoteNames)
                 if (messageContent.equals(emoteName) || messageContent.equals(":" + emoteName + ":"))
-                    message.addReaction(message.getGuild().getEmotesByName(emoteName, true).get(0)).queue();
+                    message.addReaction(message.getGuild().getEmotesByName(emoteName, true).get(0)).queue();*/
         }
     }
 }
