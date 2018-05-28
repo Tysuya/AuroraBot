@@ -11,7 +11,8 @@ public class SpamFilter {
         List<Message> messageHistoryList = new MessageHistory(channel).retrievePast(5).complete();
         int counter = 0;
         for (Message eachMessage : messageHistoryList) {
-            if (message.getAuthor().equals(eachMessage.getAuthor())) {
+            System.out.println(message.getAttachments().isEmpty());
+            if (message.getAuthor().equals(eachMessage.getAuthor()) && message.getAttachments().isEmpty()) {
                 if (message.getContent().equals(eachMessage.getContent()))
                     counter++;
                 if (counter >= 3)
