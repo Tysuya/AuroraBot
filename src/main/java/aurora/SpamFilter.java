@@ -10,8 +10,7 @@ public class SpamFilter {
     private static long time = System.currentTimeMillis() - 500;
 
     public static void spamFilter(MessageChannel channel, Message message) {
-        if (System.currentTimeMillis() - time < 500) {
-            System.out.println(System.currentTimeMillis() - time);
+        if (System.currentTimeMillis() - time < 400) {
             message.delete().queue();
             time = System.currentTimeMillis();
             return;

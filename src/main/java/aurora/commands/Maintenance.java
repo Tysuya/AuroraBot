@@ -45,8 +45,11 @@ public class Maintenance {
             String endTime = info[5];
             String timeZone = info[6].substring(0, info[6].length() - 1);
             String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-            maintenanceStart = new SimpleDateFormat("MMMM dd hh:mmaa zzz yyyy").parse(month + " " + day + " " + startTime + " " + timeZone + " " + year);
-            maintenanceEnd = new SimpleDateFormat("MMMM dd hh:mmaa zzz yyyy").parse(month + " " + day + " " + endTime + " " + timeZone + " " + year);
+            String pattern = "MMMM dd hh:mmaa zzz yyyy";
+            if (month.contains("."))
+                pattern = "MMM. dd hh:mmaa zzz yyyy";
+            maintenanceStart = new SimpleDateFormat(pattern).parse(month + " " + day + " " + startTime + " " + timeZone + " " + year);
+            maintenanceEnd = new SimpleDateFormat(pattern).parse(month + " " + day + " " + endTime + " " + timeZone + " " + year);
             // In case maintenance goes past midnight
             if (maintenanceEnd.getTime() < maintenanceStart.getTime()) {
                 Calendar cal = Calendar.getInstance();
@@ -57,7 +60,7 @@ public class Maintenance {
             // Parse maintenance details
             document = Jsoup.connect("https://www.withhive.com" + document.select("ul.list_notice > li > a").first().attr("href")).get();
             Element rawHTML2 = document.select("div.article").first();
-            document = Jsoup.parse(rawHTML2.html().replace("<p>", "$$$"));
+            document = Jsoup.parse(rawHTML2.html().replace("<p>", "$$$").replace("<div>", "$$$"));
             maintenanceInfo = document.body().text().replace("$$$", "\n");
             maintenanceInfo = maintenanceInfo.substring(0, maintenanceInfo.indexOf("■ Tap for more info!"));
         } catch (Exception e) {
