@@ -45,7 +45,7 @@ public class Maintenance {
             String endTime = info[5];
             String timeZone = info[6].substring(0, info[6].length() - 1);
             String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-            String pattern = "MMMM dd hh:mmaa zzz yyyy";
+            String pattern = "MMM dd hh:mmaa zzz yyyy";
             if (month.contains("."))
                 pattern = "MMM. dd hh:mmaa zzz yyyy";
             maintenanceStart = new SimpleDateFormat(pattern).parse(month + " " + day + " " + startTime + " " + timeZone + " " + year);
@@ -68,7 +68,7 @@ public class Maintenance {
         }
 
         // Check if maintenance has been sent
-        for (Message message : new MessageHistory(announcementsChannel).retrievePast(50).complete())
+        for (Message message : new MessageHistory(announcementsChannel).retrievePast(100).complete())
             if (message.getContent().contains(maintenanceInfo.trim()))
                 sentMaintenance = true;
     }

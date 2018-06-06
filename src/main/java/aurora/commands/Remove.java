@@ -29,7 +29,7 @@ public class Remove extends BossAbstract {
         boss.setKills(authorList);
 
         try {
-            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
+            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
             for (Message eachMessage : messageHistoryList) {
                 if (eachMessage.getContent().contains(boss.getBossName()))
                     eachMessage.editMessage(getKills(boss)).complete();

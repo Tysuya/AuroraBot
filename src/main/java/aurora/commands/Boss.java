@@ -102,7 +102,7 @@ public class Boss {
     }
 
     public void updateBossInfo() {
-        List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(100).complete();
         for (Message message : messageHistoryList) {
             String messageString = respawnTime() + currentHunters();
 

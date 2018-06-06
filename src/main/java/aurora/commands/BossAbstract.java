@@ -106,7 +106,7 @@ public abstract class BossAbstract {
     }
 
     public static void initializeHunters() {
-        List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(100).complete();
         for (Message message : messageHistoryList) {
             for (Boss boss : bossList) {
                 if (message.getContent().contains(boss.getBossName())) {
@@ -138,7 +138,7 @@ public abstract class BossAbstract {
     }
 
     public static void initializeKills() {
-        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
+        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
         for (Message message : messageHistoryList) {
             String[] bossKillsLines = message.getContent().split("\nTotal");
             //System.out.println(Arrays.toString(bossKillsLines));

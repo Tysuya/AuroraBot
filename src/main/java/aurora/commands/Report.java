@@ -84,14 +84,14 @@ public class Report extends BossAbstract {
 
     private static void updateChannels(Boss boss, String author) {
         try {
-            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(50).complete();
+            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
             for (Message eachMessage : messageHistoryList) {
                 if (eachMessage.getContent().contains(boss.getBossName()))
                     eachMessage.editMessage(getKills(boss)).complete();
                 if (eachMessage.getContent().contains("overall"))
                     eachMessage.editMessage(getOverallKills()).complete();
             }
-            messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(50).complete();
+            messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(100).complete();
             for (Message eachMessage : messageHistoryList)
                 if (eachMessage.getContent().contains(boss.getBossName()))
                     boss.updateBossInfo();
