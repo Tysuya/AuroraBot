@@ -196,7 +196,7 @@ public class MessageListener extends ListenerAdapter {
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);
             } else if (messageContent.contains("!delete")) {
-                if (member != null & member.hasPermission(Permission.ADMINISTRATOR))
+                if (member != null & member.hasPermission(Permission.MESSAGE_MANAGE))
                     delete(channel, message);
             } else if (messageContent.contains("!pin")) {
                 punchIn(channel, message);
