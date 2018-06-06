@@ -21,27 +21,12 @@ public class Battlefield {
                 String minute = date[1];
                 String second = date[2];
 
-                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("50") && second.equals("00")) {
-                    try {
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("50") && second.equals("00"))
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `10` minutes.").queue();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("57") && second.equals("00")) {
-                    try {
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("57") && second.equals("00"))
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("Battlefield will begin in `3` minutes.").queue();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("59") && second.equals("59")) {
-                    try {
+                if (Integer.parseInt(hour) % 2 == 0 && minute.equals("59") && second.equals("59"))
                         AuroraBot.jda.getTextChannelById("433153631127339018").sendMessage("<@207861040757735424>\nBattlefield will begin in `1` second.").queue();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }, 0, 1000);
     }

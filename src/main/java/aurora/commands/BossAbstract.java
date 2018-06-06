@@ -22,6 +22,7 @@ public abstract class BossAbstract {
     static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
     static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
     static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
+    static MessageChannel announcementsChannel = bossHuntersChannel;
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CHIEF MAGIEF", "MAGMA SENIOR THIEF", "BBINIKJOE", "BURNING STONE", "ELEMENTAL QUEEN", "TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "STEAMPUNK", "LANDMINE", "TITANIUM GOLEM", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
 
@@ -36,6 +37,7 @@ public abstract class BossAbstract {
             bossHuntersChannel = AuroraBot.jda.getTextChannelById("417803228764176385");
             leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
             bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
+            announcementsChannel = AuroraBot.jda.getTextChannelById("418818283102404611");
             System.out.println("Reading history...");
             for (Boss boss : bossList)
                 boss.setHistory(dropbox.readHistory(boss.getBossName()));

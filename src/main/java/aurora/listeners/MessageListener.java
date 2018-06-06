@@ -7,6 +7,7 @@ import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ShutdownEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
@@ -99,11 +100,18 @@ public class MessageListener extends ListenerAdapter {
     }
 
     @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        User user = event.getUser();
+        MessageChannel channel = AuroraBot.jda.getTextChannelById("410573170161090567");
+
+        channel.sendMessage("Hi, " + user.getAsMention() + "! Welcome to the Aurora Discord server! I am Aurora's personal AI assistant and am capable of dozens of commands. You can learn more by typing ab!help in the chat.").queue();
+    }
+
+    @Override
     public void onUserTyping(UserTypingEvent event) {
         JDA jda = event.getJDA();
         User user = event.getUser();
         MessageChannel channel = event.getChannel();
-        JDAInfo jdaInfo = new JDAInfo();
     }
 
     @Override
@@ -183,7 +191,7 @@ public class MessageListener extends ListenerAdapter {
                 }
             } else if (messageContent.equals("ab!uptime")) {
                 uptime(channel);
-            } else if (messageContent.contains("fact") && !message.getAuthor().isBot()) {
+            } else if (messageContent.equals("fact") || messageContent.contains(" fact") || messageContent.contains("fact ")) {
                 fact(channel, message);
             } else if (messageContent.contains("ab!should")) {
                 should(channel, message);

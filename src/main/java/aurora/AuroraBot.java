@@ -9,6 +9,7 @@ import aurora.listeners.MessageListener;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static aurora.commands.GuildSiege.guildSiege;
 import static aurora.commands.Maintenance.maintenance;
 import static aurora.servlet.BindToPort.bindToPort;
 import static aurora.servlet.BindToPort.keepAwake;
@@ -49,6 +50,7 @@ public class AuroraBot {
 
             BossAbstract.initialize();
             //battlefield();
+            guildSiege();
             maintenance();
             cycleGames();
             keepAwake();

@@ -65,9 +65,12 @@ public class Report extends BossAbstract {
                 messageString +
                 boss.respawnTime() +
                 boss.currentHunters()).complete());
-        boss.setHistory(boss.getHistory() + "\n" + historyString);
-        if (!AuroraBot.debugMode)
-            dropbox.writeHistory(boss.getBossName(), boss.getHistory().trim());
+
+        if (!boss.getHistory().trim().contains(historyString)) {
+            boss.setHistory(boss.getHistory() + "\n" + historyString);
+            if (!AuroraBot.debugMode)
+                dropbox.writeHistory(boss.getBossName(), boss.getHistory().trim());
+        }
 
         HashMap<String, Integer> authorList = boss.getKills();
         authorList.putIfAbsent(author, 0);
@@ -111,18 +114,18 @@ public class Report extends BossAbstract {
 
         int killCount = boss.getKills().get(author);
         if (killCount % 100 == 0 && killCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(boss.getBossName()) + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@here\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th kill for " + bold(boss.getBossName()) + "!\n" + emojiString).queue();
 
         killCount = hunterOverallKills.get(author);
         if (killCount % 100 == 0 && killCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th overall kill!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@here\nCongratulations, " + codeBlock(author) + "! You have just reported your " + codeBlock(Integer.toString(killCount)) + "th overall kill!\n" + emojiString).queue();
 
         killCount = boss.getOverallKills();
         if (killCount % 100 == 0 && killCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(boss.getBossName()) + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@here\nCongratulations, " + codeBlock(author) + "! You have just reported the " + codeBlock(Integer.toString(killCount)) + "th total kill for " + bold(boss.getBossName()) + "!\n" + emojiString).queue();
 
         killCount = auroraOverallKills;
         if (killCount % 500 == 0 && killCount != 0)
-            bossHuntersChannel.sendMessage("@everyone\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(killCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
+            bossHuntersChannel.sendMessage("@here\nCongratulations, everyone! " + codeBlock(author) + " just reported the " + codeBlock(Integer.toString(killCount)) + "th overall kill for " + bold("Aurora") + "!\n" + emojiString).queue();
     }
 }

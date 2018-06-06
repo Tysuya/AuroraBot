@@ -1,8 +1,6 @@
 package aurora.commands;
 
-import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,11 +8,11 @@ import org.jsoup.nodes.Element;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.*;
 
+import static aurora.commands.BossAbstract.announcementsChannel;
+
 public class Maintenance {
-    private static MessageChannel channel = AuroraBot.jda.getTextChannelById("418818283102404611");
     private static Date maintenanceStart = new Date();
     private static Date maintenanceEnd = new Date();
     private static String maintenanceInfo = "";
@@ -23,9 +21,6 @@ public class Maintenance {
     private static Timer maintenanceTimer = new Timer();
 
     public static void maintenance() {
-        if (AuroraBot.debugMode)
-            channel = BossAbstract.bossHuntersChannel;
-
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -70,34 +65,34 @@ public class Maintenance {
         }
 
         // Check if maintenance has been sent
-        for (Message message : new MessageHistory(channel).retrievePast(50).complete()) {
+        for (Message message : new MessageHistory(announcementsChannel).retrievePast(50).complete())
             if (message.getContent().contains(maintenanceInfo.trim()))
                 sentMaintenance = true;
-        }
     }
 
     private static void startMaintenanceTimer() {
-        if (maintenanceEnd.getTime() > new Date().getTime()) {
-            System.out.println("Maintenance coming up!");
-            if (maintenanceStart.getTime() - new Date().getTime() <= 86400000)
-                System.out.println("Maintenance in <24 hours!");
-            maintenanceTimer.cancel();
-            maintenanceTimer = new Timer();
-            maintenanceTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (maintenanceStart.getTime() - new Date().getTime() <= 86400000) {
-                        if (Calendar.getInstance().get(Calendar.MINUTE) == 0 && !sentMaintenance) {
-                            channel.sendMessage("@everyone There will be a maintenance in <24 hours! Here are the details:\n" + maintenanceInfo).queue();
-                            sentMaintenance = true;
-                        }
-                        if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
-                            channel.sendMessage("@everyone Today's maintenance has begun!").queue();
-                        if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date())))
-                            channel.sendMessage("@everyone Today's maintenance has ended!").queue();
+        long differenceInMillis = maintenanceEnd.getTime() - new Date().getTime();
+
+        System.out.println("Maintenance coming up!");
+        if (maintenanceStart.getTime() - new Date().getTime() <= 86400000)
+            System.out.println("Maintenance in <24 hours!");
+
+        maintenanceTimer.cancel();
+        maintenanceTimer = new Timer();
+        maintenanceTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (differenceInMillis <= 86400000 && differenceInMillis >= -86400000) {
+                    if (!sentMaintenance) {
+                        announcementsChannel.sendMessage("@everyone There will be a maintenance in <24 hours! Here are the details:\n" + maintenanceInfo).queue();
+                        sentMaintenance = true;
                     }
+                    if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
+                        announcementsChannel.sendMessage("@everyone Today's maintenance has begun!").queue();
+                    if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date())))
+                        announcementsChannel.sendMessage("@everyone Today's maintenance has ended!").queue();
                 }
-            }, 0, 1000);
-        }
+            }
+        }, 0, 1000);
     }
 }
