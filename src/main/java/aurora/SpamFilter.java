@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class SpamFilter {
-    private static long time = System.currentTimeMillis() - 500;
+    private static long time = System.currentTimeMillis() - 750;
 
     public static void spamFilter(MessageChannel channel, Message message) {
         List<Message> messageHistoryList = new MessageHistory(channel).retrievePast(10).complete();

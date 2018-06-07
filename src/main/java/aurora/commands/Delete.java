@@ -14,7 +14,7 @@ public class Delete {
         amount = 100;
 
         for (int i = 0; i <= counter; i++) {
-            if (i == counter)
+            if (i == counter && remainder != 0)
                 amount = remainder;
             List<Message> messageHistoryList = new MessageHistory(channel).retrievePast(amount).complete();
             for (Message eachMessage : messageHistoryList)
