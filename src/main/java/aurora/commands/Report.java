@@ -68,8 +68,8 @@ public class Report extends BossAbstract {
 
         if (!boss.getHistory().trim().contains(historyString)) {
             boss.setHistory(boss.getHistory() + "\n" + historyString);
-            /*if (!AuroraBot.debugMode)
-                dropbox.writeHistory(boss.getBossName(), "History", boss.getHistory().trim());*/
+            if (!AuroraBot.debugMode)
+                dropbox.writeHistory(boss.getBossName(), "History", boss.getHistory().trim());
         }
 
         HashMap<String, Integer> authorList = boss.getKills();

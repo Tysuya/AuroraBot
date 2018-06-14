@@ -1,5 +1,6 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageHistory;
@@ -29,6 +30,9 @@ public class Remove extends BossAbstract {
         boss.setKills(authorList);
 
         try {
+            if (!AuroraBot.debugMode)
+                dropbox.writeHistory(boss.getBossName(), "Leaderboard", getKills(boss).trim());
+
             List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
             for (Message eachMessage : messageHistoryList) {
                 if (eachMessage.getContent().contains(boss.getBossName()))
