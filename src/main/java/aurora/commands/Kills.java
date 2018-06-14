@@ -12,9 +12,14 @@ public class Kills extends BossAbstract {
         for(Boss boss : bosses)
             channel.sendMessage(getKills(boss)).queue();
 
-        if (message.getContent().contains("all"))
+        if (message.getContent().contains("update"))
+            for (Boss boss : bossList)
+                dropbox.writeHistory(boss.getBossName(), "Leaderboard", getKills(boss).trim());
+
+        if (message.getContent().contains("all")) {
             channel.sendMessage(getOverallKills()).queue();
             for (Boss boss : bossList)
                 channel.sendMessage(getKills(boss)).queue();
+        }
     }
 }

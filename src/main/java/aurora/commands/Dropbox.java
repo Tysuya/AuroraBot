@@ -33,10 +33,10 @@ public class Dropbox {
         client = new DbxClientV2(config, ACCESS_TOKEN);
     }
 
-    public String readHistory(String fileName) {
+    public String readHistory(String fileName, String folder) {
         try {
             // Get files and folder metadata from Dropbox root directory
-            ListFolderResult result = client.files().listFolder("");
+            ListFolderResult result = client.files().listFolder("/" + folder + "/");
             boolean found = false;
             while (true) {
                 for (Metadata metadata : result.getEntries())
@@ -52,9 +52,10 @@ public class Dropbox {
         } catch (DbxException e) {
             e.printStackTrace();
         }
+
         String output = "";
         try {
-            DbxDownloader downloader = client.files().download("/" + fileName + ".txt");
+            DbxDownloader downloader = client.files().download("/" + folder + "/" + fileName + ".txt");
             InputStream inputStream = downloader.getInputStream();
             Scanner scanner = new Scanner(inputStream);
             while (scanner.hasNext())
@@ -65,10 +66,10 @@ public class Dropbox {
         return output;
     }
 
-    public void writeHistory(String fileName, String output) {
+    public void writeHistory(String fileName, String folder, String output) {
         try {
             InputStream inputStream = new ByteArrayInputStream(output.getBytes());
-            client.files().uploadBuilder("/" + fileName + ".txt").withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
+            client.files().uploadBuilder("/" + folder + "/" + fileName + ".txt").withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
         } catch (DbxException e) {
             e.printStackTrace();
         } catch (IOException e) {

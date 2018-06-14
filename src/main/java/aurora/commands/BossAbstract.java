@@ -19,10 +19,10 @@ public abstract class BossAbstract {
     static Dropbox dropbox = new Dropbox();
     static ArrayList<Boss> bossList = new ArrayList<>();
 
-    static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
-    static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
-    static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
-    static MessageChannel announcementsChannel = bossHuntersChannel;
+    public static MessageChannel bossHuntersChannel = AuroraBot.jda.getTextChannelById("418683981291192331");
+    public static MessageChannel leaderboardChannel = AuroraBot.jda.getTextChannelById("420058966257827841");
+    public static MessageChannel bossInfoChannel = AuroraBot.jda.getTextChannelById("422636412702031873");
+    public static MessageChannel announcementsChannel = bossHuntersChannel;
 
     static final String[] bossNamesFinal = {"GHOSTSNAKE", "WILDBOAR", "SPIDEY", "BERSERK GOSUMI", "WHITE CROW", "BLOODY GOSUMI", "RAVEN", "BLASTER", "BSSSZSSS", "DESERT ASSASAIN", "STEALTH", "BUZSS", "BIZIZI", "BIGMOUSE", "LESSER MADMAN", "SHAAACK", "SUUUK", "SUSUSUK", "ELDER BEHOLDER", "SANDGRAVE", "CHIEF MAGIEF", "MAGMA SENIOR THIEF", "BBINIKJOE", "BURNING STONE", "ELEMENTAL QUEEN", "TWISTER", "MAELSTROM", "SWIRL FLAME", "TANK", "STEAMPUNK", "LANDMINE", "TITANIUM GOLEM", "LACOSTEZA", "BLACKSKULL", "TURTLE Z"};
 
@@ -38,19 +38,17 @@ public abstract class BossAbstract {
             leaderboardChannel = AuroraBot.jda.getTextChannelById("420067387644182538");
             bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
             announcementsChannel = AuroraBot.jda.getTextChannelById("418818283102404611");
+
             System.out.println("Reading history...");
             for (Boss boss : bossList)
-                boss.setHistory(dropbox.readHistory(boss.getBossName()));
-        }
+                boss.setHistory(dropbox.readHistory(boss.getBossName(), "History"));
 
-        try {
             System.out.println("Initializing kills...");
             initializeKills();
-            System.out.println("Initializing hunters...");
-            initializeHunters();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        System.out.println("Initializing hunters...");
+        initializeHunters();
 
         // Check every second if boss has respawned
         try {
@@ -67,12 +65,12 @@ public abstract class BossAbstract {
                     for (Boss boss : bossList) {
                         if (boss.getNextSpawnTime() != null) {
                             if (fastDate.equals(dateFormat.format(boss.getNextSpawnTime())))
-                                bossHuntersChannel.sendMessage(boss.notifyingHunters() +
-                                        "\n" + bold(boss.getBossName()) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").queue();
+                                boss.spawnTimer(bossHuntersChannel.sendMessage(boss.notifyingHunters() +
+                                        "\n" + bold(boss.getBossName()) + " will respawn in " + codeBlock("3") + " minutes! Don't forget to log in!").complete());
 
                             if (currentDate.equals(dateFormat.format(boss.getNextSpawnTime()))) {
-                                bossHuntersChannel.sendMessage(boss.notifyingHunters() +
-                                        "\n" + bold(boss.getBossName()) + " has respawned! Find it and kill it!").queue();
+                                boss.spawnTimer(bossHuntersChannel.sendMessage(boss.notifyingHunters() +
+                                        "\n" + bold(boss.getBossName()) + " has respawned! Find it and kill it!").complete());
                                 boss.updateBossInfo();
                             }
                         }
@@ -138,9 +136,8 @@ public abstract class BossAbstract {
     }
 
     public static void initializeKills() {
-        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
-        for (Message message : messageHistoryList) {
-            String[] bossKillsLines = message.getContent().split("\nTotal");
+        for (Boss boss : bossList) {
+            String[] bossKillsLines = dropbox.readHistory(boss.getBossName(), "Leaderboard").split("\nTotal");
             //System.out.println(Arrays.toString(bossKillsLines));
 
             for (String bossKillsLine : bossKillsLines) {

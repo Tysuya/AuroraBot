@@ -13,8 +13,8 @@ import java.util.*;
 import static aurora.commands.BossAbstract.announcementsChannel;
 
 public class Maintenance {
-    private static Date maintenanceStart = new Date();
-    private static Date maintenanceEnd = new Date();
+    private static Date maintenanceStart;
+    private static Date maintenanceEnd;
     private static String maintenanceInfo = "";
     private static DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     private static boolean sentMaintenance = false;
