@@ -39,7 +39,7 @@ public abstract class BossAbstract {
             bossInfoChannel = AuroraBot.jda.getTextChannelById("422701643566678016");
             announcementsChannel = AuroraBot.jda.getTextChannelById("418818283102404611");
 
-            System.out.println("Reading history...");
+            System.out.println("Initializing history...");
             for (Boss boss : bossList)
                 boss.setHistory(dropbox.readHistory(boss.getBossName(), "History"));
 

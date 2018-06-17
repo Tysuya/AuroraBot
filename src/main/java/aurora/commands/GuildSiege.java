@@ -18,7 +18,7 @@ public class GuildSiege {
                 if (date == 3 || date == 5 || date == 7)
                     startGuildSiegeTimer();
             }
-        }, 0, 43200000);
+        }, 0, 21600000);
     }
 
     private static void startGuildSiegeTimer() {
@@ -36,8 +36,10 @@ public class GuildSiege {
                     if (calendar.get(Calendar.HOUR_OF_DAY) == 20) {
                         if (calendar.get(Calendar.MINUTE) == 20)
                             announcementsChannel.sendMessage("@everyone The Guild Siege will begin in `10` minutes!").queue();
-                        if (calendar.get(Calendar.MINUTE) == 30)
+                        if (calendar.get(Calendar.MINUTE) == 30) {
                             announcementsChannel.sendMessage("@everyone The Guild Siege has begun!").queue();
+                            guildSiegeTimer.cancel();
+                        }
                     }
                 }
             }
