@@ -26,9 +26,17 @@ public class Maintenance {
             public void run() {
                 System.out.println("Checking for maintenance...");
                 checkForMaintenance();
-                startMaintenanceTimer();
+
+                long differenceInMillis = maintenanceStart.getTime() - new Date().getTime();
+                if (differenceInMillis <= 86400000 && differenceInMillis >= -86400000) {
+                    System.out.println("Maintenance in <24 hours!");
+                    startMaintenanceTimer();
+                }
+                else {
+                    maintenanceTimer.cancel();
+                }
             }
-        }, 0, 21600000);
+        }, 0, 3600000);
     }
 
     private static void checkForMaintenance() {
@@ -74,27 +82,21 @@ public class Maintenance {
     }
 
     private static void startMaintenanceTimer() {
-        long differenceInMillis = maintenanceEnd.getTime() - new Date().getTime();
-
-        System.out.println("Maintenance coming up!");
-        if (maintenanceStart.getTime() - new Date().getTime() <= 86400000)
-            System.out.println("Maintenance in <24 hours!");
-
         maintenanceTimer.cancel();
         maintenanceTimer = new Timer();
         maintenanceTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (differenceInMillis <= 86400000 && differenceInMillis >= -86400000) {
                     if (!sentMaintenance) {
                         announcementsChannel.sendMessage("@everyone There will be a maintenance in <24 hours! Here are the details:\n" + maintenanceInfo).queue();
                         sentMaintenance = true;
                     }
                     if (dateFormat.format(maintenanceStart).equals(dateFormat.format(new Date())))
                         announcementsChannel.sendMessage("@everyone Today's maintenance has begun!").queue();
-                    if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date())))
+                    if (dateFormat.format(maintenanceEnd).equals(dateFormat.format(new Date()))) {
                         announcementsChannel.sendMessage("@everyone Today's maintenance has ended!").queue();
-                }
+                        maintenanceTimer.cancel();
+                    }
             }
         }, 0, 1000);
     }

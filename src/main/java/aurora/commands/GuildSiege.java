@@ -17,6 +17,8 @@ public class GuildSiege {
                 int date = calendar.get(Calendar.DAY_OF_WEEK);
                 if (date == 3 || date == 5 || date == 7)
                     startGuildSiegeTimer();
+                else
+                    guildSiegeTimer.cancel();
             }
         }, 0, 21600000);
     }
