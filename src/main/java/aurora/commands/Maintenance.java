@@ -28,7 +28,7 @@ public class Maintenance {
                 checkForMaintenance();
 
                 long differenceInMillis = maintenanceStart.getTime() - new Date().getTime();
-                if (differenceInMillis <= 86400000 && differenceInMillis >= -86400000) {
+                if (differenceInMillis <= 86400000 && differenceInMillis >= -43200000) {
                     System.out.println("Maintenance in <24 hours!");
                     startMaintenanceTimer();
                 }
