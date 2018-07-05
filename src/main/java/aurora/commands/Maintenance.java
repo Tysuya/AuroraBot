@@ -46,12 +46,12 @@ public class Maintenance {
             if (!document.toString().contains("[Maintenance]"))
                 return;
             Element rawHTML = document.select("ul.list_notice > li > a > span").first();
-            String[] info = rawHTML.text().substring(13).split(" ");
+            String[] info = rawHTML.text().substring(26).replace("st", "").replace("nd", "").replace("rd", "").replace("th", "").split(" ");
             String month = info[0];
-            String day = info[1].replace("st", "").replace("nd", "").replace("rd", "").replace("th", "");
-            String startTime = info[3].substring(1);
-            String endTime = info[5];
-            String timeZone = info[6].substring(0, info[6].length() - 1);
+            String day = info[1];
+            String startTime = info[2];
+            String endTime = info[6];
+            String timeZone = info[7].substring(0, info[7].length() - 1);
             String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
             String pattern = "MMM dd hh:mmaa zzz yyyy";
             if (month.contains("."))
@@ -70,7 +70,7 @@ public class Maintenance {
             Element rawHTML2 = document.select("div.article").first();
             document = Jsoup.parse(rawHTML2.html().replace("<p>", "$$$").replace("<div>", "$$$"));
             maintenanceInfo = document.body().text().replace("$$$", "\n");
-            maintenanceInfo = maintenanceInfo.substring(0, maintenanceInfo.indexOf("■ Tap for more info!"));
+            maintenanceInfo = maintenanceInfo.substring(0, maintenanceInfo.indexOf("■ Tap for more info!")).substring(0, 2000 - 74);
         } catch (Exception e) {
             e.printStackTrace();
         }
