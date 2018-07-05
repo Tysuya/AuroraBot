@@ -70,7 +70,10 @@ public class Maintenance {
             Element rawHTML2 = document.select("div.article").first();
             document = Jsoup.parse(rawHTML2.html().replace("<p>", "$$$").replace("<div>", "$$$"));
             maintenanceInfo = document.body().text().replace("$$$", "\n");
-            maintenanceInfo = maintenanceInfo.substring(0, maintenanceInfo.indexOf("■ Tap for more info!")).substring(0, 2000 - 74);
+            maintenanceInfo = maintenanceInfo.substring(0, maintenanceInfo.indexOf("■ Tap for more info!"));
+
+            if (maintenanceInfo.length() + 74 > 2000)
+                maintenanceInfo = maintenanceInfo.substring(0, 2000 - 74);
         } catch (Exception e) {
             e.printStackTrace();
         }
