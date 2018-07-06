@@ -15,7 +15,7 @@ public class GuildSiege {
 
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST"));
                 int date = calendar.get(Calendar.DAY_OF_WEEK);
-                if (date == 3 || date == 5 || date == 7)
+                if (date == 3 || date == 7)
                     startGuildSiegeTimer();
                 else
                     guildSiegeTimer.cancel();
@@ -31,11 +31,11 @@ public class GuildSiege {
             public void run() {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST"));
                 if (calendar.get(Calendar.SECOND) == 0) {
-                    if (calendar.get(Calendar.HOUR_OF_DAY) == 19)
+                    if (calendar.get(Calendar.HOUR_OF_DAY) == 21)
                         if (calendar.get(Calendar.MINUTE) == 30)
                             announcementsChannel.sendMessage("@everyone The Guild Siege will begin in `1` hour!").queue();
 
-                    if (calendar.get(Calendar.HOUR_OF_DAY) == 20) {
+                    if (calendar.get(Calendar.HOUR_OF_DAY) == 22) {
                         if (calendar.get(Calendar.MINUTE) == 20) {
                             announcementsChannel.sendMessage("@everyone The Guild Siege will begin in `10` minutes!").queue();
                             guildSiegeTimer.cancel();

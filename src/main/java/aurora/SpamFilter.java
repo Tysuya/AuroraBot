@@ -21,7 +21,8 @@ public class SpamFilter {
                 if (message.getAuthor().equals(eachMessage.getAuthor()) && message.getAttachments().isEmpty()) {
                     if (message.getContent().equals(eachMessage.getContent()))
                         counter++;
-                    if (counter >= 3 || System.currentTimeMillis() - time < 500) {
+                    //if (counter >= 3 || System.currentTimeMillis() - time < 500) {
+                    if (counter >= 3) {
                         message.delete().queue();
                         channel.sendMessage(message.getAuthor().getAsMention() + " Your message has been marked as spam and has been deleted.").complete().delete().queueAfter(5, TimeUnit.SECONDS);
                         break;
