@@ -15,6 +15,6 @@ public class Active extends BossAbstract {
                 messageString += boss.respawnTime();
                 total++;
             }
-        channel.sendMessage("Currently tracked bossList: " + codeBlock(Integer.toString(total)) + "\n" + messageString).queue();
+        channel.sendMessage("Currently tracked bosses: " + codeBlock(Integer.toString(total)) + messageString).queue();
     }
 }
