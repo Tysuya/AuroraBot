@@ -47,11 +47,12 @@ public class Maintenance {
                 return;
             Element rawHTML = document.select("ul.list_notice > li > a > span").first();
             String[] info = rawHTML.text().substring(26).replace("st", "").replace("nd", "").replace("rd", "").replace("th", "").split(" ");
+            System.out.println(Arrays.toString(info));
             String month = info[0];
             String day = info[1];
             String startTime = info[2];
-            String endTime = info[6];
-            String timeZone = info[7].substring(0, info[7].length() - 1);
+            String endTime = info[4];
+            String timeZone = info[5].substring(0, info[5].length() - 1);
             String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
             String pattern = "MMM dd hh:mmaa zzz yyyy";
             if (month.contains("."))
