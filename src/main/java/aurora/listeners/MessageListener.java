@@ -2,12 +2,17 @@ package aurora.listeners;
 
 import aurora.AuroraBot;
 import net.dv8tion.jda.client.entities.Group;
+import net.dv8tion.jda.client.events.call.CallCreateEvent;
+import net.dv8tion.jda.client.events.call.voice.CallVoiceJoinEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.entities.impl.UserImpl;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
@@ -123,6 +128,14 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onShutdown(ShutdownEvent event) {
         System.out.println(event.getShutdownTime());
+    }
+
+    @Override
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        User user = event.getMember().getUser();
+        User triplefury = AuroraBot.jda.getUserById(159201526114549760L);
+        if (!user.isBot())
+            triplefury.openPrivateChannel().complete().sendMessage(user.getName() + " has joined the call").complete();
     }
 
     @Override

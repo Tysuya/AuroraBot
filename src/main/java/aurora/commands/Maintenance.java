@@ -78,10 +78,9 @@ public class Maintenance {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // Check if maintenance has been sent
         for (Message message : new MessageHistory(announcementsChannel).retrievePast(100).complete())
-            if (message.getContent().contains(maintenanceInfo.trim()))
+            if (message.getContent().contains(maintenanceInfo.trim()) && !maintenanceInfo.isEmpty())
                 sentMaintenance = true;
     }
 
