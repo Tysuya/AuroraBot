@@ -22,6 +22,7 @@ public class Boss {
         this.bossName = bossName;
         this.respawnTime = respawnTime;
         hunters = new ArrayList<>();
+        history = "";
         kills = new HashMap<>();
         spawnTimer = new Timer();
     }

@@ -55,8 +55,14 @@ public class Maintenance {
             String timeZone = info[5].substring(0, info[5].length() - 1);
             String year = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
             String pattern = "MMM dd hh:mmaa zzz yyyy";
+
             if (month.contains("."))
                 pattern = "MMM. dd hh:mmaa zzz yyyy";
+            if (!startTime.contains(":"))
+                startTime = startTime.substring(0, startTime.length() - 2) + ":00" + startTime.substring(startTime.length() - 2);
+            if (!endTime.contains(":"))
+                endTime = endTime.substring(0, endTime.length() - 2) + ":00" + endTime.substring(endTime.length() - 2);
+
             maintenanceStart = new SimpleDateFormat(pattern).parse(month + " " + day + " " + startTime + " " + timeZone + " " + year);
             maintenanceEnd = new SimpleDateFormat(pattern).parse(month + " " + day + " " + endTime + " " + timeZone + " " + year);
             // In case maintenance goes past midnight

@@ -79,29 +79,25 @@ public class Report extends BossAbstract {
 
         // Update #leaderboard and #bossinfo
         if (!message.getContent().contains("lost"))
-            updateChannels(boss, author);
+            updateChannel(boss, author);
     }
 
-    private static void updateChannels(Boss boss, String author) {
+    private static void updateChannel(Boss boss, String author) {
         if (!AuroraBot.debugMode)
             dropbox.writeHistory(boss.getBossName(), "Leaderboard", getKills(boss).trim());
 
         try {
-            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
-            for (Message eachMessage : messageHistoryList) {
-                if (eachMessage.getContent().contains(boss.getBossName()))
-                    eachMessage.editMessage(getKills(boss)).complete();
-                if (eachMessage.getContent().contains("overall"))
-                    eachMessage.editMessage(getOverallKills()).complete();
-            }
-            messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(100).complete();
+            updateChannels(boss);
+
+            List<Message> messageHistoryList = new MessageHistory(bossInfoChannel).retrievePast(100).complete();
             for (Message eachMessage : messageHistoryList)
                 if (eachMessage.getContent().contains(boss.getBossName()))
                     boss.updateBossInfo();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        checkKills(boss, author);
+        if (!author.isEmpty())
+            checkKills(boss, author);
     }
 
     private static void checkKills(Boss boss, String author) {

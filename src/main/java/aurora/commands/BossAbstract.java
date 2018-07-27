@@ -46,7 +46,7 @@ public abstract class BossAbstract {
             System.out.println("Initializing kills...");
             initializeKills();
         }
-
+        
         System.out.println("Initializing hunters...");
         initializeHunters();
 
@@ -156,6 +156,18 @@ public abstract class BossAbstract {
                     bossList.get(Arrays.asList(bossNamesFinal).indexOf(bossName)).setKills(bossKillsHashMap);
             }
         }
+        for (Boss boss : bossList)
+            updateChannels(boss);
+    }
+
+    public static void updateChannels(Boss boss) {
+        List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
+        for (Message eachMessage : messageHistoryList) {
+            if (eachMessage.getContent().contains(boss.getBossName()) && !eachMessage.getContent().equals(getKills(boss)))
+                eachMessage.editMessage(getKills(boss)).complete();
+            if (eachMessage.getContent().contains("overall") && !eachMessage.getContent().equals(getOverallKills()))
+                eachMessage.editMessage(getOverallKills()).complete();
+        }
     }
 
     public static String getKills(Boss boss) {
@@ -194,9 +206,6 @@ public abstract class BossAbstract {
     }
 
     public static HashMap<String, Integer> parseKills(String[] huntersLine) {
-        //System.out.println(name);
-                        /*if (name.equals("Domm1e/Henry"))
-                            name = "narrak/Henry";*/
         HashMap<String, Integer> bossKillsHashMap = new HashMap<>();
         for (int i = 1; i < huntersLine.length - 1; i++) {
             int parenthesis = huntersLine[i].indexOf(")");
@@ -207,6 +216,14 @@ public abstract class BossAbstract {
 
             String name = huntersLine[i].substring(parenthesis + 2, colon).trim();
             Integer kills = Integer.parseInt(huntersLine[i].substring(colon + 2, dash - 1));
+
+            if (name.equals("Domm1e/Henry") || name.equals("narrak/Henry"))
+                name = "Henry";
+            if (name.equals("Linkin Park/Files"))
+                name = "Files";
+
+            if (bossKillsHashMap.get(name) != null)
+                kills += bossKillsHashMap.get(name);
 
             bossKillsHashMap.put(name, kills);
         }

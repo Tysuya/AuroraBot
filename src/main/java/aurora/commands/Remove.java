@@ -33,13 +33,7 @@ public class Remove extends BossAbstract {
             if (!AuroraBot.debugMode)
                 dropbox.writeHistory(boss.getBossName(), "Leaderboard", getKills(boss).trim());
 
-            List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
-            for (Message eachMessage : messageHistoryList) {
-                if (eachMessage.getContent().contains(boss.getBossName()))
-                    eachMessage.editMessage(getKills(boss)).complete();
-                if (eachMessage.getContent().contains("overall"))
-                    eachMessage.editMessage(getOverallKills()).complete();
-            }
+            updateChannels(boss);
         } catch (Exception e) {
             e.printStackTrace();
         }
