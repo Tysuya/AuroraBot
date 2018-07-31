@@ -221,6 +221,12 @@ public abstract class BossAbstract {
                 name = "Henry";
             if (name.equals("Linkin Park/Files"))
                 name = "Files";
+            if (name.equals("Leyla  ll  MyCoffin") || name.equals("Leyla"))
+                name = "MyCoffin";
+            if (name.equals("raf"))
+                name = "Raffael";
+            if (name.equals("Acemon"))
+                name = "AceMon";
 
             if (bossKillsHashMap.get(name) != null)
                 kills += bossKillsHashMap.get(name);
