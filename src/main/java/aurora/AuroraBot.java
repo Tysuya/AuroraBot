@@ -50,7 +50,7 @@ public class AuroraBot {
 
             BossAbstract.initialize();
             //battlefield();
-            guildSiege();
+            //guildSiege();
             maintenance();
             cycleGames();
             keepAwake();

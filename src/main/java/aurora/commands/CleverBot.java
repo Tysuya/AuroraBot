@@ -1,5 +1,6 @@
 package aurora.commands;
 
+import aurora.AuroraBot;
 import aurora.utils.CleverBotQuery;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -15,6 +16,8 @@ public class CleverBot {
         channel.sendTyping().complete();
         try {
             String chat = message.getContent().split("@AuroraBot ")[1];
+            if (AuroraBot.debugMode)
+                chat = message.getContent().split("@AuroraBotTest ")[1];
             String author = message.getAuthor().getName();
             System.out.println(chat);
 

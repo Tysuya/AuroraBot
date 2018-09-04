@@ -42,11 +42,10 @@ public abstract class BossAbstract {
             System.out.println("Initializing history...");
             for (Boss boss : bossList)
                 boss.setHistory(dropbox.readHistory(boss.getBossName(), "History"));
-
-            System.out.println("Initializing kills...");
-            initializeKills();
         }
-        
+
+        System.out.println("Initializing kills...");
+        initializeKills();
         System.out.println("Initializing hunters...");
         initializeHunters();
 
@@ -163,9 +162,9 @@ public abstract class BossAbstract {
     public static void updateChannels(Boss boss) {
         List<Message> messageHistoryList = new MessageHistory(leaderboardChannel).retrievePast(100).complete();
         for (Message eachMessage : messageHistoryList) {
-            if (eachMessage.getContent().contains(boss.getBossName()) && !eachMessage.getContent().equals(getKills(boss)))
+            if (eachMessage.getContent().contains(boss.getBossName()) && !eachMessage.getContent().equals(getKills(boss).trim()))
                 eachMessage.editMessage(getKills(boss)).complete();
-            if (eachMessage.getContent().contains("overall") && !eachMessage.getContent().equals(getOverallKills()))
+            if (eachMessage.getContent().contains("overall") && !eachMessage.getContent().equals(getOverallKills().trim()))
                 eachMessage.editMessage(getOverallKills()).complete();
         }
     }
@@ -227,6 +226,8 @@ public abstract class BossAbstract {
                 name = "Raffael";
             if (name.equals("Acemon"))
                 name = "AceMon";
+            if (name.equals("Tum"))
+                name = "Tum/Chinjungs";
 
             if (bossKillsHashMap.get(name) != null)
                 kills += bossKillsHashMap.get(name);
