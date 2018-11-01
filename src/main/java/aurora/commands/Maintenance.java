@@ -82,10 +82,10 @@ public class Maintenance {
             if (maintenanceInfo.length() + 74 > 2000)
                 maintenanceInfo = maintenanceInfo.substring(0, 2000 - 74);
 
-
             // Check if maintenance has been sent
+            sentMaintenance = false;
             for (Message message : new MessageHistory(announcementsChannel).retrievePast(100).complete()) {
-                if (message.getContent().contains("Maintenance (" + month + " " + day) && maintenanceInfo.contains("Updated")) {
+                if (message.getContent().contains("Maintenance (" + month + " " + day) && !message.getContent().contains("Updated") && maintenanceInfo.contains("Updated")) {
                     message.editMessage("@everyone There will be a maintenance in <24 hours! Here are the details:\n" + maintenanceInfo).queue();
                     sentMaintenance = true;
                 }

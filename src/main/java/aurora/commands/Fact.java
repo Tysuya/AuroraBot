@@ -1,10 +1,8 @@
 package aurora.commands;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import org.xml.sax.InputSource;
@@ -49,7 +47,7 @@ public class Fact {
                 JsonObject rootObj = root.getAsJsonObject();
                 rootString = rootObj.get("fact").getAsString();
 
-                String sURL2 = "http://thecatapi.com/api/images/get?format=xml&results_per_page=1";
+                String sURL2 = "https://api.thecatapi.com/api/images/get?format=xml&amp;results_per_page=1";
                 URL url2 = new URL(sURL2);
                 HttpURLConnection request2 = (HttpURLConnection) url2.openConnection();
                 request2.connect();
