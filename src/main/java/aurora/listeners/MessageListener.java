@@ -106,10 +106,12 @@ public class MessageListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        User user = event.getUser();
-        MessageChannel channel = AuroraBot.jda.getTextChannelById("410573170161090567");
+        if (event.getGuild().getId().equals("408761157516656651")) {
+            User user = event.getUser();
+            MessageChannel channel = AuroraBot.jda.getTextChannelById("410573170161090567");
 
-        channel.sendMessage("Hi, " + user.getAsMention() + "! Welcome to the Aurora Discord server! I am Aurora's personal AI assistant and am capable of dozens of commands. You can learn more by typing ab!help in the chat.").queue();
+            channel.sendMessage("Hi, " + user.getAsMention() + "! Welcome to the Aurora Discord server! I am Aurora's personal AI assistant and am capable of dozens of commands. You can learn more by typing ab!help in the chat.").queue();
+        }
     }
 
     @Override
